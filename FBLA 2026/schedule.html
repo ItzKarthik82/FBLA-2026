@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Schedule — PeerLearn</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1 class="brand">PeerLearn</h1>
+      <nav>
+        <ul class="nav">
+          <li><a href="Home.Html">Home</a></li>
+          <li><a href="schedule.html">Schedule</a></li>
+          <li><a href="dashboard.html">Dashboard</a></li>
+          <li><a href="resources.html">Resources</a></li>
+        </ul>
+      </nav>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button id="themeToggle" class="btn outline" aria-label="Toggle theme">Dark</button>
+        <button id="resetBtn" class="btn outline" aria-label="Reset theme">Reset</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="content page">
+    <div class="container">
+      <h2>Live Tutoring & Group Study</h2>
+      <p class="muted">Join live sessions, group studies, or host your own — times shown in your local timezone.</p>
+
+      <section style="margin-top:18px">
+        <div class="schedule-list">
+          <div class="card">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div>
+                <div class="kicker">Monday • 4:00 PM</div>
+                <h3>Intro to Python</h3>
+                <div class="muted">Host: Aisha</div>
+              </div>
+              <div>
+                <button class="btn" onclick="joinSession('Intro to Python')">Join</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div>
+                <div class="kicker">Wednesday • 6:00 PM</div>
+                <h3>Web Dev Workshop</h3>
+                <div class="muted">Host: Marcus</div>
+              </div>
+              <div>
+                <button class="btn" onclick="joinSession('Web Dev Workshop')">Join</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div>
+                <div class="kicker">Friday • 3:00 PM</div>
+                <h3>Algorithms Study Group</h3>
+                <div class="muted">Host: Team Lead</div>
+              </div>
+              <div>
+                <button class="btn" onclick="joinSession('Algorithms Study Group')">Join</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" style="margin-top:20px">
+        <h3>Host a Session</h3>
+        <p class="muted">Propose a session and we'll review it for the public schedule.</p>
+        <form id="hostForm" onsubmit="event.preventDefault(); proposeSession();" style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+          <input type="text" id="sessionTitle" placeholder="Session title" required />
+          <input type="text" id="sessionHost" placeholder="Your name" required />
+          <input type="text" id="sessionTime" placeholder="Day & time" required />
+          <button class="btn" type="submit">Propose</button>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">&copy; 2026 PeerLearn</div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

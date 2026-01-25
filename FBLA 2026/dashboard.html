@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dashboard — PeerLearn</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1 class="brand">PeerLearn</h1>
+      <nav>
+        <ul class="nav">
+          <li><a href="Home.Html">Home</a></li>
+          <li><a href="schedule.html">Schedule</a></li>
+          <li><a href="dashboard.html">Dashboard</a></li>
+          <li><a href="resources.html">Resources</a></li>
+        </ul>
+      </nav>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button id="themeToggle" class="btn outline" aria-label="Toggle theme">Dark</button>
+        <button id="resetBtn" class="btn outline" aria-label="Reset theme">Reset</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="content page">
+    <div class="container row">
+      <aside class="sidebar">
+        <div class="card small profile">
+          <div class="avatar">JD</div>
+          <div>
+            <div style="font-weight:700">Jordan Doe</div>
+            <div class="muted">Computer Science • Year 2</div>
+          </div>
+        </div>
+
+        <div class="stat card small">
+          <div style="font-size:0.9rem;color:var(--muted)">Lessons</div>
+          <div style="font-size:1.2rem;font-weight:700">26</div>
+        </div>
+        <div class="stat card small">
+          <div style="font-size:0.9rem;color:var(--muted)">Quizzes</div>
+          <div style="font-size:1.2rem;font-weight:700">8</div>
+        </div>
+        <div class="card small">
+          <h4 style="margin-bottom:8px">Quick Actions</h4>
+          <button class="btn" onclick="markComplete(10)">Mark Lesson</button>
+          <button class="btn outline" style="margin-left:8px" onclick="markQuizPassed()">Mark Quiz</button>
+        </div>
+      </aside>
+
+      <section class="col">
+        <h2>Your Dashboard</h2>
+        <p class="muted">Track progress and recent activity.</p>
+
+        <div class="row" style="margin-top:18px">
+          <div class="progress-card card col">
+            <h3>Lessons Completed</h3>
+            <div class="progress" style="margin-top:10px">
+              <div id="lessonsBar" class="progress-bar" style="width:0%">0%</div>
+            </div>
+          </div>
+          <div class="progress-card card" style="max-width:320px">
+            <h3>Quizzes Passed</h3>
+            <div class="progress" style="margin-top:10px">
+              <div id="quizBar" class="progress-bar" style="width:0%">0%</div>
+            </div>
+          </div>
+        </div>
+
+        <section style="margin-top:18px">
+          <h3>Activity Log</h3>
+          <ul id="activityList" class="log" style="min-height:120px"></ul>
+          <div style="margin-top:12px">
+            <button class="btn outline" onclick="clearActivity()">Clear Log</button>
+          </div>
+        </section>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">&copy; 2026 PeerLearn</div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

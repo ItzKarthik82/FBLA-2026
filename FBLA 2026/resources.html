@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Resources — PeerLearn</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1 class="brand">PeerLearn</h1>
+      <nav>
+        <ul class="nav">
+          <li><a href="Home.Html">Home</a></li>
+          <li><a href="schedule.html">Schedule</a></li>
+          <li><a href="dashboard.html">Dashboard</a></li>
+          <li><a href="resources.html">Resources</a></li>
+        </ul>
+      </nav>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button id="themeToggle" class="btn outline" aria-label="Toggle theme">Dark</button>
+        <button id="resetBtn" class="btn outline" aria-label="Reset theme">Reset</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="content page">
+    <div class="container">
+      <h2>Resources</h2>
+      <p class="muted">Interactive lessons, short videos, quizzes, and downloadable study guides curated by students.</p>
+
+      <section style="margin-top:18px">
+        <h3 class="kicker">Lessons</h3>
+        <div class="resources-grid">
+          <div class="resource-card card">
+            <h4>Getting Started with Python</h4>
+            <p class="muted">Basics: variables, control flow, and functions.</p>
+            <div style="margin-top:12px;display:flex;gap:8px">
+              <a class="btn" href="#lesson1">Open</a>
+              <a class="btn outline" href="materials/sample.txt" download>Download Notes</a>
+            </div>
+          </div>
+
+          <div class="resource-card card">
+            <h4>Intro to HTML & CSS</h4>
+            <p class="muted">Build responsive web pages and style them.</p>
+            <div style="margin-top:12px;display:flex;gap:8px">
+              <a class="btn" href="#lesson2">Open</a>
+              <a class="btn outline" href="#">Watch</a>
+            </div>
+          </div>
+
+          <div class="resource-card card">
+            <h4>Basic Algorithms</h4>
+            <p class="muted">Sorting, searching, and problem solving strategies.</p>
+            <div style="margin-top:12px;display:flex;gap:8px">
+              <a class="btn" href="#lesson3">Open</a>
+              <a class="btn outline" href="#">Quiz</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="lesson1" class="card" style="margin-top:20px">
+        <h3>Getting Started with Python</h3>
+        <p class="muted">Short video and a quick quiz to test your understanding.</p>
+        <div class="video" style="margin-top:12px">
+          <iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Lesson video" frameborder="0" allowfullscreen></iframe>
+        </div>
+        <div class="quiz" style="margin-top:12px">
+          <h4>Quick Quiz</h4>
+          <p>Which symbol starts a comment in Python?</p>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <label><input type="radio" name="q1" value="#" /> #</label>
+            <label><input type="radio" name="q1" value="//" /> //</label>
+            <label><input type="radio" name="q1" value="/*" /> /*</label>
+          </div>
+          <div style="margin-top:10px">
+            <button class="btn" onclick="checkQuiz()">Submit Answer</button>
+            <span id="quizResult" style="margin-left:12px"></span>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">&copy; 2026 PeerLearn</div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+PeerLearn — Sample Notes
+
+Welcome to the sample notes for the PeerLearn materials folder.
+
+Use these notes as a starting point for creating downloadable study guides.
+
+- Topic: Getting Started with Python
+- Summary: Variables, data types, control flow, and comments (#)
+
+Feel free to replace this file with lesson PDFs or slides.
