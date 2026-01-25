@@ -1,95 +1,187 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Schedule — PeerLearn</title>
-  <link rel="stylesheet" href="styles.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule - PeerLearn</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header class="site-header">
-    <div class="container">
-      <h1 class="brand">PeerLearn</h1>
-      <nav>
-        <ul class="nav">
-          <li><a href="Home.Html">Home</a></li>
-          <li><a href="schedule.html">Schedule</a></li>
-          <li><a href="dashboard.html">Dashboard</a></li>
-          <li><a href="resources.html">Resources</a></li>
-        </ul>
-      </nav>
-      <div style="display:flex;gap:8px;align-items:center">
-        <button id="themeToggle" class="btn outline" aria-label="Toggle theme">Dark</button>
-        <button id="resetBtn" class="btn outline" aria-label="Reset theme">Reset</button>
-      </div>
-    </div>
-  </header>
-
-  <main class="content page">
-    <div class="container">
-      <h2>Live Tutoring & Group Study</h2>
-      <p class="muted">Join live sessions, group studies, or host your own — times shown in your local timezone.</p>
-
-      <section style="margin-top:18px">
-        <div class="schedule-list">
-          <div class="card">
-            <div style="display:flex;justify-content:space-between;align-items:center">
-              <div>
-                <div class="kicker">Monday • 4:00 PM</div>
-                <h3>Intro to Python</h3>
-                <div class="muted">Host: Aisha</div>
-              </div>
-              <div>
-                <button class="btn" onclick="joinSession('Intro to Python')">Join</button>
-              </div>
+    <header class="site-header">
+        <div class="container">
+            <h1 class="brand">PeerLearn</h1>
+            <p class="tag">Tech Learning Hub</p>
+            <nav>
+                <ul class="nav">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="schedule.html">Schedule</a></li>
+                    <li><a href="resources.html">Resources</a></li>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <button id="themeToggle" class="btn outline">🌙 Dark</button>
+                <button id="resetBtn" class="btn outline">🔄 Reset</button>
             </div>
-          </div>
-
-          <div class="card">
-            <div style="display:flex;justify-content:space-between;align-items:center">
-              <div>
-                <div class="kicker">Wednesday • 6:00 PM</div>
-                <h3>Web Dev Workshop</h3>
-                <div class="muted">Host: Marcus</div>
-              </div>
-              <div>
-                <button class="btn" onclick="joinSession('Web Dev Workshop')">Join</button>
-              </div>
-            </div>
-          </div>
-
-          <div class="card">
-            <div style="display:flex;justify-content:space-between;align-items:center">
-              <div>
-                <div class="kicker">Friday • 3:00 PM</div>
-                <h3>Algorithms Study Group</h3>
-                <div class="muted">Host: Team Lead</div>
-              </div>
-              <div>
-                <button class="btn" onclick="joinSession('Algorithms Study Group')">Join</button>
-              </div>
-            </div>
-          </div>
         </div>
-      </section>
+    </header>
 
-      <section class="card" style="margin-top:20px">
-        <h3>Host a Session</h3>
-        <p class="muted">Propose a session and we'll review it for the public schedule.</p>
-        <form id="hostForm" onsubmit="event.preventDefault(); proposeSession();" style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
-          <input type="text" id="sessionTitle" placeholder="Session title" required />
-          <input type="text" id="sessionHost" placeholder="Your name" required />
-          <input type="text" id="sessionTime" placeholder="Day & time" required />
-          <button class="btn" type="submit">Propose</button>
-        </form>
-      </section>
-    </div>
-  </main>
+    <main class="content">
+        <div class="container">
+            <h2>Live Tutoring & Study Sessions</h2>
+            <p>Join interactive coding sessions, group study, and peer tutoring. All times in your local timezone.</p>
 
-  <footer class="site-footer">
-    <div class="container">&copy; 2026 PeerLearn</div>
-  </footer>
+            <div class="schedule-filters">
+                <button class="filter-btn active" data-filter="all">All Sessions</button>
+                <button class="filter-btn" data-filter="web-dev">Web Dev</button>
+                <button class="filter-btn" data-filter="python">Python</button>
+                <button class="filter-btn" data-filter="data">Data</button>
+            </div>
 
-  <script src="script.js"></script>
+            <div class="schedule-grid">
+                <div class="session-card" data-category="web-dev">
+                    <div class="session-time">
+                        <span class="day">Mon</span>
+                        <span class="time">4:00 PM</span>
+                    </div>
+                    <div class="session-details">
+                        <h3>Intro to HTML & CSS</h3>
+                        <p>Learn the basics of web development with hands-on coding.</p>
+                        <div class="session-meta">
+                            <span>Host: Alex</span>
+                            <span>Level: Beginner</span>
+                        </div>
+                    </div>
+                    <button class="btn primary join-btn" onclick="joinSession('Intro to HTML & CSS')">Join Session</button>
+                </div>
+
+                <div class="session-card" data-category="python">
+                    <div class="session-time">
+                        <span class="day">Tue</span>
+                        <span class="time">6:00 PM</span>
+                    </div>
+                    <div class="session-details">
+                        <h3>Python Basics</h3>
+                        <p>Variables, loops, and functions in Python.</p>
+                        <div class="session-meta">
+                            <span>Host: Jordan</span>
+                            <span>Level: Beginner</span>
+                        </div>
+                    </div>
+                    <button class="btn primary join-btn" onclick="joinSession('Python Basics')">Join Session</button>
+                </div>
+
+                <div class="session-card" data-category="web-dev">
+                    <div class="session-time">
+                        <span class="day">Wed</span>
+                        <span class="time">5:30 PM</span>
+                    </div>
+                    <div class="session-details">
+                        <h3>JavaScript Fundamentals</h3>
+                        <p>Interactive web development with JS.</p>
+                        <div class="session-meta">
+                            <span>Host: Sam</span>
+                            <span>Level: Intermediate</span>
+                        </div>
+                    </div>
+                    <button class="btn primary join-btn" onclick="joinSession('JavaScript Fundamentals')">Join Session</button>
+                </div>
+
+                <div class="session-card" data-category="data">
+                    <div class="session-time">
+                        <span class="day">Thu</span>
+                        <span class="time">7:00 PM</span>
+                    </div>
+                    <div class="session-details">
+                        <h3>Data Analysis with Python</h3>
+                        <p>Using pandas and matplotlib for data insights.</p>
+                        <div class="session-meta">
+                            <span>Host: Taylor</span>
+                            <span>Level: Advanced</span>
+                        </div>
+                    </div>
+                    <button class="btn primary join-btn" onclick="joinSession('Data Analysis with Python')">Join Session</button>
+                </div>
+
+                <div class="session-card" data-category="web-dev">
+                    <div class="session-time">
+                        <span class="day">Fri</span>
+                        <span class="time">3:00 PM</span>
+                    </div>
+                    <div class="session-details">
+                        <h3>React Components</h3>
+                        <p>Building dynamic UIs with React.</p>
+                        <div class="session-meta">
+                            <span>Host: Casey</span>
+                            <span>Level: Intermediate</span>
+                        </div>
+                    </div>
+                    <button class="btn primary join-btn" onclick="joinSession('React Components')">Join Session</button>
+                </div>
+
+                <div class="session-card" data-category="python">
+                    <div class="session-time">
+                        <span class="day">Sat</span>
+                        <span class="time">10:00 AM</span>
+                    </div>
+                    <div class="session-details">
+                        <h3>Web Scraping with Python</h3>
+                        <p>Automate data collection from websites.</p>
+                        <div class="session-meta">
+                            <span>Host: Riley</span>
+                            <span>Level: Intermediate</span>
+                        </div>
+                    </div>
+                    <button class="btn primary join-btn" onclick="joinSession('Web Scraping with Python')">Join Session</button>
+                </div>
+            </div>
+
+            <div class="propose-session">
+                <h3>Host Your Own Session</h3>
+                <form id="hostForm" onsubmit="proposeSession(); return false;">
+                    <input type="text" id="sessionTitle" placeholder="Session Title" required>
+                    <input type="text" id="sessionHost" placeholder="Your Name" required>
+                    <input type="datetime-local" id="sessionTime" required>
+                    <select id="sessionCategory">
+                        <option value="web-dev">Web Development</option>
+                        <option value="python">Python</option>
+                        <option value="data">Data & Analytics</option>
+                        <option value="design">UI/UX Design</option>
+                    </select>
+                    <button type="submit" class="btn primary">Propose Session</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>PeerLearn</h4>
+                    <p>Student-built, student-powered learning platform.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="schedule.html">Schedule</a></li>
+                        <li><a href="resources.html">Resources</a></li>
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect</h4>
+                    <p>Built for FBLA 2026</p>
+                    <p>Created by students, for students</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 PeerLearn. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>

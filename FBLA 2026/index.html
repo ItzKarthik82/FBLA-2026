@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PeerLearn - Tech Hub</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💻</text></svg>">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container">
+            <h1 class="brand">PeerLearn</h1>
+            <p class="tag">Tech Learning Hub</p>
+            <nav>
+                <ul class="nav">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="schedule.html">Schedule</a></li>
+                    <li><a href="resources.html">Resources</a></li>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <button id="themeToggle" class="btn outline">🌙 Dark</button>
+                <button id="resetBtn" class="btn outline">🔄 Reset</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="content">
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h2>Master Technology Through Peer Learning</h2>
+                    <p>Join our student-led community for interactive programming tutorials, live coding sessions, and collaborative projects. Learn HTML, CSS, JavaScript, Python, and more in a fun, supportive environment.</p>
+                    <div class="hero-cta">
+                        <a href="schedule.html" class="btn primary">Join a Session</a>
+                        <a href="resources.html" class="btn secondary">Explore Resources</a>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <div class="code-preview">
+                        <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;Hello World&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Welcome to PeerLearn!&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="features">
+            <div class="container">
+                <h2>Why Choose PeerLearn?</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">👥</div>
+                        <h3>Peer-to-Peer Learning</h3>
+                        <p>Learn from students who recently mastered the same concepts. Get personalized help and real-world insights.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🎯</div>
+                        <h3>Interactive Sessions</h3>
+                        <p>Participate in live coding challenges, group debugging, and collaborative project building.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📚</div>
+                        <h3>Comprehensive Resources</h3>
+                        <p>Access curated lessons, video tutorials, coding exercises, and downloadable guides.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📊</div>
+                        <h3>Track Your Progress</h3>
+                        <p>Monitor your learning journey with our dashboard, complete quizzes, and earn achievements.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="subjects">
+            <div class="container">
+                <h2>Explore Technology Topics</h2>
+                <div class="subjects-grid">
+                    <div class="subject-card" data-subject="web-dev">
+                        <h3>Web Development</h3>
+                        <p>HTML, CSS, JavaScript, React</p>
+                        <a href="resources.html#web-dev" class="btn small">Learn More</a>
+                    </div>
+                    <div class="subject-card" data-subject="python">
+                        <h3>Python Programming</h3>
+                        <p>Data science, automation, web apps</p>
+                        <a href="resources.html#python" class="btn small">Learn More</a>
+                    </div>
+                    <div class="subject-card" data-subject="data">
+                        <h3>Data & Analytics</h3>
+                        <p>SQL, Excel, basic statistics</p>
+                        <a href="resources.html#data" class="btn small">Learn More</a>
+                    </div>
+                    <div class="subject-card" data-subject="design">
+                        <h3>UI/UX Design</h3>
+                        <p>Figma, design principles, prototyping</p>
+                        <a href="resources.html#design" class="btn small">Learn More</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-section">
+            <div class="container">
+                <div class="cta-card">
+                    <h2>Ready to Start Coding?</h2>
+                    <p>Join thousands of students building their tech skills together.</p>
+                    <a href="dashboard.html" class="btn primary large">Get Started</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>PeerLearn</h4>
+                    <p>Student-built, student-powered learning platform.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="schedule.html">Schedule</a></li>
+                        <li><a href="resources.html">Resources</a></li>
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect</h4>
+                    <p>Built for FBLA 2026</p>
+                    <p>Created by students, for students</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 PeerLearn. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

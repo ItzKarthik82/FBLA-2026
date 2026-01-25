@@ -1,90 +1,195 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Dashboard — PeerLearn</title>
-  <link rel="stylesheet" href="styles.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - PeerLearn</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header class="site-header">
-    <div class="container">
-      <h1 class="brand">PeerLearn</h1>
-      <nav>
-        <ul class="nav">
-          <li><a href="Home.Html">Home</a></li>
-          <li><a href="schedule.html">Schedule</a></li>
-          <li><a href="dashboard.html">Dashboard</a></li>
-          <li><a href="resources.html">Resources</a></li>
-        </ul>
-      </nav>
-      <div style="display:flex;gap:8px;align-items:center">
-        <button id="themeToggle" class="btn outline" aria-label="Toggle theme">Dark</button>
-        <button id="resetBtn" class="btn outline" aria-label="Reset theme">Reset</button>
-      </div>
-    </div>
-  </header>
-
-  <main class="content page">
-    <div class="container row">
-      <aside class="sidebar">
-        <div class="card small profile">
-          <div class="avatar">JD</div>
-          <div>
-            <div style="font-weight:700">Jordan Doe</div>
-            <div class="muted">Computer Science • Year 2</div>
-          </div>
-        </div>
-
-        <div class="stat card small">
-          <div style="font-size:0.9rem;color:var(--muted)">Lessons</div>
-          <div style="font-size:1.2rem;font-weight:700">26</div>
-        </div>
-        <div class="stat card small">
-          <div style="font-size:0.9rem;color:var(--muted)">Quizzes</div>
-          <div style="font-size:1.2rem;font-weight:700">8</div>
-        </div>
-        <div class="card small">
-          <h4 style="margin-bottom:8px">Quick Actions</h4>
-          <button class="btn" onclick="markComplete(10)">Mark Lesson</button>
-          <button class="btn outline" style="margin-left:8px" onclick="markQuizPassed()">Mark Quiz</button>
-        </div>
-      </aside>
-
-      <section class="col">
-        <h2>Your Dashboard</h2>
-        <p class="muted">Track progress and recent activity.</p>
-
-        <div class="row" style="margin-top:18px">
-          <div class="progress-card card col">
-            <h3>Lessons Completed</h3>
-            <div class="progress" style="margin-top:10px">
-              <div id="lessonsBar" class="progress-bar" style="width:0%">0%</div>
+    <header class="site-header">
+        <div class="container">
+            <h1 class="brand">PeerLearn</h1>
+            <p class="tag">Tech Learning Hub</p>
+            <nav>
+                <ul class="nav">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="schedule.html">Schedule</a></li>
+                    <li><a href="resources.html">Resources</a></li>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <button id="themeToggle" class="btn outline">🌙 Dark</button>
+                <button id="resetBtn" class="btn outline">🔄 Reset</button>
             </div>
-          </div>
-          <div class="progress-card card" style="max-width:320px">
-            <h3>Quizzes Passed</h3>
-            <div class="progress" style="margin-top:10px">
-              <div id="quizBar" class="progress-bar" style="width:0%">0%</div>
-            </div>
-          </div>
         </div>
+    </header>
 
-        <section style="margin-top:18px">
-          <h3>Activity Log</h3>
-          <ul id="activityList" class="log" style="min-height:120px"></ul>
-          <div style="margin-top:12px">
-            <button class="btn outline" onclick="clearActivity()">Clear Log</button>
-          </div>
-        </section>
-      </section>
-    </div>
-  </main>
+    <main class="content">
+        <div class="container">
+            <div class="dashboard-header">
+                <h2>Welcome back, Student!</h2>
+                <p>Track your progress and continue learning.</p>
+            </div>
 
-  <footer class="site-footer">
-    <div class="container">&copy; 2026 PeerLearn</div>
-  </footer>
+            <div class="dashboard-grid">
+                <div class="dashboard-sidebar">
+                    <div class="profile-card">
+                        <div class="avatar">👨‍💻</div>
+                        <div class="profile-info">
+                            <h3>John Doe</h3>
+                            <p>Computer Science Student</p>
+                            <div class="level">Level 3 Coder</div>
+                        </div>
+                    </div>
 
-  <script src="script.js"></script>
+                    <div class="stats-card">
+                        <h4>Quick Stats</h4>
+                        <div class="stat">
+                            <span class="stat-label">Lessons Completed</span>
+                            <span class="stat-value" id="lessonsCount">12</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Quizzes Passed</span>
+                            <span class="stat-value" id="quizzesCount">8</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Hours Studied</span>
+                            <span class="stat-value" id="hoursCount">24</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Achievements</span>
+                            <span class="stat-value" id="achievementsCount">5</span>
+                        </div>
+                    </div>
+
+                    <div class="quick-actions">
+                        <h4>Quick Actions</h4>
+                        <button class="btn full" onclick="markLessonComplete()">Mark Lesson Complete</button>
+                        <button class="btn full outline" onclick="takeQuiz()">Take a Quiz</button>
+                        <button class="btn full outline" onclick="joinSessionFromDash()">Join Study Session</button>
+                    </div>
+                </div>
+
+                <div class="dashboard-main">
+                    <div class="progress-section">
+                        <h3>Your Progress</h3>
+                        <div class="progress-cards">
+                            <div class="progress-card">
+                                <h4>Web Development</h4>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="webProgress" style="width: 65%"></div>
+                                </div>
+                                <span class="progress-text">65% Complete</span>
+                            </div>
+                            <div class="progress-card">
+                                <h4>Python Programming</h4>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="pythonProgress" style="width: 40%"></div>
+                                </div>
+                                <span class="progress-text">40% Complete</span>
+                            </div>
+                            <div class="progress-card">
+                                <h4>Data Science</h4>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="dataProgress" style="width: 25%"></div>
+                                </div>
+                                <span class="progress-text">25% Complete</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recent-activity">
+                        <h3>Recent Activity</h3>
+                        <div class="activity-list" id="activityList">
+                            <div class="activity-item">
+                                <div class="activity-icon">📚</div>
+                                <div class="activity-content">
+                                    <p>Completed "HTML & CSS Fundamentals" lesson</p>
+                                    <span class="activity-time">2 hours ago</span>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon">✅</div>
+                                <div class="activity-content">
+                                    <p>Passed "JavaScript Basics" quiz</p>
+                                    <span class="activity-time">1 day ago</span>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon">👥</div>
+                                <div class="activity-content">
+                                    <p>Joined "React Components" study session</p>
+                                    <span class="activity-time">3 days ago</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="achievements-section">
+                        <h3>Achievements</h3>
+                        <div class="achievements-grid">
+                            <div class="achievement unlocked">
+                                <div class="achievement-icon">🏆</div>
+                                <h4>First Steps</h4>
+                                <p>Complete your first lesson</p>
+                            </div>
+                            <div class="achievement unlocked">
+                                <div class="achievement-icon">🎯</div>
+                                <h4>Quiz Master</h4>
+                                <p>Pass 5 quizzes</p>
+                            </div>
+                            <div class="achievement unlocked">
+                                <div class="achievement-icon">👨‍💻</div>
+                                <h4>Code Warrior</h4>
+                                <p>Write 1000 lines of code</p>
+                            </div>
+                            <div class="achievement locked">
+                                <div class="achievement-icon">🚀</div>
+                                <h4>Full Stack</h4>
+                                <p>Master front-end and back-end</p>
+                            </div>
+                            <div class="achievement locked">
+                                <div class="achievement-icon">🌟</div>
+                                <h4>Tech Guru</h4>
+                                <p>Complete all courses</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>PeerLearn</h4>
+                    <p>Student-built, student-powered learning platform.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="schedule.html">Schedule</a></li>
+                        <li><a href="resources.html">Resources</a></li>
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect</h4>
+                    <p>Built for FBLA 2026</p>
+                    <p>Created by students, for students</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 PeerLearn. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>

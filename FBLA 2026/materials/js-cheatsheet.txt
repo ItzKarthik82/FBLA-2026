@@ -1,0 +1,72 @@
+JavaScript Cheat Sheet
+======================
+
+JavaScript is a programming language that adds interactivity to your websites.
+
+Variables:
+let name = "John";
+const age = 25;
+var oldWay = "Don't use this";
+
+Data Types:
+- String: "Hello"
+- Number: 42
+- Boolean: true/false
+- Array: [1, 2, 3]
+- Object: {name: "John", age: 25}
+
+Functions:
+function greet(name) {
+    return "Hello, " + name + "!";
+}
+
+Arrow functions:
+const greet = (name) => "Hello, " + name + "!";
+
+DOM Manipulation:
+document.getElementById('myId')
+document.querySelector('.myClass')
+element.innerHTML = "New content"
+element.style.color = "red"
+
+Events:
+element.addEventListener('click', function() {
+    console.log('Clicked!');
+});
+
+Conditional Statements:
+if (condition) {
+    // code
+} else if (anotherCondition) {
+    // code
+} else {
+    // code
+}
+
+Loops:
+for (let i = 0; i < 5; i++) {
+    console.log(i);
+}
+
+while (condition) {
+    // code
+}
+
+Arrays:
+let fruits = ['apple', 'banana', 'orange'];
+fruits.push('grape');
+fruits.forEach(fruit => console.log(fruit));
+
+Objects:
+let person = {
+    name: "John",
+    age: 25,
+    greet: function() { return "Hello!"; }
+};
+
+Common Methods:
+- console.log() - Output to console
+- alert() - Show popup
+- prompt() - Get user input
+- setTimeout() - Delay execution
+- fetch() - Make HTTP requests

@@ -1,94 +1,283 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Resources — PeerLearn</title>
-  <link rel="stylesheet" href="styles.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resources - PeerLearn</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header class="site-header">
-    <div class="container">
-      <h1 class="brand">PeerLearn</h1>
-      <nav>
-        <ul class="nav">
-          <li><a href="Home.Html">Home</a></li>
-          <li><a href="schedule.html">Schedule</a></li>
-          <li><a href="dashboard.html">Dashboard</a></li>
-          <li><a href="resources.html">Resources</a></li>
-        </ul>
-      </nav>
-      <div style="display:flex;gap:8px;align-items:center">
-        <button id="themeToggle" class="btn outline" aria-label="Toggle theme">Dark</button>
-        <button id="resetBtn" class="btn outline" aria-label="Reset theme">Reset</button>
-      </div>
+    <header class="site-header">
+        <div class="container">
+            <h1 class="brand">PeerLearn</h1>
+            <p class="tag">Tech Learning Hub</p>
+            <nav>
+                <ul class="nav">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="schedule.html">Schedule</a></li>
+                    <li><a href="resources.html">Resources</a></li>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <button id="themeToggle" class="btn outline">🌙 Dark</button>
+                <button id="resetBtn" class="btn outline">🔄 Reset</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="content">
+        <div class="container">
+            <h2>Learning Resources</h2>
+            <p>Interactive lessons, video tutorials, quizzes, and downloadable materials to accelerate your tech learning.</p>
+
+            <div class="resource-tabs">
+                <button class="tab-btn active" data-tab="lessons">Lessons</button>
+                <button class="tab-btn" data-tab="videos">Videos</button>
+                <button class="tab-btn" data-tab="quizzes">Quizzes</button>
+                <button class="tab-btn" data-tab="tools">Tools</button>
+            </div>
+
+            <div id="lessons" class="tab-content active">
+                <div class="resources-grid">
+                    <div class="resource-card" id="web-dev">
+                        <h3>HTML & CSS Fundamentals</h3>
+                        <p>Learn the building blocks of the web. Create your first webpage from scratch.</p>
+                        <div class="resource-actions">
+                            <a href="#" class="btn small" onclick="openLesson('html-css')">Start Lesson</a>
+                            <a href="materials/html-css-guide.txt" download class="btn small outline">Download Guide</a>
+                        </div>
+                    </div>
+
+                    <div class="resource-card">
+                        <h3>JavaScript Basics</h3>
+                        <p>Add interactivity to your websites with JavaScript programming.</p>
+                        <div class="resource-actions">
+                            <a href="#" class="btn small" onclick="openLesson('js-basics')">Start Lesson</a>
+                            <a href="materials/js-cheatsheet.txt" download class="btn small outline">Download Guide</a>
+                        </div>
+                    </div>
+
+                    <div class="resource-card" id="python">
+                        <h3>Python for Beginners</h3>
+                        <p>Start your programming journey with Python's simple syntax.</p>
+                        <div class="resource-actions">
+                            <a href="#" class="btn small" onclick="openLesson('python-intro')">Start Lesson</a>
+                            <a href="materials/python-guide.txt" download class="btn small outline">Download Guide</a>
+                        </div>
+                    </div>
+
+                    <div class="resource-card">
+                        <h3>React Components</h3>
+                        <p>Build modern web applications with React.</p>
+                        <div class="resource-actions">
+                            <a href="#" class="btn small" onclick="openLesson('react-components')">Start Lesson</a>
+                            <a href="materials/react-guide.txt" download class="btn small outline">Download Guide</a>
+                        </div>
+                    </div>
+
+                    <div class="resource-card" id="data">
+                        <h3>Data Analysis with Pandas</h3>
+                        <p>Manipulate and analyze data using Python's pandas library.</p>
+                        <div class="resource-actions">
+                            <a href="#" class="btn small" onclick="openLesson('pandas-analysis')">Start Lesson</a>
+                            <a href="materials/pandas-tutorial.txt" download class="btn small outline">Download Guide</a>
+                        </div>
+                    </div>
+
+                    <div class="resource-card" id="design">
+                        <h3>UI/UX Design Principles</h3>
+                        <p>Create user-friendly interfaces with design best practices.</p>
+                        <div class="resource-actions">
+                            <a href="#" class="btn small" onclick="openLesson('ui-ux-design')">Start Lesson</a>
+                            <a href="materials/design-principles.txt" download class="btn small outline">Download Guide</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="videos" class="tab-content">
+                <div class="videos-grid">
+                    <div class="video-card">
+                        <div class="video-thumbnail">
+                            <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/0.jpg" alt="Video thumbnail">
+                            <div class="play-btn">▶</div>
+                        </div>
+                        <h4>HTML Crash Course</h4>
+                        <p>15-minute overview of HTML basics</p>
+                        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" class="btn small">Watch Video</a>
+                    </div>
+
+                    <div class="video-card">
+                        <div class="video-thumbnail">
+                            <img src="https://img.youtube.com/vi/hvL1339luv0/0.jpg" alt="Video thumbnail">
+                            <div class="play-btn">▶</div>
+                        </div>
+                        <h4>CSS Flexbox Tutorial</h4>
+                        <p>Master modern CSS layout techniques</p>
+                        <a href="https://www.youtube.com/watch?v=hvL1339luv0" target="_blank" class="btn small">Watch Video</a>
+                    </div>
+
+                    <div class="video-card">
+                        <div class="video-thumbnail">
+                            <img src="https://img.youtube.com/vi/W6NZfCO5SIk/0.jpg" alt="Video thumbnail">
+                            <div class="play-btn">▶</div>
+                        </div>
+                        <h4>Python in 100 Seconds</h4>
+                        <p>Quick introduction to Python programming</p>
+                        <a href="https://www.youtube.com/watch?v=W6NZfCO5SIk" target="_blank" class="btn small">Watch Video</a>
+                    </div>
+                </div>
+            </div>
+
+            <div id="quizzes" class="tab-content">
+                <div class="quiz-section">
+                    <h3>Test Your Knowledge</h3>
+                    <div class="quiz-card">
+                        <h4>HTML Basics Quiz</h4>
+                        <p>10 questions to test your HTML knowledge</p>
+                        <button class="btn primary" onclick="startQuiz('html')">Start Quiz</button>
+                        <div id="html-quiz" class="quiz-content" style="display: none;">
+                            <div class="question">
+                                <p>What does HTML stand for?</p>
+                                <label><input type="radio" name="q1" value="HyperText Markup Language"> HyperText Markup Language</label>
+                                <label><input type="radio" name="q1" value="High Tech Modern Language"> High Tech Modern Language</label>
+                                <label><input type="radio" name="q1" value="Home Tool Markup Language"> Home Tool Markup Language</label>
+                            </div>
+                            <button class="btn" onclick="checkQuiz('html')">Submit</button>
+                            <div id="html-result" class="quiz-result"></div>
+                        </div>
+                    </div>
+
+                    <div class="quiz-card">
+                        <h4>CSS Quiz</h4>
+                        <p>Challenge your CSS skills</p>
+                        <button class="btn primary" onclick="startQuiz('css')">Start Quiz</button>
+                        <div id="css-quiz" class="quiz-content" style="display: none;">
+                            <div class="question">
+                                <p>Which property is used to change the background color?</p>
+                                <label><input type="radio" name="q2" value="color"> color</label>
+                                <label><input type="radio" name="q2" value="background-color"> background-color</label>
+                                <label><input type="radio" name="q2" value="bgcolor"> bgcolor</label>
+                            </div>
+                            <button class="btn" onclick="checkQuiz('css')">Submit</button>
+                            <div id="css-result" class="quiz-result"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tools" class="tab-content">
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <h3>Code Playground</h3>
+                        <p>Experiment with HTML, CSS, and JavaScript in real-time</p>
+                        <button class="btn primary" onclick="openCodePlayground()">Open Playground</button>
+                    </div>
+
+                    <div class="tool-card">
+                        <h3>Color Picker</h3>
+                        <p>Find the perfect colors for your projects</p>
+                        <button class="btn primary" onclick="openColorPicker()">Open Tool</button>
+                    </div>
+
+                    <div class="tool-card">
+                        <h3>Calculator</h3>
+                        <p>Quick calculations for your coding projects</p>
+                        <button class="btn primary" onclick="toggleCalculator()">Open Calculator</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Code Playground Modal -->
+    <div id="codePlayground" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeCodePlayground()">&times;</span>
+            <h3>Code Playground</h3>
+            <div class="playground-container">
+                <div class="code-input">
+                    <textarea id="htmlCode" placeholder="HTML code here..."><!DOCTYPE html>
+<html>
+<head>
+    <title>My Page</title>
+</head>
+<body>
+    <h1>Hello, World!</h1>
+    <p>This is my first webpage.</p>
+</body>
+</html></textarea>
+                    <textarea id="cssCode" placeholder="CSS code here...">body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+}
+
+h1 {
+    color: #333;
+}</textarea>
+                    <textarea id="jsCode" placeholder="JavaScript code here...">console.log('Hello from JavaScript!');</textarea>
+                </div>
+                <div class="code-output">
+                    <iframe id="outputFrame"></iframe>
+                </div>
+            </div>
+            <button class="btn" onclick="runCode()">Run Code</button>
+        </div>
     </div>
-  </header>
 
-  <main class="content page">
-    <div class="container">
-      <h2>Resources</h2>
-      <p class="muted">Interactive lessons, short videos, quizzes, and downloadable study guides curated by students.</p>
-
-      <section style="margin-top:18px">
-        <h3 class="kicker">Lessons</h3>
-        <div class="resources-grid">
-          <div class="resource-card card">
-            <h4>Getting Started with Python</h4>
-            <p class="muted">Basics: variables, control flow, and functions.</p>
-            <div style="margin-top:12px;display:flex;gap:8px">
-              <a class="btn" href="#lesson1">Open</a>
-              <a class="btn outline" href="materials/sample.txt" download>Download Notes</a>
-            </div>
-          </div>
-
-          <div class="resource-card card">
-            <h4>Intro to HTML & CSS</h4>
-            <p class="muted">Build responsive web pages and style them.</p>
-            <div style="margin-top:12px;display:flex;gap:8px">
-              <a class="btn" href="#lesson2">Open</a>
-              <a class="btn outline" href="#">Watch</a>
-            </div>
-          </div>
-
-          <div class="resource-card card">
-            <h4>Basic Algorithms</h4>
-            <p class="muted">Sorting, searching, and problem solving strategies.</p>
-            <div style="margin-top:12px;display:flex;gap:8px">
-              <a class="btn" href="#lesson3">Open</a>
-              <a class="btn outline" href="#">Quiz</a>
-            </div>
-          </div>
+    <!-- Calculator -->
+    <div id="calculator" class="calculator">
+        <div class="calc-display" id="calcDisplay">0</div>
+        <div class="calc-buttons">
+            <button onclick="calcPress('7')">7</button>
+            <button onclick="calcPress('8')">8</button>
+            <button onclick="calcPress('9')">9</button>
+            <button onclick="calcPress('/')">/</button>
+            <button onclick="calcPress('4')">4</button>
+            <button onclick="calcPress('5')">5</button>
+            <button onclick="calcPress('6')">6</button>
+            <button onclick="calcPress('*')">*</button>
+            <button onclick="calcPress('1')">1</button>
+            <button onclick="calcPress('2')">2</button>
+            <button onclick="calcPress('3')">3</button>
+            <button onclick="calcPress('-')">-</button>
+            <button onclick="calcPress('0')">0</button>
+            <button onclick="calcPress('.')">.</button>
+            <button onclick="calcPress('=')">=</button>
+            <button onclick="calcPress('+')">+</button>
+            <button onclick="calcClear()">C</button>
         </div>
-      </section>
-
-      <section id="lesson1" class="card" style="margin-top:20px">
-        <h3>Getting Started with Python</h3>
-        <p class="muted">Short video and a quick quiz to test your understanding.</p>
-        <div class="video" style="margin-top:12px">
-          <iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Lesson video" frameborder="0" allowfullscreen></iframe>
-        </div>
-        <div class="quiz" style="margin-top:12px">
-          <h4>Quick Quiz</h4>
-          <p>Which symbol starts a comment in Python?</p>
-          <div style="display:flex;flex-direction:column;gap:8px">
-            <label><input type="radio" name="q1" value="#" /> #</label>
-            <label><input type="radio" name="q1" value="//" /> //</label>
-            <label><input type="radio" name="q1" value="/*" /> /*</label>
-          </div>
-          <div style="margin-top:10px">
-            <button class="btn" onclick="checkQuiz()">Submit Answer</button>
-            <span id="quizResult" style="margin-left:12px"></span>
-          </div>
-        </div>
-      </section>
     </div>
-  </main>
 
-  <footer class="site-footer">
-    <div class="container">&copy; 2026 PeerLearn</div>
-  </footer>
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>PeerLearn</h4>
+                    <p>Student-built, student-powered learning platform.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="schedule.html">Schedule</a></li>
+                        <li><a href="resources.html">Resources</a></li>
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect</h4>
+                    <p>Built for FBLA 2026</p>
+                    <p>Created by students, for students</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 PeerLearn. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
 
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

@@ -1,0 +1,115 @@
+Data Analysis with Pandas
+==========================
+
+Pandas is a powerful Python library for data manipulation and analysis.
+
+Installation:
+pip install pandas
+
+Import:
+import pandas as pd
+
+Creating DataFrames:
+# From dictionary
+data = {
+    'Name': ['Alice', 'Bob', 'Charlie'],
+    'Age': [25, 30, 35],
+    'City': ['NYC', 'LA', 'Chicago']
+}
+df = pd.DataFrame(data)
+
+# From CSV
+df = pd.read_csv('data.csv')
+
+Basic Operations:
+# View first 5 rows
+df.head()
+
+# View last 5 rows
+df.tail()
+
+# Get info about DataFrame
+df.info()
+
+# Summary statistics
+df.describe()
+
+# Select columns
+df['Name']
+df[['Name', 'Age']]
+
+# Filter rows
+df[df['Age'] > 25]
+
+# Add new column
+df['Salary'] = [50000, 60000, 70000]
+
+Data Cleaning:
+# Handle missing values
+df.dropna()  # Remove rows with NaN
+df.fillna(0)  # Fill NaN with 0
+
+# Remove duplicates
+df.drop_duplicates()
+
+# Change data types
+df['Age'] = df['Age'].astype(int)
+
+Grouping and Aggregation:
+# Group by city and get mean age
+df.groupby('City')['Age'].mean()
+
+# Multiple aggregations
+df.groupby('City').agg({
+    'Age': 'mean',
+    'Salary': 'sum'
+})
+
+Merging DataFrames:
+# Inner join
+merged = pd.merge(df1, df2, on='key')
+
+# Left join
+merged = pd.merge(df1, df2, on='key', how='left')
+
+Data Visualization:
+import matplotlib.pyplot as plt
+
+# Bar chart
+df['City'].value_counts().plot(kind='bar')
+plt.show()
+
+# Scatter plot
+plt.scatter(df['Age'], df['Salary'])
+plt.show()
+
+Time Series:
+# Convert to datetime
+df['Date'] = pd.to_datetime(df['Date'])
+
+# Set as index
+df.set_index('Date', inplace=True)
+
+# Resample monthly
+monthly = df.resample('M').mean()
+
+Exporting Data:
+# To CSV
+df.to_csv('output.csv', index=False)
+
+# To Excel
+df.to_excel('output.xlsx', index=False)
+
+Common Use Cases:
+1. Data cleaning and preprocessing
+2. Exploratory data analysis
+3. Feature engineering
+4. Data aggregation and reporting
+5. Time series analysis
+
+Best Practices:
+- Use vectorized operations instead of loops
+- Set appropriate data types to save memory
+- Handle missing data appropriately
+- Document your data cleaning steps
+- Use meaningful column names

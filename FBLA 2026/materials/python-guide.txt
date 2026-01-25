@@ -1,0 +1,87 @@
+Python Programming Guide
+========================
+
+Python is a versatile, high-level programming language known for its simplicity and readability.
+
+Getting Started:
+Install Python from python.org
+Use IDLE or any text editor
+Run with: python filename.py
+
+Basic Syntax:
+print("Hello, World!")
+
+Variables:
+name = "Alice"
+age = 25
+height = 5.6
+
+Data Types:
+- int: 42
+- float: 3.14
+- str: "Hello"
+- bool: True/False
+- list: [1, 2, 3]
+- dict: {"key": "value"}
+
+Control Flow:
+if age > 18:
+    print("Adult")
+elif age > 13:
+    print("Teen")
+else:
+    print("Child")
+
+Loops:
+for i in range(5):
+    print(i)
+
+while condition:
+    # code
+
+Functions:
+def greet(name):
+    return f"Hello, {name}!"
+
+Lists:
+fruits = ["apple", "banana", "orange"]
+fruits.append("grape")
+for fruit in fruits:
+    print(fruit)
+
+Dictionaries:
+person = {
+    "name": "Alice",
+    "age": 25,
+    "city": "New York"
+}
+print(person["name"])
+
+File Handling:
+with open("file.txt", "r") as file:
+    content = file.read()
+
+with open("file.txt", "w") as file:
+    file.write("Hello, World!")
+
+Modules:
+import math
+print(math.sqrt(16))
+
+from datetime import datetime
+now = datetime.now()
+
+Exception Handling:
+try:
+    result = 10 / 0
+except ZeroDivisionError:
+    print("Cannot divide by zero")
+finally:
+    print("This always runs")
+
+Popular Libraries:
+- NumPy: Numerical computing
+- Pandas: Data manipulation
+- Matplotlib: Data visualization
+- Flask/Django: Web development
+- TensorFlow: Machine learning
