@@ -34,8 +34,8 @@ function loadProgress() {
     // Count completed lessons per subject
     const mathLessons = completedLessons.filter(id => ['algebra', 'geometry'].includes(id)).length;
     const scienceLessons = completedLessons.filter(id => ['biology', 'chemistry'].includes(id)).length;
-    const englishLessons = completedLessons.filter(id => ['essay-writing'].includes(id)).length;
-    const historyLessons = completedLessons.filter(id => ['world-history'].includes(id)).length;
+    const englishLessons = completedLessons.filter(id => ['essay'].includes(id)).length;
+    const historyLessons = completedLessons.filter(id => ['history'].includes(id)).length;
 
     updateDisplay('lessonsCount', completedLessons.length);
     updateDisplay('quizzesCount', quizzes);
@@ -356,30 +356,21 @@ function updateLessonProgress() {
     const completedLessons = JSON.parse(localStorage.getItem('completedLessons') || '[]');
     
     // Update individual lesson status
-    const lessonStatus = {
-        'algebra': 'algebra-status',
-        'geometry': 'geometry-status',
-        'biology': 'biology-status',
-        'chemistry': 'chemistry-status',
-        'essay': 'essay-status',
-        'history': 'history-status'
-    };
+    const lessons = [
+        { id: 'algebra', statusId: 'algebra-status', btnId: 'algebra-btn' },
+        { id: 'geometry', statusId: 'geometry-status', btnId: 'geometry-btn' },
+        { id: 'biology', statusId: 'biology-status', btnId: 'biology-btn' },
+        { id: 'chemistry', statusId: 'chemistry-status', btnId: 'chemistry-btn' },
+        { id: 'essay', statusId: 'essay-status', btnId: 'essay-btn' },
+        { id: 'history', statusId: 'history-status', btnId: 'history-btn' }
+    ];
     
-    const lessonBtns = {
-        'algebra': 'algebra-btn',
-        'geometry': 'geometry-btn',
-        'biology': 'biology-btn',
-        'chemistry': 'chemistry-btn',
-        'essay': 'essay-btn',
-        'history': 'history-btn'
-    };
-    
-    Object.keys(lessonStatus).forEach(lessonId => {
-        const statusEl = document.getElementById(lessonStatus[lessonId]);
-        const btnEl = document.getElementById(lessonBtns[lessonId]);
+    lessons.forEach(lesson => {
+        const statusEl = document.getElementById(lesson.statusId);
+        const btnEl = document.getElementById(lesson.btnId);
         
-        if (completedLessons.includes(lessonId)) {
-            if (statusEl) statusEl.textContent = 'Completed';
+        if (completedLessons.includes(lesson.id)) {
+            if (statusEl) statusEl.textContent = '✓ Completed';
             if (btnEl) {
                 btnEl.textContent = 'Review Lesson';
                 btnEl.classList.add('completed');
@@ -588,7 +579,7 @@ document.addEventListener('DOMContentLoaded', function() {
     loadTheme();
     loadProgress();
     updateActivityList();
-    updateLessonProgress(); // Update lesson completion status
+    updateLessonProgress();
 
     // Add event listeners
     const themeBtn = document.getElementById('themeToggle');
@@ -623,4 +614,43 @@ document.addEventListener('DOMContentLoaded', function() {
         card.style.animationDelay = `${index * 0.1}s`;
         card.classList.add('fade-in');
     });
+});
+
+// Ensure lesson progress is updated when page becomes visible (e.g., from cache)
+window.addEventListener('pageshow', () => {
+    updateLessonProgress();
+});
+
+// Add event listeners
+const themeBtn = document.getElementById('themeToggle');
+if (themeBtn) {
+    themeBtn.addEventListener('click', toggleTheme);
+}
+
+const resetBtn = document.getElementById('resetBtn');
+if (resetBtn) {
+    resetBtn.addEventListener('click', resetAll);
+}
+
+// Tab event listeners for resources page
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const tabId = this.dataset.tab;
+        switchTab(tabId);
+    });
+});
+
+// Filter event listeners for schedule page
+document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const filter = this.dataset.filter;
+        filterSessions(filter);
+    });
+});
+
+// Add fade-in animation to cards
+const cards = document.querySelectorAll('.feature-card, .subject-card, .session-card, .resource-card');
+cards.forEach((card, index) => {
+    card.style.animationDelay = `${index * 0.1}s`;
+    card.classList.add('fade-in');
 });
