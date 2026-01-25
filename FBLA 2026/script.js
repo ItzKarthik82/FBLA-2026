@@ -26,20 +26,93 @@ function loadTheme() {
 
 // Progress Management
 function loadProgress() {
-    const lessons = parseInt(localStorage.getItem('lessons') || '0');
+    const completedLessons = JSON.parse(localStorage.getItem('completedLessons') || '[]');
     const quizzes = parseInt(localStorage.getItem('quizzes') || '0');
     const hours = parseInt(localStorage.getItem('hours') || '0');
-    const achievements = parseInt(localStorage.getItem('achievements') || '0');
+    const sessions = parseInt(localStorage.getItem('sessions') || '0');
 
-    updateDisplay('lessonsCount', lessons);
+    // Count completed lessons per subject
+    const mathLessons = completedLessons.filter(id => ['algebra', 'geometry'].includes(id)).length;
+    const scienceLessons = completedLessons.filter(id => ['biology', 'chemistry'].includes(id)).length;
+    const englishLessons = completedLessons.filter(id => ['essay-writing'].includes(id)).length;
+    const historyLessons = completedLessons.filter(id => ['world-history'].includes(id)).length;
+
+    updateDisplay('lessonsCount', completedLessons.length);
     updateDisplay('quizzesCount', quizzes);
     updateDisplay('hoursCount', hours);
-    updateDisplay('achievementsCount', achievements);
 
-    // Update progress bars
-    updateProgressBar('mathProgress', Math.min(100, lessons * 5));
-    updateProgressBar('scienceProgress', Math.min(100, quizzes * 12));
-    updateProgressBar('englishProgress', Math.min(100, hours * 10));
+    // Update progress bars based on completed lessons per subject
+    const mathProgress = Math.min(100, (mathLessons / 2) * 100); // 2 math lessons
+    const scienceProgress = Math.min(100, (scienceLessons / 2) * 100); // 2 science lessons
+    const englishProgress = Math.min(100, (englishLessons / 1) * 100); // 1 english lesson
+
+    updateProgressBar('mathProgress', mathProgress);
+    updateProgressBar('scienceProgress', scienceProgress);
+    updateProgressBar('englishProgress', englishProgress);
+
+    // Update achievements
+    updateAchievements(completedLessons.length, quizzes, sessions);
+}
+
+function updateAchievements(lessons, quizzes, sessions) {
+    const achievements = [];
+
+    // First Steps: Complete first lesson
+    const firstStepsEl = document.getElementById('first-steps');
+    if (lessons >= 1) {
+        firstStepsEl.classList.remove('locked');
+        firstStepsEl.classList.add('unlocked');
+        achievements.push('first-steps');
+    } else {
+        firstStepsEl.classList.remove('unlocked');
+        firstStepsEl.classList.add('locked');
+    }
+
+    // Quiz Master: Pass 5 quizzes
+    const quizMasterEl = document.getElementById('quiz-master');
+    if (quizzes >= 5) {
+        quizMasterEl.classList.remove('locked');
+        quizMasterEl.classList.add('unlocked');
+        achievements.push('quiz-master');
+    } else {
+        quizMasterEl.classList.remove('unlocked');
+        quizMasterEl.classList.add('locked');
+    }
+
+    // Dedicated Learner: Complete 10 lessons
+    const dedicatedEl = document.getElementById('dedicated-learner');
+    if (lessons >= 10) {
+        dedicatedEl.classList.remove('locked');
+        dedicatedEl.classList.add('unlocked');
+        achievements.push('dedicated-learner');
+    } else {
+        dedicatedEl.classList.remove('unlocked');
+        dedicatedEl.classList.add('locked');
+    }
+
+    // Study Group: Join 5 sessions
+    const studyGroupEl = document.getElementById('study-group');
+    if (sessions >= 5) {
+        studyGroupEl.classList.remove('locked');
+        studyGroupEl.classList.add('unlocked');
+        achievements.push('study-group');
+    } else {
+        studyGroupEl.classList.remove('unlocked');
+        studyGroupEl.classList.add('locked');
+    }
+
+    // Academic Excellence: Complete all subjects (arbitrary: 20 lessons, 10 quizzes, 10 sessions)
+    const excellenceEl = document.getElementById('academic-excellence');
+    if (lessons >= 20 && quizzes >= 10 && sessions >= 10) {
+        excellenceEl.classList.remove('locked');
+        excellenceEl.classList.add('unlocked');
+        achievements.push('academic-excellence');
+    } else {
+        excellenceEl.classList.remove('unlocked');
+        excellenceEl.classList.add('locked');
+    }
+
+    updateDisplay('achievementsCount', achievements.length);
 }
 
 function updateDisplay(id, value) {
@@ -50,15 +123,51 @@ function updateDisplay(id, value) {
 function updateProgressBar(id, percentage) {
     const bar = document.getElementById(id);
     if (bar) bar.style.width = percentage + '%';
+    
+    const textId = id.replace('Progress', 'ProgressText');
+    const textElement = document.getElementById(textId);
+    if (textElement) textElement.textContent = percentage + '% Complete';
 }
 
 function markLessonComplete() {
+    if (!currentLessonId) {
+        currentLessonId = document.getElementById('lessonModal').getAttribute('data-lesson');
+        if (!currentLessonId) return;
+    }
+    
+    // Mark this specific lesson as completed
+    const completedLessonsStr = localStorage.getItem('completedLessons');
+    let completedLessons = [];
+    if (completedLessonsStr) {
+        try {
+            completedLessons = JSON.parse(completedLessonsStr);
+            if (!Array.isArray(completedLessons)) completedLessons = [];
+        } catch (e) {
+            completedLessons = [];
+        }
+    }
+    
+    if (!completedLessons.includes(currentLessonId)) {
+        completedLessons.push(currentLessonId);
+        localStorage.setItem('completedLessons', JSON.stringify(completedLessons));
+    }
+    
+    // Update global lessons count for backward compatibility
     const current = parseInt(localStorage.getItem('lessons') || '0');
     const newValue = Math.min(100, current + 1);
     localStorage.setItem('lessons', newValue);
-    addActivity('Completed a lesson');
+    
+    addActivity(`Completed "${currentLessonId.replace('-', ' ')}" lesson`);
     loadProgress();
     showToast('Lesson marked as complete!');
+    
+    // Close the lesson modal
+    document.getElementById('lessonModal').style.display = 'none';
+    
+    // Update lesson cards immediately
+    updateLessonCards();
+    
+    currentLessonId = null; // Reset
 }
 
 function takeQuiz() {
@@ -71,8 +180,12 @@ function takeQuiz() {
 }
 
 function joinSessionFromDash() {
+    const current = parseInt(localStorage.getItem('sessions') || '0');
+    const newValue = current + 1;
+    localStorage.setItem('sessions', newValue);
     addActivity('Joined a study session');
     showToast('Joined study session!');
+    loadProgress();
 }
 
 function addActivity(description) {
@@ -177,93 +290,184 @@ function filterSessions(category) {
 }
 
 // Resources Functions
-function openLesson(lessonId) {
-    const lessonData = {
-        'algebra': {
-            file: 'algebra-guide.txt',
-            title: 'Algebra Essentials'
-        },
-        'geometry': {
-            file: 'geometry-guide.txt',
-            title: 'Geometry Fundamentals'
-        },
-        'biology': {
-            file: 'biology-guide.txt',
-            title: 'Biology Basics'
-        },
-        'chemistry': {
-            file: 'chemistry-guide.txt',
-            title: 'Chemistry Fundamentals'
-        },
-        'essay-writing': {
-            file: 'essay-guide.txt',
-            title: 'Essay Writing'
-        },
-        'world-history': {
-            file: 'history-guide.txt',
-            title: 'World History'
-        }
-    };
+let currentLessonId = null;
 
+function startLesson(lessonId) {
+    currentLessonId = lessonId;
+    
+    const lessonData = {
+        'algebra': { file: 'algebra-guide.txt', title: 'Algebra Essentials' },
+        'geometry': { file: 'geometry-guide.txt', title: 'Geometry Fundamentals' },
+        'biology': { file: 'biology-guide.txt', title: 'Biology Basics' },
+        'chemistry': { file: 'chemistry-guide.txt', title: 'Chemistry Fundamentals' },
+        'essay': { file: 'essay-guide.txt', title: 'Essay Writing' },
+        'history': { file: 'history-guide.txt', title: 'World History' }
+    };
+    
     const data = lessonData[lessonId];
     if (!data) {
         showToast('Lesson not available yet.');
         return;
     }
-
+    
+    document.getElementById('lessonTitle').textContent = data.title;
+    
     fetch(`materials/${data.file}`)
         .then(response => response.text())
         .then(content => {
-            document.getElementById('lessonTitle').textContent = data.title;
-            document.getElementById('lessonContent').innerHTML = '<pre>' + content + '</pre>';
+            document.getElementById('lessonContent').innerHTML = `<pre>${content}</pre>`;
             document.getElementById('lessonModal').style.display = 'block';
         })
         .catch(error => {
-            showToast('Error loading lesson content.');
-            console.error('Error:', error);
+            document.getElementById('lessonContent').innerHTML = '<p>Error loading lesson content.</p>';
+            document.getElementById('lessonModal').style.display = 'block';
         });
 }
 
-function closeLesson() {
-    document.getElementById('lessonModal').style.display = 'none';
-}
-
-function startQuiz(quizId) {
-    const quizElement = document.getElementById(`${quizId}-quiz`);
-    if (quizElement) {
-        quizElement.style.display = 'block';
+function completeLesson() {
+    if (!currentLessonId) return;
+    
+    // Mark lesson as completed
+    const completedLessons = JSON.parse(localStorage.getItem('completedLessons') || '[]');
+    if (!completedLessons.includes(currentLessonId)) {
+        completedLessons.push(currentLessonId);
+        localStorage.setItem('completedLessons', JSON.stringify(completedLessons));
     }
+    
+    // Update progress
+    updateLessonProgress();
+    
+    // Update achievements
+    const lessons = completedLessons.length;
+    const quizzes = parseInt(localStorage.getItem('quizzes') || '0');
+    const sessions = parseInt(localStorage.getItem('sessions') || '0');
+    updateAchievements(lessons, quizzes, sessions);
+    
+    showToast('Lesson completed!');
+    closeModal();
 }
 
-function checkQuiz(quizId) {
-    const form = document.getElementById(`${quizId}-quiz`);
-    const resultElement = document.getElementById(`${quizId}-result`);
-    const radios = form.querySelectorAll('input[type="radio"]');
-    let selectedValue = null;
+function closeModal() {
+    document.getElementById('lessonModal').style.display = 'none';
+    currentLessonId = null;
+}
 
-    radios.forEach(radio => {
-        if (radio.checked) selectedValue = radio.value;
+function updateLessonProgress() {
+    const completedLessons = JSON.parse(localStorage.getItem('completedLessons') || '[]');
+    
+    // Update individual lesson status
+    const lessonStatus = {
+        'algebra': 'algebra-status',
+        'geometry': 'geometry-status',
+        'biology': 'biology-status',
+        'chemistry': 'chemistry-status',
+        'essay': 'essay-status',
+        'history': 'history-status'
+    };
+    
+    const lessonBtns = {
+        'algebra': 'algebra-btn',
+        'geometry': 'geometry-btn',
+        'biology': 'biology-btn',
+        'chemistry': 'chemistry-btn',
+        'essay': 'essay-btn',
+        'history': 'history-btn'
+    };
+    
+    Object.keys(lessonStatus).forEach(lessonId => {
+        const statusEl = document.getElementById(lessonStatus[lessonId]);
+        const btnEl = document.getElementById(lessonBtns[lessonId]);
+        
+        if (completedLessons.includes(lessonId)) {
+            if (statusEl) statusEl.textContent = 'Completed';
+            if (btnEl) {
+                btnEl.textContent = 'Review Lesson';
+                btnEl.classList.add('completed');
+            }
+        } else {
+            if (statusEl) statusEl.textContent = '';
+            if (btnEl) {
+                btnEl.textContent = 'Start Lesson';
+                btnEl.classList.remove('completed');
+            }
+        }
     });
+    
+    // Update course progress
+    const courses = {
+        'math': { lessons: ['algebra', 'geometry'], progressId: 'math-progress', courseId: 'math-course' },
+        'science': { lessons: ['biology', 'chemistry'], progressId: 'science-progress', courseId: 'science-course' },
+        'english': { lessons: ['essay'], progressId: 'english-progress', courseId: 'english-course' },
+        'history': { lessons: ['history'], progressId: 'history-progress', courseId: 'history-course' }
+    };
+    
+    Object.keys(courses).forEach(courseKey => {
+        const course = courses[courseKey];
+        const completed = course.lessons.filter(lesson => completedLessons.includes(lesson)).length;
+        const total = course.lessons.length;
+        
+        const progressEl = document.getElementById(course.progressId);
+        if (progressEl) {
+            progressEl.textContent = `${completed} / ${total} completed`;
+        }
+        
+        const courseEl = document.getElementById(course.courseId);
+        if (courseEl) {
+            if (completed === total) {
+                courseEl.classList.add('completed');
+            } else {
+                courseEl.classList.remove('completed');
+            }
+        }
+    });
+}
 
-    if (!selectedValue) {
-        resultElement.textContent = 'Please select an answer.';
-        resultElement.className = 'quiz-result incorrect';
+function checkQuiz(quizType) {
+    const quizEl = document.getElementById(`${quizType}-quiz`);
+    const resultEl = document.getElementById(`${quizType}-result`);
+    
+    if (!quizEl || !resultEl) return;
+    
+    const radios = quizEl.querySelectorAll('input[type="radio"]:checked');
+    if (radios.length === 0) {
+        resultEl.innerHTML = '<p>Please select an answer.</p>';
         return;
     }
-
-    // Simple quiz logic - in real app, this would be more sophisticated
-    const correctAnswers = { q1: '2', q2: 'cell' };
-    const isCorrect = selectedValue === correctAnswers.q1 || selectedValue === correctAnswers.q2;
-
-    if (isCorrect) {
-        resultElement.textContent = 'Correct! Well done!';
-        resultElement.className = 'quiz-result correct';
-        takeQuiz(); // Update progress
+    
+    const answer = radios[0].value;
+    let correct = false;
+    let message = '';
+    
+    if (quizType === 'math' && answer === '2') {
+        correct = true;
+        message = 'Correct! 2x = 4, so x = 2.';
+    } else if (quizType === 'science' && answer === 'cell') {
+        correct = true;
+        message = 'Correct! The cell is the basic unit of life.';
     } else {
-        resultElement.textContent = 'Not quite right. Try again!';
-        resultElement.className = 'quiz-result incorrect';
+        message = 'Incorrect. Try again!';
+    }
+    
+    resultEl.innerHTML = `<p>${message}</p>`;
+    
+    if (correct) {
+        // Increment quiz count
+        const quizzes = parseInt(localStorage.getItem('quizzes') || '0') + 1;
+        localStorage.setItem('quizzes', quizzes);
+        updateAchievements();
+        showToast('Quiz completed!');
     }
 }
+
+function startTimer() {
+    showToast('Timer feature coming soon!');
+}
+
+function openNotes() {
+    showToast('Notes feature coming soon!');
+}
+
+
 
 // Tab switching
 function switchTab(tabId) {
@@ -384,6 +588,7 @@ document.addEventListener('DOMContentLoaded', function() {
     loadTheme();
     loadProgress();
     updateActivityList();
+    updateLessonProgress(); // Update lesson completion status
 
     // Add event listeners
     const themeBtn = document.getElementById('themeToggle');

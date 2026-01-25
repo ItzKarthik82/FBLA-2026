@@ -48,27 +48,20 @@
                         <h4>Quick Stats</h4>
                         <div class="stat">
                             <span class="stat-label">Lessons Completed</span>
-                            <span class="stat-value" id="lessonsCount">12</span>
+                            <span class="stat-value" id="lessonsCount">0</span>
                         </div>
                         <div class="stat">
                             <span class="stat-label">Quizzes Passed</span>
-                            <span class="stat-value" id="quizzesCount">8</span>
+                            <span class="stat-value" id="quizzesCount">0</span>
                         </div>
                         <div class="stat">
                             <span class="stat-label">Hours Studied</span>
-                            <span class="stat-value" id="hoursCount">24</span>
+                            <span class="stat-value" id="hoursCount">0</span>
                         </div>
                         <div class="stat">
                             <span class="stat-label">Achievements</span>
-                            <span class="stat-value" id="achievementsCount">5</span>
+                            <span class="stat-value" id="achievementsCount">0</span>
                         </div>
-                    </div>
-
-                    <div class="quick-actions">
-                        <h4>Quick Actions</h4>
-                        <button class="btn full" onclick="markLessonComplete()">Mark Lesson Complete</button>
-                        <button class="btn full outline" onclick="takeQuiz()">Take a Quiz</button>
-                        <button class="btn full outline" onclick="joinSessionFromDash()">Join Study Session</button>
                     </div>
                 </div>
 
@@ -79,23 +72,23 @@
                             <div class="progress-card">
                                 <h4>Mathematics</h4>
                                 <div class="progress-bar">
-                                    <div class="progress-fill" id="mathProgress" style="width: 65%"></div>
+                                    <div class="progress-fill" id="mathProgress" style="width: 0%"></div>
                                 </div>
-                                <span class="progress-text">65% Complete</span>
+                                <span class="progress-text" id="mathProgressText">0% Complete</span>
                             </div>
                             <div class="progress-card">
                                 <h4>Science</h4>
                                 <div class="progress-bar">
-                                    <div class="progress-fill" id="scienceProgress" style="width: 40%"></div>
+                                    <div class="progress-fill" id="scienceProgress" style="width: 0%"></div>
                                 </div>
-                                <span class="progress-text">40% Complete</span>
+                                <span class="progress-text" id="scienceProgressText">0% Complete</span>
                             </div>
                             <div class="progress-card">
                                 <h4>English</h4>
                                 <div class="progress-bar">
-                                    <div class="progress-fill" id="englishProgress" style="width: 25%"></div>
+                                    <div class="progress-fill" id="englishProgress" style="width: 0%"></div>
                                 </div>
-                                <span class="progress-text">25% Complete</span>
+                                <span class="progress-text" id="englishProgressText">0% Complete</span>
                             </div>
                         </div>
                     </div>
@@ -103,57 +96,37 @@
                     <div class="recent-activity">
                         <h3>Recent Activity</h3>
                         <div class="activity-list" id="activityList">
-                            <div class="activity-item">
-                                <div class="activity-icon">📚</div>
-                                <div class="activity-content">
-                                    <p>Completed "HTML & CSS Fundamentals" lesson</p>
-                                    <span class="activity-time">2 hours ago</span>
-                                </div>
-                            </div>
-                            <div class="activity-item">
-                                <div class="activity-icon">✅</div>
-                                <div class="activity-content">
-                                    <p>Passed "JavaScript Basics" quiz</p>
-                                    <span class="activity-time">1 day ago</span>
-                                </div>
-                            </div>
-                            <div class="activity-item">
-                                <div class="activity-icon">👥</div>
-                                <div class="activity-content">
-                                    <p>Joined "React Components" study session</p>
-                                    <span class="activity-time">3 days ago</span>
-                                </div>
-                            </div>
+                            <!-- Activities will be loaded dynamically -->
                         </div>
                     </div>
 
                     <div class="achievements-section">
                         <h3>Achievements</h3>
                         <div class="achievements-grid">
-                            <div class="achievement unlocked">
+                            <div class="achievement locked" id="first-steps">
                                 <div class="achievement-icon">🏆</div>
                                 <h4>First Steps</h4>
                                 <p>Complete your first lesson</p>
                             </div>
-                            <div class="achievement unlocked">
+                            <div class="achievement locked" id="quiz-master">
                                 <div class="achievement-icon">🎯</div>
                                 <h4>Quiz Master</h4>
                                 <p>Pass 5 quizzes</p>
                             </div>
-                            <div class="achievement unlocked">
-                                <div class="achievement-icon">👨‍💻</div>
-                                <h4>Code Warrior</h4>
-                                <p>Write 1000 lines of code</p>
+                            <div class="achievement locked" id="dedicated-learner">
+                                <div class="achievement-icon">📚</div>
+                                <h4>Dedicated Learner</h4>
+                                <p>Complete 10 lessons</p>
                             </div>
-                            <div class="achievement locked">
-                                <div class="achievement-icon">🚀</div>
-                                <h4>Full Stack</h4>
-                                <p>Master front-end and back-end</p>
+                            <div class="achievement locked" id="study-group">
+                                <div class="achievement-icon">👥</div>
+                                <h4>Study Group</h4>
+                                <p>Join 5 study sessions</p>
                             </div>
-                            <div class="achievement locked">
+                            <div class="achievement locked" id="academic-excellence">
                                 <div class="achievement-icon">🌟</div>
-                                <h4>Tech Guru</h4>
-                                <p>Complete all courses</p>
+                                <h4>Academic Excellence</h4>
+                                <p>Complete all subjects</p>
                             </div>
                         </div>
                     </div>
