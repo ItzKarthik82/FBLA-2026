@@ -1,0 +1,65 @@
+Geometry Fundamentals Guide
+============================
+
+Geometry is the study of shapes, sizes, and properties of space.
+
+Points, Lines, and Planes:
+- Point: A location with no size (represented by a dot)
+- Line: Straight path extending infinitely in both directions
+- Plane: Flat surface extending infinitely
+
+Angles:
+- Acute: Less than 90°
+- Right: Exactly 90°
+- Obtuse: Greater than 90° but less than 180°
+- Straight: 180°
+- Reflex: Greater than 180°
+
+Angle Relationships:
+- Vertical angles: Equal
+- Adjacent angles: Sum to 180°
+- Complementary angles: Sum to 90°
+- Supplementary angles: Sum to 180°
+
+Triangles:
+- Sum of interior angles: 180°
+- Types: Equilateral, Isosceles, Scalene
+- Area: (base × height) ÷ 2
+- Pythagorean Theorem: a² + b² = c²
+
+Quadrilaterals:
+- Rectangle: Opposite sides equal, 4 right angles
+- Square: All sides equal, 4 right angles
+- Parallelogram: Opposite sides parallel and equal
+- Trapezoid: At least one pair of parallel sides
+
+Circles:
+- Circumference: 2πr or πd
+- Area: πr²
+- Diameter: 2r
+- Radius: d/2
+
+Coordinate Geometry:
+- Distance formula: √[(x₂-x₁)² + (y₂-y₁)²]
+- Midpoint formula: ((x₁+x₂)/2, (y₁+y₂)/2)
+- Slope: (y₂-y₁)/(x₂-x₁)
+
+Transformations:
+- Translation: Slide
+- Rotation: Turn around a point
+- Reflection: Mirror image
+- Dilation: Size change
+
+Proofs:
+- Use given information
+- Apply theorems and postulates
+- Logical reasoning
+- Two-column proofs
+
+Volume and Surface Area:
+- Cube: V = s³, SA = 6s²
+- Rectangular Prism: V = lwh, SA = 2(lw + lh + wh)
+- Cylinder: V = πr²h, SA = 2πr² + 2πrh
+- Sphere: V = (4/3)πr³, SA = 4πr²
+
+Practice drawing diagrams and labeling all information provided!

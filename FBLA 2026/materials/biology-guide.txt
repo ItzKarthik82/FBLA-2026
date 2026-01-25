@@ -1,0 +1,70 @@
+Biology Fundamentals Guide
+==========================
+
+Biology is the study of life and living organisms.
+
+Cell Theory:
+- All living things are made of cells
+- Cells are the basic unit of life
+- All cells come from pre-existing cells
+
+Cell Structure:
+- Cell Membrane: Controls what enters/exits the cell
+- Cytoplasm: Jelly-like substance inside the cell
+- Nucleus: Control center containing DNA
+- Mitochondria: Powerhouses that produce energy
+- Ribosomes: Protein factories
+- Endoplasmic Reticulum: Transportation system
+- Golgi Apparatus: Packaging and shipping
+
+Cell Types:
+- Prokaryotic: No nucleus (bacteria)
+- Eukaryotic: Has nucleus (plants, animals, fungi)
+
+DNA and Genetics:
+- DNA: Deoxyribonucleic acid, genetic material
+- Genes: Segments of DNA that code for traits
+- Chromosomes: Structures containing DNA
+- Mitosis: Cell division for growth
+- Meiosis: Cell division for reproduction
+
+Evolution:
+- Natural Selection: Survival of the fittest
+- Adaptation: Changes that help organisms survive
+- Speciation: Formation of new species
+- Fossil Record: Evidence of past life
+
+Ecology:
+- Ecosystem: Community of organisms and environment
+- Food Chain: Energy flow through organisms
+- Biodiversity: Variety of life
+- Symbiosis: Relationships between organisms
+  - Mutualism: Both benefit
+  - Parasitism: One benefits, one harmed
+  - Commensalism: One benefits, other unaffected
+
+Human Biology:
+- Organ Systems: Groups of organs working together
+- Circulatory System: Transports blood and nutrients
+- Respiratory System: Gas exchange
+- Digestive System: Breaks down food
+- Nervous System: Controls body functions
+- Immune System: Fights disease
+
+Photosynthesis:
+- Process where plants make food using sunlight
+- 6CO2 + 6H2O + light → C6H12O6 + 6O2
+
+Cellular Respiration:
+- Process where cells release energy from food
+- C6H12O6 + 6O2 → 6CO2 + 6H2O + energy
+
+Scientific Method:
+1. Observe
+2. Question
+3. Hypothesis
+4. Experiment
+5. Analyze
+6. Conclusion
+
+Practice drawing cell diagrams and food webs!

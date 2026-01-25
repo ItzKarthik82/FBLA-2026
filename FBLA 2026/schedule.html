@@ -10,7 +10,7 @@
     <header class="site-header">
         <div class="container">
             <h1 class="brand">PeerLearn</h1>
-            <p class="tag">Tech Learning Hub</p>
+            <p class="tag">Academic Learning Hub</p>
             <nav>
                 <ul class="nav">
                     <li><a href="index.html">Home</a></li>
@@ -29,110 +29,110 @@
     <main class="content">
         <div class="container">
             <h2>Live Tutoring & Study Sessions</h2>
-            <p>Join interactive coding sessions, group study, and peer tutoring. All times in your local timezone.</p>
+            <p>Join interactive study sessions, group discussions, and peer tutoring. All times in your local timezone.</p>
 
             <div class="schedule-filters">
                 <button class="filter-btn active" data-filter="all">All Sessions</button>
-                <button class="filter-btn" data-filter="web-dev">Web Dev</button>
-                <button class="filter-btn" data-filter="python">Python</button>
-                <button class="filter-btn" data-filter="data">Data</button>
+                <button class="filter-btn" data-filter="math">Math</button>
+                <button class="filter-btn" data-filter="science">Science</button>
+                <button class="filter-btn" data-filter="english">English</button>
             </div>
 
             <div class="schedule-grid">
-                <div class="session-card" data-category="web-dev">
+                <div class="session-card" data-category="math">
                     <div class="session-time">
                         <span class="day">Mon</span>
                         <span class="time">4:00 PM</span>
                     </div>
                     <div class="session-details">
-                        <h3>Intro to HTML & CSS</h3>
-                        <p>Learn the basics of web development with hands-on coding.</p>
+                        <h3>Algebra Fundamentals</h3>
+                        <p>Master variables, equations, and basic algebraic concepts.</p>
                         <div class="session-meta">
                             <span>Host: Alex</span>
                             <span>Level: Beginner</span>
                         </div>
                     </div>
-                    <button class="btn primary join-btn" onclick="joinSession('Intro to HTML & CSS')">Join Session</button>
+                    <button class="btn primary join-btn" onclick="joinSession('Algebra Fundamentals')">Join Session</button>
                 </div>
 
-                <div class="session-card" data-category="python">
+                <div class="session-card" data-category="science">
                     <div class="session-time">
                         <span class="day">Tue</span>
                         <span class="time">6:00 PM</span>
                     </div>
                     <div class="session-details">
-                        <h3>Python Basics</h3>
-                        <p>Variables, loops, and functions in Python.</p>
+                        <h3>Biology Basics</h3>
+                        <p>Explore cells, organisms, and the fundamentals of life science.</p>
                         <div class="session-meta">
                             <span>Host: Jordan</span>
                             <span>Level: Beginner</span>
                         </div>
                     </div>
-                    <button class="btn primary join-btn" onclick="joinSession('Python Basics')">Join Session</button>
+                    <button class="btn primary join-btn" onclick="joinSession('Biology Basics')">Join Session</button>
                 </div>
 
-                <div class="session-card" data-category="web-dev">
+                <div class="session-card" data-category="english">
                     <div class="session-time">
                         <span class="day">Wed</span>
                         <span class="time">5:30 PM</span>
                     </div>
                     <div class="session-details">
-                        <h3>JavaScript Fundamentals</h3>
-                        <p>Interactive web development with JS.</p>
+                        <h3>Essay Writing</h3>
+                        <p>Learn structure, thesis statements, and effective writing techniques.</p>
                         <div class="session-meta">
                             <span>Host: Sam</span>
                             <span>Level: Intermediate</span>
                         </div>
                     </div>
-                    <button class="btn primary join-btn" onclick="joinSession('JavaScript Fundamentals')">Join Session</button>
+                    <button class="btn primary join-btn" onclick="joinSession('Essay Writing')">Join Session</button>
                 </div>
 
-                <div class="session-card" data-category="data">
+                <div class="session-card" data-category="history">
                     <div class="session-time">
                         <span class="day">Thu</span>
                         <span class="time">7:00 PM</span>
                     </div>
                     <div class="session-details">
-                        <h3>Data Analysis with Python</h3>
-                        <p>Using pandas and matplotlib for data insights.</p>
+                        <h3>World History Overview</h3>
+                        <p>Journey through major civilizations and historical events.</p>
                         <div class="session-meta">
                             <span>Host: Taylor</span>
-                            <span>Level: Advanced</span>
+                            <span>Level: Beginner</span>
                         </div>
                     </div>
-                    <button class="btn primary join-btn" onclick="joinSession('Data Analysis with Python')">Join Session</button>
+                    <button class="btn primary join-btn" onclick="joinSession('World History Overview')">Join Session</button>
                 </div>
 
-                <div class="session-card" data-category="web-dev">
+                <div class="session-card" data-category="math">
                     <div class="session-time">
                         <span class="day">Fri</span>
                         <span class="time">3:00 PM</span>
                     </div>
                     <div class="session-details">
-                        <h3>React Components</h3>
-                        <p>Building dynamic UIs with React.</p>
+                        <h3>Geometry Concepts</h3>
+                        <p>Shapes, angles, theorems, and geometric problem-solving.</p>
                         <div class="session-meta">
                             <span>Host: Casey</span>
                             <span>Level: Intermediate</span>
                         </div>
                     </div>
-                    <button class="btn primary join-btn" onclick="joinSession('React Components')">Join Session</button>
+                    <button class="btn primary join-btn" onclick="joinSession('Geometry Concepts')">Join Session</button>
                 </div>
 
-                <div class="session-card" data-category="python">
+                <div class="session-card" data-category="science">
                     <div class="session-time">
                         <span class="day">Sat</span>
                         <span class="time">10:00 AM</span>
                     </div>
                     <div class="session-details">
-                        <h3>Web Scraping with Python</h3>
-                        <p>Automate data collection from websites.</p>
+                        <h3>Chemistry Lab Basics</h3>
+                        <p>Elements, compounds, reactions, and laboratory techniques.</p>
                         <div class="session-meta">
                             <span>Host: Riley</span>
                             <span>Level: Intermediate</span>
                         </div>
                     </div>
-                    <button class="btn primary join-btn" onclick="joinSession('Web Scraping with Python')">Join Session</button>
+                    <button class="btn primary join-btn" onclick="joinSession('Chemistry Lab Basics')">Join Session</button>
                 </div>
             </div>
 
@@ -143,10 +143,10 @@
                     <input type="text" id="sessionHost" placeholder="Your Name" required>
                     <input type="datetime-local" id="sessionTime" required>
                     <select id="sessionCategory">
-                        <option value="web-dev">Web Development</option>
-                        <option value="python">Python</option>
-                        <option value="data">Data & Analytics</option>
-                        <option value="design">UI/UX Design</option>
+                        <option value="math">Mathematics</option>
+                        <option value="science">Science</option>
+                        <option value="english">English</option>
+                        <option value="history">History</option>
                     </select>
                     <button type="submit" class="btn primary">Propose Session</button>
                 </form>

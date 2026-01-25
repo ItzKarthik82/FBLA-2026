@@ -1,0 +1,49 @@
+Algebra Essentials Guide
+========================
+
+Algebra is the branch of mathematics that uses letters and symbols to represent numbers and quantities in formulas and equations.
+
+Variables and Constants:
+- Variables: Letters that represent unknown values (x, y, z)
+- Constants: Fixed values (2, 3.14, π)
+
+Basic Operations:
+- Addition: x + 5 = 10
+- Subtraction: x - 3 = 7
+- Multiplication: 2x = 8
+- Division: x/2 = 4
+
+Solving Linear Equations:
+1. Isolate the variable on one side
+2. Use inverse operations
+3. Check your solution
+
+Example: Solve 2x + 3 = 7
+- Subtract 3: 2x = 4
+- Divide by 2: x = 2
+
+Quadratic Equations:
+ax² + bx + c = 0
+Use quadratic formula: x = (-b ± √(b²-4ac))/(2a)
+
+Factoring:
+- Find two numbers that multiply to give ac and add to give b
+- Example: x² + 5x + 6 = (x + 2)(x + 3)
+
+Systems of Equations:
+- Method of substitution
+- Method of elimination
+- Graphing
+
+Word Problems:
+1. Define variables
+2. Write equations
+3. Solve
+4. Check answer
+
+Common Mistakes:
+- Forgetting to perform the same operation on both sides
+- Incorrect order of operations
+- Sign errors when distributing
+
+Practice regularly and check your work!

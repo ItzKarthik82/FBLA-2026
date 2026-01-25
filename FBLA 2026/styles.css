@@ -855,6 +855,28 @@ body.dark .modal-content {
     background: var(--card-bg);
 }
 
+.modal-body {
+    max-height: 60vh;
+    overflow-y: auto;
+    margin: 20px 0;
+}
+
+.lesson-video {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.lesson-video iframe {
+    border-radius: var(--border-radius);
+}
+
+pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-family: var(--font-mono);
+    line-height: 1.5;
+}
+
 .close {
     position: absolute;
     top: 10px;

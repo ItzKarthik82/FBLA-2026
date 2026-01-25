@@ -1,0 +1,86 @@
+Chemistry Fundamentals Guide
+=============================
+
+Chemistry is the study of matter, its properties, and transformations.
+
+Matter and Energy:
+- Matter: Anything that has mass and takes up space
+- States of Matter: Solid, Liquid, Gas, Plasma
+- Energy: Ability to do work
+- Chemical vs Physical Changes
+
+Atomic Structure:
+- Atom: Smallest unit of an element
+- Protons: Positive charge, in nucleus
+- Neutrons: No charge, in nucleus
+- Electrons: Negative charge, orbiting nucleus
+- Atomic Number: Number of protons
+- Mass Number: Protons + neutrons
+- Isotopes: Atoms of same element with different neutrons
+
+Periodic Table:
+- Elements arranged by atomic number
+- Groups: Vertical columns (similar properties)
+- Periods: Horizontal rows
+- Metals: Left side, shiny, conduct electricity
+- Nonmetals: Right side, dull, poor conductors
+- Metalloids: Properties of both
+
+Chemical Bonding:
+- Ionic Bonds: Transfer of electrons
+- Covalent Bonds: Sharing of electrons
+- Metallic Bonds: Sea of electrons
+- Lewis Dot Structures: Show valence electrons
+
+Chemical Reactions:
+- Reactants → Products
+- Types: Synthesis, Decomposition, Single Replacement, Double Replacement, Combustion
+- Balancing Equations: Equal atoms on both sides
+- Law of Conservation of Mass: Matter cannot be created or destroyed
+
+Acids and Bases:
+- Acids: Donate H+ ions, sour taste, pH < 7
+- Bases: Accept H+ ions, bitter taste, pH > 7
+- pH Scale: 0-14
+- Neutral: pH = 7
+- Indicators: Show acid/base strength
+
+Solutions:
+- Solvent: Dissolving medium
+- Solute: Substance being dissolved
+- Concentration: Amount of solute per solvent
+- Molarity: Moles per liter
+- Dilution: Adding solvent to decrease concentration
+
+Stoichiometry:
+- Mole: 6.02 × 10²³ particles
+- Molar Mass: Mass of one mole
+- Limiting Reactant: Reactant that runs out first
+- Percent Yield: Actual vs theoretical yield
+
+Gas Laws:
+- Boyle's Law: P₁V₁ = P₂V₂ (pressure-volume)
+- Charles's Law: V₁/T₁ = V₂/T₂ (volume-temperature)
+- Gay-Lussac's Law: P₁/T₁ = P₂/T₂ (pressure-temperature)
+- Combined Gas Law: P₁V₁/T₁ = P₂V₂/T₂
+
+Thermodynamics:
+- Endothermic: Absorbs heat
+- Exothermic: Releases heat
+- Activation Energy: Energy needed to start reaction
+- Catalyst: Speeds up reaction without being consumed
+
+Organic Chemistry:
+- Carbon-based compounds
+- Hydrocarbons: Carbon and hydrogen
+- Functional Groups: Determine properties
+- Polymers: Long chain molecules
+
+Nuclear Chemistry:
+- Radioactivity: Unstable nuclei decay
+- Alpha, Beta, Gamma radiation
+- Half-life: Time for half to decay
+- Nuclear Fission: Splitting atoms
+- Nuclear Fusion: Combining atoms
+
+Practice balancing equations and drawing Lewis structures!

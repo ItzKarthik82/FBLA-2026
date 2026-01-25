@@ -37,9 +37,9 @@ function loadProgress() {
     updateDisplay('achievementsCount', achievements);
 
     // Update progress bars
-    updateProgressBar('webProgress', Math.min(100, lessons * 5));
-    updateProgressBar('pythonProgress', Math.min(100, quizzes * 12));
-    updateProgressBar('dataProgress', Math.min(100, hours * 10));
+    updateProgressBar('mathProgress', Math.min(100, lessons * 5));
+    updateProgressBar('scienceProgress', Math.min(100, quizzes * 12));
+    updateProgressBar('englishProgress', Math.min(100, hours * 10));
 }
 
 function updateDisplay(id, value) {
@@ -178,8 +178,54 @@ function filterSessions(category) {
 
 // Resources Functions
 function openLesson(lessonId) {
-    showToast(`Opening ${lessonId} lesson...`);
-    // In a real app, this would navigate to lesson page
+    const lessonData = {
+        'algebra': {
+            file: 'algebra-guide.txt',
+            title: 'Algebra Essentials'
+        },
+        'geometry': {
+            file: 'geometry-guide.txt',
+            title: 'Geometry Fundamentals'
+        },
+        'biology': {
+            file: 'biology-guide.txt',
+            title: 'Biology Basics'
+        },
+        'chemistry': {
+            file: 'chemistry-guide.txt',
+            title: 'Chemistry Fundamentals'
+        },
+        'essay-writing': {
+            file: 'essay-guide.txt',
+            title: 'Essay Writing'
+        },
+        'world-history': {
+            file: 'history-guide.txt',
+            title: 'World History'
+        }
+    };
+
+    const data = lessonData[lessonId];
+    if (!data) {
+        showToast('Lesson not available yet.');
+        return;
+    }
+
+    fetch(`materials/${data.file}`)
+        .then(response => response.text())
+        .then(content => {
+            document.getElementById('lessonTitle').textContent = data.title;
+            document.getElementById('lessonContent').innerHTML = '<pre>' + content + '</pre>';
+            document.getElementById('lessonModal').style.display = 'block';
+        })
+        .catch(error => {
+            showToast('Error loading lesson content.');
+            console.error('Error:', error);
+        });
+}
+
+function closeLesson() {
+    document.getElementById('lessonModal').style.display = 'none';
 }
 
 function startQuiz(quizId) {
@@ -206,7 +252,7 @@ function checkQuiz(quizId) {
     }
 
     // Simple quiz logic - in real app, this would be more sophisticated
-    const correctAnswers = { q1: 'HyperText Markup Language', q2: 'background-color' };
+    const correctAnswers = { q1: '2', q2: 'cell' };
     const isCorrect = selectedValue === correctAnswers.q1 || selectedValue === correctAnswers.q2;
 
     if (isCorrect) {
