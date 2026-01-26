@@ -131,31 +131,41 @@
             </div>
 
             <div id="quizzes" class="tab-content">
-                <div class="quiz-section">
-                    <h3>Mathematics Quiz</h3>
-                    <div id="math-quiz" class="quiz-container">
-                        <div class="quiz-question">
-                            <p>What is the value of x in the equation 2x + 3 = 7?</p>
-                            <label><input type="radio" name="math-q1" value="2"> 2</label>
-                            <label><input type="radio" name="math-q1" value="3"> 3</label>
-                            <label><input type="radio" name="math-q1" value="4"> 4</label>
+                <div class="courses-grid">
+                    <div class="course-card" id="math-quiz-course">
+                        <h3>Mathematics Quizzes</h3>
+                        <p>Test your knowledge of mathematical concepts.</p>
+                        <div class="course-progress" id="math-quiz-progress">0 / 2 completed</div>
+                        <div class="sub-lessons">
+                            <div class="sub-lesson">
+                                <span class="lesson-title">Basic Algebra</span>
+                                <span class="completion-status" id="algebra-quiz-status"></span>
+                                <button class="btn small" id="algebra-quiz-btn" onclick="startQuiz('algebra')">Take Quiz</button>
+                            </div>
+                            <div class="sub-lesson">
+                                <span class="lesson-title">Geometry Basics</span>
+                                <span class="completion-status" id="geometry-quiz-status"></span>
+                                <button class="btn small" id="geometry-quiz-btn" onclick="startQuiz('geometry')">Take Quiz</button>
+                            </div>
                         </div>
-                        <button class="btn" onclick="checkQuiz('math')">Submit Quiz</button>
-                        <div id="math-result" class="quiz-result"></div>
                     </div>
-                </div>
 
-                <div class="quiz-section">
-                    <h3>Science Quiz</h3>
-                    <div id="science-quiz" class="quiz-container">
-                        <div class="quiz-question">
-                            <p>What is the basic unit of life?</p>
-                            <label><input type="radio" name="science-q1" value="atom"> Atom</label>
-                            <label><input type="radio" name="science-q1" value="cell"> Cell</label>
-                            <label><input type="radio" name="science-q1" value="molecule"> Molecule</label>
+                    <div class="course-card" id="science-quiz-course">
+                        <h3>Science Quizzes</h3>
+                        <p>Challenge yourself with science questions.</p>
+                        <div class="course-progress" id="science-quiz-progress">0 / 2 completed</div>
+                        <div class="sub-lessons">
+                            <div class="sub-lesson">
+                                <span class="lesson-title">Biology Basics</span>
+                                <span class="completion-status" id="biology-quiz-status"></span>
+                                <button class="btn small" id="biology-quiz-btn" onclick="startQuiz('biology')">Take Quiz</button>
+                            </div>
+                            <div class="sub-lesson">
+                                <span class="lesson-title">Chemistry Basics</span>
+                                <span class="completion-status" id="chemistry-quiz-status"></span>
+                                <button class="btn small" id="chemistry-quiz-btn" onclick="startQuiz('chemistry')">Take Quiz</button>
+                            </div>
                         </div>
-                        <button class="btn" onclick="checkQuiz('science')">Submit Quiz</button>
-                        <div id="science-result" class="quiz-result"></div>
                     </div>
                 </div>
             </div>
@@ -220,6 +230,24 @@
             <div class="modal-footer">
                 <button class="btn" onclick="completeLesson()">Mark Complete</button>
                 <button class="btn outline" onclick="closeModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quiz Modal -->
+    <div id="quizModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="quizTitle">Quiz</h3>
+                <span class="close" onclick="closeQuizModal()">&times;</span>
+            </div>
+            <div id="quizContent" class="modal-body">
+                <div id="quizQuestionContainer">
+                    <div id="quizQuestion"></div>
+                    <div id="quizOptions"></div>
+                    <button class="btn" onclick="submitQuizAnswer()">Submit Answer</button>
+                </div>
+                <div id="quizResult" style="display: none;"></div>
             </div>
         </div>
     </div>

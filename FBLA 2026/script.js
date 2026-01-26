@@ -482,6 +482,195 @@ function checkQuiz(quizType) {
     }
 }
 
+// Quiz Modal Functions
+let currentQuizId = null;
+
+function startQuiz(quizId) {
+    currentQuizId = quizId;
+
+    // Simple quiz data with single questions
+    const quizData = {
+        'algebra': {
+            title: 'Algebra Quiz',
+            question: 'What is the value of x in the equation 2x + 3 = 7?',
+            options: ['2', '3', '4', '5'],
+            correct: 0
+        },
+        'geometry': {
+            title: 'Geometry Quiz',
+            question: 'What is the sum of angles in a triangle?',
+            options: ['90°', '180°', '270°', '360°'],
+            correct: 1
+        },
+        'biology': {
+            title: 'Biology Quiz',
+            question: 'What is the powerhouse of the cell?',
+            options: ['Nucleus', 'Mitochondria', 'Ribosome', 'Golgi Body'],
+            correct: 1
+        },
+        'chemistry': {
+            title: 'Chemistry Quiz',
+            question: 'What is the chemical symbol for water?',
+            options: ['H2O', 'CO2', 'O2', 'NaCl'],
+            correct: 0
+        }
+    };
+
+    const quiz = quizData[quizId];
+    if (!quiz) {
+        showToast('Quiz not available yet.');
+        return;
+    }
+
+    // Set quiz title
+    document.getElementById('quizTitle').textContent = quiz.title;
+
+    // Set quiz question
+    document.getElementById('quizQuestion').textContent = quiz.question;
+
+    // Set quiz options
+    const optionsContainer = document.getElementById('quizOptions');
+    optionsContainer.innerHTML = quiz.options.map((option, index) =>
+        `<label class="quiz-option">
+            <input type="radio" name="quiz-option" value="${index}">
+            <span class="option-text">${option}</span>
+        </label>`
+    ).join('');
+
+    // Show modal
+    document.getElementById('quizModal').style.display = 'block';
+}
+
+function submitQuizAnswer() {
+    const selectedOption = document.querySelector('input[name="quiz-option"]:checked');
+    if (!selectedOption) {
+        showToast('Please select an answer first.');
+        return;
+    }
+
+    const answer = parseInt(selectedOption.value);
+
+    // Simple quiz data for checking answer
+    const quizData = {
+        'algebra': { correct: 0 },
+        'geometry': { correct: 1 },
+        'biology': { correct: 1 },
+        'chemistry': { correct: 0 }
+    };
+
+    const quiz = quizData[currentQuizId];
+    const isCorrect = answer === quiz.correct;
+
+    // Show result
+    const resultDiv = document.getElementById('quizResult');
+    if (isCorrect) {
+        resultDiv.innerHTML = `
+            <div class="quiz-results correct">
+                <h3>Correct! 🎉</h3>
+                <p>Great job! You got the answer right.</p>
+            </div>
+        `;
+
+        // Mark as completed
+        const completedQuizzes = JSON.parse(localStorage.getItem('completedQuizzes') || '[]');
+        if (!completedQuizzes.includes(currentQuizId)) {
+            completedQuizzes.push(currentQuizId);
+            localStorage.setItem('completedQuizzes', JSON.stringify(completedQuizzes));
+        }
+
+        // Increment quiz count
+        const quizzes = parseInt(localStorage.getItem('quizzes') || '0') + 1;
+        localStorage.setItem('quizzes', quizzes);
+
+        updateQuizProgress();
+        updateAchievements();
+        addActivity(`Completed "${document.getElementById('quizTitle').textContent}"`);
+
+    } else {
+        resultDiv.innerHTML = `
+            <div class="quiz-results incorrect">
+                <h3>Incorrect</h3>
+                <p>Better luck next time! Keep studying.</p>
+            </div>
+        `;
+    }
+
+    // Hide question, show result
+    document.getElementById('quizQuestionContainer').style.display = 'none';
+    document.getElementById('quizResult').style.display = 'block';
+}
+
+function closeQuizModal() {
+    document.getElementById('quizModal').style.display = 'none';
+    document.getElementById('quizQuestionContainer').style.display = 'block';
+    document.getElementById('quizResult').style.display = 'none';
+    currentQuizId = null;
+}
+
+function updateQuizProgress() {
+    const completedQuizzes = JSON.parse(localStorage.getItem('completedQuizzes') || '[]');
+
+    // Update individual quiz status
+    const quizStatus = {
+        'algebra': 'algebra-quiz-status',
+        'geometry': 'geometry-quiz-status',
+        'biology': 'biology-quiz-status',
+        'chemistry': 'chemistry-quiz-status'
+    };
+
+    const quizBtns = {
+        'algebra': 'algebra-quiz-btn',
+        'geometry': 'geometry-quiz-btn',
+        'biology': 'biology-quiz-btn',
+        'chemistry': 'chemistry-quiz-btn'
+    };
+
+    Object.keys(quizStatus).forEach(quizId => {
+        const statusEl = document.getElementById(quizStatus[quizId]);
+        const btnEl = document.getElementById(quizBtns[quizId]);
+
+        if (completedQuizzes.includes(quizId)) {
+            if (statusEl) statusEl.textContent = '✓ Completed';
+            if (btnEl) {
+                btnEl.textContent = 'Retake Quiz';
+                btnEl.classList.add('completed');
+            }
+        } else {
+            if (statusEl) statusEl.textContent = '';
+            if (btnEl) {
+                btnEl.textContent = 'Take Quiz';
+                btnEl.classList.remove('completed');
+            }
+        }
+    });
+
+    // Update course progress
+    const quizCourses = {
+        'math-quiz': { quizzes: ['algebra', 'geometry'], progressId: 'math-quiz-progress', courseId: 'math-quiz-course' },
+        'science-quiz': { quizzes: ['biology', 'chemistry'], progressId: 'science-quiz-progress', courseId: 'science-quiz-course' }
+    };
+
+    Object.keys(quizCourses).forEach(courseKey => {
+        const course = quizCourses[courseKey];
+        const completed = course.quizzes.filter(quiz => completedQuizzes.includes(quiz)).length;
+        const total = course.quizzes.length;
+
+        const progressEl = document.getElementById(course.progressId);
+        if (progressEl) {
+            progressEl.textContent = `${completed} / ${total} completed`;
+        }
+
+        const courseEl = document.getElementById(course.courseId);
+        if (courseEl) {
+            if (completed === total) {
+                courseEl.classList.add('completed');
+            } else {
+                courseEl.classList.remove('completed');
+            }
+        }
+    });
+}
+
 function startTimer() {
     showToast('Timer feature coming soon!');
 }
@@ -612,6 +801,7 @@ document.addEventListener('DOMContentLoaded', function() {
     loadProgress();
     updateActivityList();
     updateLessonProgress();
+    updateQuizProgress();
 
     // Add event listeners
     const themeBtn = document.getElementById('themeToggle');
@@ -651,6 +841,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // Ensure lesson progress is updated when page becomes visible (e.g., from cache)
 window.addEventListener('pageshow', () => {
     updateLessonProgress();
+    updateQuizProgress();
 });
 
 // Add event listeners
