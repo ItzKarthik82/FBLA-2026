@@ -36,7 +36,7 @@
                 <button class="tab-btn active" data-tab="lessons">Lessons</button>
                 <button class="tab-btn" data-tab="videos">Videos</button>
                 <button class="tab-btn" data-tab="quizzes">Quizzes</button>
-                <button class="tab-btn" data-tab="tools">Tools</button>
+                <button class="tab-btn" data-tab="materials">Materials</button>
             </div>
 
             <div id="lessons" class="tab-content active">
@@ -216,50 +216,71 @@
                 </div>
             </div>
 
-            <div id="tools" class="tab-content">
-                <div class="tools-grid">
-                    <div class="tool-card">
-                        <h4>📱 Calculator</h4>
-                        <p>Basic calculator for mathematical operations.</p>
-                        <button class="btn" onclick="toggleCalculator()">Open Calculator</button>
-                    </div>
-                    <div class="tool-card">
-                        <h4>⏱️ Timer</h4>
-                        <p>Set timers for focused study sessions.</p>
-                        <button class="btn" onclick="startTimer()">Start Timer</button>
-                    </div>
-                    <div class="tool-card">
-                        <h4>📝 Notes</h4>
-                        <p>Quick note-taking tool.</p>
-                        <button class="btn" onclick="openNotes()">Open Notes</button>
-                    </div>
-                </div>
-
-                <div id="calculator" class="tool-modal" style="display: none;">
-                    <div class="calculator-container">
-                        <div id="calcDisplay" class="calc-display">0</div>
-                        <div class="calc-buttons">
-                            <button onclick="calcPress('7')">7</button>
-                            <button onclick="calcPress('8')">8</button>
-                            <button onclick="calcPress('9')">9</button>
-                            <button onclick="calcPress('/')">/</button>
-                            <button onclick="calcPress('4')">4</button>
-                            <button onclick="calcPress('5')">5</button>
-                            <button onclick="calcPress('6')">6</button>
-                            <button onclick="calcPress('*')">*</button>
-                            <button onclick="calcPress('1')">1</button>
-                            <button onclick="calcPress('2')">2</button>
-                            <button onclick="calcPress('3')">3</button>
-                            <button onclick="calcPress('-')">-</button>
-                            <button onclick="calcPress('0')">0</button>
-                            <button onclick="calcPress('C')">C</button>
-                            <button onclick="calcPress('=')">=</button>
-                            <button onclick="calcPress('+')">+</button>
+            <div id="materials" class="tab-content">
+                <div class="courses-grid">
+                    <div class="course-card">
+                        <h3>Mathematics Materials</h3>
+                        <p>Essential study guides for algebra and geometry.</p>
+                        <div class="sub-lessons">
+                            <div class="sub-lesson">
+                                <span class="lesson-title">Algebra Guide</span>
+                                <a href="materials/algebra-guide.txt" download class="btn small">Download</a>
+                            </div>
+                            <div class="sub-lesson">
+                                <span class="lesson-title">Geometry Guide</span>
+                                <a href="materials/geometry-guide.txt" download class="btn small">Download</a>
+                            </div>
                         </div>
-                        <button class="btn" onclick="toggleCalculator()">Close</button>
+                    </div>
+
+                    <div class="course-card">
+                        <h3>Science Materials</h3>
+                        <p>Comprehensive guides for biology and chemistry.</p>
+                        <div class="sub-lessons">
+                            <div class="sub-lesson">
+                                <span class="lesson-title">Biology Guide</span>
+                                <a href="materials/biology-guide.txt" download class="btn small">Download</a>
+                            </div>
+                            <div class="sub-lesson">
+                                <span class="lesson-title">Chemistry Guide</span>
+                                <a href="materials/chemistry-guide.txt" download class="btn small">Download</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="course-card">
+                        <h3>English Materials</h3>
+                        <p>Writing and grammar guides for effective communication.</p>
+                        <div class="sub-lessons">
+                            <div class="sub-lesson">
+                                <span class="lesson-title">Essay Writing Guide</span>
+                                <a href="materials/essay-guide.txt" download class="btn small">Download</a>
+                            </div>
+                            <div class="sub-lesson">
+                                <span class="lesson-title">Grammar Guide</span>
+                                <a href="materials/grammar-guide.txt" download class="btn small">Download</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="course-card">
+                        <h3>History Materials</h3>
+                        <p>Comprehensive guides for world and US history.</p>
+                        <div class="sub-lessons">
+                            <div class="sub-lesson">
+                                <span class="lesson-title">History Guide</span>
+                                <a href="materials/history-guide.txt" download class="btn small">Download</a>
+                            </div>
+                            <div class="sub-lesson">
+                                <span class="lesson-title">US History Guide</span>
+                                <a href="materials/us-history-guide.txt" download class="btn small">Download</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+
+
         </div>
     </main>
 

@@ -956,6 +956,78 @@ body.dark .tool-card p {
     color: var(--text-muted);
 }
 
+/* Materials Grid and Cards */
+.materials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+}
+
+.material-card {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border: 2px solid var(--gray-200);
+    padding: 28px;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+}
+
+body.dark .material-card {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    border: 2px solid var(--gray-700);
+}
+
+.material-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+}
+
+.material-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary);
+}
+
+body.dark .material-card:hover {
+    border-color: var(--primary);
+}
+
+.material-card h4 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--gray-900);
+}
+
+body.dark .material-card h4 {
+    color: var(--text);
+}
+
+.material-card p {
+    color: var(--gray-600);
+    margin-bottom: 20px;
+    flex-grow: 1;
+    line-height: 1.5;
+    font-size: 14px;
+}
+
+body.dark .material-card p {
+    color: var(--text-muted);
+}
+
+.material-card .btn {
+    align-self: flex-start;
+}
+
 /* Modal */
 .modal {
     display: none;
