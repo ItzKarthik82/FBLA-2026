@@ -484,35 +484,95 @@ function checkQuiz(quizType) {
 
 // Quiz Modal Functions
 let currentQuizId = null;
+let currentQuestionIndex = 0;
+let quizAnswers = [];
 
 function startQuiz(quizId) {
     currentQuizId = quizId;
+    currentQuestionIndex = 0;
+    quizAnswers = [];
 
-    // Simple quiz data with single questions
+    // Quiz data with multiple questions (up to 5 per quiz)
     const quizData = {
         'algebra': {
             title: 'Algebra Quiz',
-            question: 'What is the value of x in the equation 2x + 3 = 7?',
-            options: ['2', '3', '4', '5'],
-            correct: 0
+            questions: [
+                {
+                    question: 'What is the value of x in the equation 2x + 3 = 7?',
+                    options: ['2', '3', '4', '5'],
+                    correct: 0
+                },
+                {
+                    question: 'Solve for y: 3y - 5 = 13',
+                    options: ['6', '7', '8', '9'],
+                    correct: 0
+                },
+                {
+                    question: 'What is the slope of the line y = 2x + 3?',
+                    options: ['1', '2', '3', '4'],
+                    correct: 1
+                }
+            ]
         },
         'geometry': {
             title: 'Geometry Quiz',
-            question: 'What is the sum of angles in a triangle?',
-            options: ['90°', '180°', '270°', '360°'],
-            correct: 1
+            questions: [
+                {
+                    question: 'What is the sum of angles in a triangle?',
+                    options: ['90°', '180°', '270°', '360°'],
+                    correct: 1
+                },
+                {
+                    question: 'What is the area of a circle with radius 5?',
+                    options: ['25π', '10π', '15π', '20π'],
+                    correct: 0
+                },
+                {
+                    question: 'How many sides does a hexagon have?',
+                    options: ['5', '6', '7', '8'],
+                    correct: 1
+                }
+            ]
         },
         'biology': {
             title: 'Biology Quiz',
-            question: 'What is the powerhouse of the cell?',
-            options: ['Nucleus', 'Mitochondria', 'Ribosome', 'Golgi Body'],
-            correct: 1
+            questions: [
+                {
+                    question: 'What is the powerhouse of the cell?',
+                    options: ['Nucleus', 'Mitochondria', 'Ribosome', 'Golgi Body'],
+                    correct: 1
+                },
+                {
+                    question: 'What is the basic unit of life?',
+                    options: ['Atom', 'Molecule', 'Cell', 'Tissue'],
+                    correct: 2
+                },
+                {
+                    question: 'Which organelle contains DNA?',
+                    options: ['Ribosome', 'Mitochondria', 'Nucleus', 'Vacuole'],
+                    correct: 2
+                }
+            ]
         },
         'chemistry': {
             title: 'Chemistry Quiz',
-            question: 'What is the chemical symbol for water?',
-            options: ['H2O', 'CO2', 'O2', 'NaCl'],
-            correct: 0
+            questions: [
+                {
+                    question: 'What is the chemical symbol for water?',
+                    options: ['H2O', 'CO2', 'O2', 'NaCl'],
+                    correct: 0
+                },
+                {
+                    question: 'What is the atomic number of carbon?',
+                    options: ['4', '6', '8', '12'],
+                    correct: 1
+                },
+                {
+                    question: 'What type of bond shares electrons?',
+                    options: ['Ionic', 'Covalent', 'Hydrogen', 'Metallic'],
+                    correct: 1
+                }
+            ]
         }
     };
 
@@ -525,53 +585,116 @@ function startQuiz(quizId) {
     // Set quiz title
     document.getElementById('quizTitle').textContent = quiz.title;
 
-    // Set quiz question
-    document.getElementById('quizQuestion').textContent = quiz.question;
-
-    // Set quiz options
-    const optionsContainer = document.getElementById('quizOptions');
-    optionsContainer.innerHTML = quiz.options.map((option, index) =>
-        `<label class="quiz-option">
-            <input type="radio" name="quiz-option" value="${index}">
-            <span class="option-text">${option}</span>
-        </label>`
-    ).join('');
+    // Show first question
+    showQuestion(quiz, 0);
 
     // Show modal
     document.getElementById('quizModal').style.display = 'block';
 }
 
-function submitQuizAnswer() {
+function showQuestion(quiz, index) {
+    const question = quiz.questions[index];
+
+    // Update question content
+    document.getElementById('quizQuestion').textContent = question.question;
+
+    // Update options
+    const optionsContainer = document.getElementById('quizOptions');
+    optionsContainer.innerHTML = question.options.map((option, i) =>
+        `<label class="quiz-option">
+            <input type="radio" name="quiz-option" value="${i}" ${quizAnswers[index] !== undefined && quizAnswers[index] === i ? 'checked' : ''}>
+            <span class="option-text">${option}</span>
+        </label>`
+    ).join('');
+
+    // Update navigation
+    const prevBtn = document.getElementById('prevQuestion');
+    const nextBtn = document.getElementById('nextQuestion');
+    const submitBtn = document.getElementById('submitQuiz');
+
+    prevBtn.style.display = index > 0 ? 'inline-block' : 'none';
+    nextBtn.style.display = index < quiz.questions.length - 1 ? 'inline-block' : 'none';
+    submitBtn.style.display = index === quiz.questions.length - 1 ? 'inline-block' : 'none';
+
+    // Update question counter
+    document.getElementById('questionCounter').textContent = `Question ${index + 1} of ${quiz.questions.length}`;
+}
+
+function nextQuestion() {
+    // Save current answer
     const selectedOption = document.querySelector('input[name="quiz-option"]:checked');
-    if (!selectedOption) {
-        showToast('Please select an answer first.');
-        return;
+    if (selectedOption) {
+        quizAnswers[currentQuestionIndex] = parseInt(selectedOption.value);
     }
 
-    const answer = parseInt(selectedOption.value);
+    // Move to next question
+    currentQuestionIndex++;
+    const quizData = getCurrentQuizData();
+    showQuestion(quizData, currentQuestionIndex);
+}
 
-    // Simple quiz data for checking answer
-    const quizData = {
-        'algebra': { correct: 0 },
-        'geometry': { correct: 1 },
-        'biology': { correct: 1 },
-        'chemistry': { correct: 0 }
-    };
+function prevQuestion() {
+    // Save current answer
+    const selectedOption = document.querySelector('input[name="quiz-option"]:checked');
+    if (selectedOption) {
+        quizAnswers[currentQuestionIndex] = parseInt(selectedOption.value);
+    }
 
-    const quiz = quizData[currentQuizId];
-    const isCorrect = answer === quiz.correct;
+    // Move to previous question
+    currentQuestionIndex--;
+    const quizData = getCurrentQuizData();
+    showQuestion(quizData, currentQuestionIndex);
+}
 
-    // Show result
+function submitQuizAnswer() {
+    // Save final answer
+    const selectedOption = document.querySelector('input[name="quiz-option"]:checked');
+    if (selectedOption) {
+        quizAnswers[currentQuestionIndex] = parseInt(selectedOption.value);
+    }
+
+    // Calculate score
+    const quizData = getCurrentQuizData();
+    let correctAnswers = 0;
+
+    quizData.questions.forEach((question, index) => {
+        if (quizAnswers[index] === question.correct) {
+            correctAnswers++;
+        }
+    });
+
+    const score = Math.round((correctAnswers / quizData.questions.length) * 100);
+
+    // Show results
     const resultDiv = document.getElementById('quizResult');
-    if (isCorrect) {
-        resultDiv.innerHTML = `
-            <div class="quiz-results correct">
-                <h3>Correct! 🎉</h3>
-                <p>Great job! You got the answer right.</p>
-            </div>
-        `;
+    const questionContainer = document.getElementById('quizQuestionContainer');
+    const navigation = document.getElementById('quizNavigation');
 
-        // Mark as completed
+    // Hide question and navigation
+    questionContainer.style.display = 'none';
+    navigation.style.display = 'none';
+
+    // Show results
+    resultDiv.innerHTML = `
+        <div class="quiz-results ${score >= 70 ? 'correct' : 'incorrect'}">
+            <h3>Quiz Complete!</h3>
+            <div class="score-display">
+                <div class="score-circle ${score >= 70 ? 'pass' : 'fail'}">
+                    ${score}%
+                </div>
+                <p>You got ${correctAnswers} out of ${quizData.questions.length} questions correct.</p>
+            </div>
+            <div class="result-message">
+                ${score >= 90 ? 'Excellent work! 🎉' :
+                  score >= 70 ? 'Good job! Keep practicing.' :
+                  'Keep studying and try again! 📚'}
+            </div>
+        </div>
+    `;
+    resultDiv.style.display = 'block';
+
+    // Mark as completed if passed
+    if (score >= 70) {
         const completedQuizzes = JSON.parse(localStorage.getItem('completedQuizzes') || '[]');
         if (!completedQuizzes.includes(currentQuizId)) {
             completedQuizzes.push(currentQuizId);
@@ -584,27 +707,65 @@ function submitQuizAnswer() {
 
         updateQuizProgress();
         updateAchievements();
-        addActivity(`Completed "${document.getElementById('quizTitle').textContent}"`);
-
-    } else {
-        resultDiv.innerHTML = `
-            <div class="quiz-results incorrect">
-                <h3>Incorrect</h3>
-                <p>Better luck next time! Keep studying.</p>
-            </div>
-        `;
+        addActivity(`Completed "${quizData.title}" with ${score}%`);
     }
 
-    // Hide question, show result
-    document.getElementById('quizQuestionContainer').style.display = 'none';
-    document.getElementById('quizResult').style.display = 'block';
+    // Add close button after delay
+    setTimeout(() => {
+        const closeBtn = document.createElement('button');
+        closeBtn.className = 'btn';
+        closeBtn.textContent = 'Close Quiz';
+        closeBtn.onclick = closeQuizModal;
+        resultDiv.appendChild(closeBtn);
+    }, 2000);
+}
+
+function getCurrentQuizData() {
+    const quizData = {
+        'algebra': {
+            title: 'Algebra Quiz',
+            questions: [
+                { question: 'What is the value of x in the equation 2x + 3 = 7?', options: ['2', '3', '4', '5'], correct: 0 },
+                { question: 'Solve for y: 3y - 5 = 13', options: ['6', '7', '8', '9'], correct: 0 },
+                { question: 'What is the slope of the line y = 2x + 3?', options: ['1', '2', '3', '4'], correct: 1 }
+            ]
+        },
+        'geometry': {
+            title: 'Geometry Quiz',
+            questions: [
+                { question: 'What is the sum of angles in a triangle?', options: ['90°', '180°', '270°', '360°'], correct: 1 },
+                { question: 'What is the area of a circle with radius 5?', options: ['25π', '10π', '15π', '20π'], correct: 0 },
+                { question: 'How many sides does a hexagon have?', options: ['5', '6', '7', '8'], correct: 1 }
+            ]
+        },
+        'biology': {
+            title: 'Biology Quiz',
+            questions: [
+                { question: 'What is the powerhouse of the cell?', options: ['Nucleus', 'Mitochondria', 'Ribosome', 'Golgi Body'], correct: 1 },
+                { question: 'What is the basic unit of life?', options: ['Atom', 'Molecule', 'Cell', 'Tissue'], correct: 2 },
+                { question: 'Which organelle contains DNA?', options: ['Ribosome', 'Mitochondria', 'Nucleus', 'Vacuole'], correct: 2 }
+            ]
+        },
+        'chemistry': {
+            title: 'Chemistry Quiz',
+            questions: [
+                { question: 'What is the chemical symbol for water?', options: ['H2O', 'CO2', 'O2', 'NaCl'], correct: 0 },
+                { question: 'What is the atomic number of carbon?', options: ['4', '6', '8', '12'], correct: 1 },
+                { question: 'What type of bond shares electrons?', options: ['Ionic', 'Covalent', 'Hydrogen', 'Metallic'], correct: 1 }
+            ]
+        }
+    };
+    return quizData[currentQuizId];
 }
 
 function closeQuizModal() {
     document.getElementById('quizModal').style.display = 'none';
     document.getElementById('quizQuestionContainer').style.display = 'block';
     document.getElementById('quizResult').style.display = 'none';
+    document.getElementById('quizNavigation').style.display = 'flex';
     currentQuizId = null;
+    currentQuestionIndex = 0;
+    quizAnswers = [];
 }
 
 function updateQuizProgress() {

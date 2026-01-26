@@ -243,9 +243,14 @@
             </div>
             <div id="quizContent" class="modal-body">
                 <div id="quizQuestionContainer">
-                    <div id="quizQuestion"></div>
-                    <div id="quizOptions"></div>
-                    <button class="btn" onclick="submitQuizAnswer()">Submit Answer</button>
+                    <div id="questionCounter" class="question-counter"></div>
+                    <div id="quizQuestion" class="quiz-question"></div>
+                    <div id="quizOptions" class="quiz-options"></div>
+                </div>
+                <div id="quizNavigation" class="quiz-navigation">
+                    <button id="prevQuestion" class="btn secondary" onclick="prevQuestion()">Previous</button>
+                    <button id="nextQuestion" class="btn" onclick="nextQuestion()">Next</button>
+                    <button id="submitQuiz" class="btn primary" onclick="submitQuizAnswer()" style="display: none;">Submit Quiz</button>
                 </div>
                 <div id="quizResult" style="display: none;"></div>
             </div>

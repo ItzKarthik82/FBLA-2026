@@ -1679,6 +1679,14 @@ body.dark .toast {
     border-top: 1px solid var(--gray-200);
 }
 
+.question-counter {
+    text-align: center;
+    font-size: 14px;
+    color: var(--gray-600);
+    margin-bottom: 15px;
+    font-weight: 500;
+}
+
 .quiz-results {
     text-align: center;
     padding: 20px 0;
@@ -1738,6 +1746,10 @@ body.dark .option-text {
 
 body.dark .quiz-option input[type="radio"]:checked + .option-text {
     color: var(--primary);
+}
+
+body.dark .question-counter {
+    color: var(--gray-400);
 }
 
 body.dark .quiz-navigation {
