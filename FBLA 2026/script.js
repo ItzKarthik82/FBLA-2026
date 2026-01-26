@@ -59,60 +59,73 @@ function updateAchievements(lessons, quizzes, sessions) {
 
     // First Steps: Complete first lesson
     const firstStepsEl = document.getElementById('first-steps');
-    if (lessons >= 1) {
-        firstStepsEl.classList.remove('locked');
-        firstStepsEl.classList.add('unlocked');
-        achievements.push('first-steps');
-    } else {
-        firstStepsEl.classList.remove('unlocked');
-        firstStepsEl.classList.add('locked');
+    if (firstStepsEl) {
+        if (lessons >= 1) {
+            firstStepsEl.classList.remove('locked');
+            firstStepsEl.classList.add('unlocked');
+            achievements.push('first-steps');
+        } else {
+            firstStepsEl.classList.remove('unlocked');
+            firstStepsEl.classList.add('locked');
+        }
     }
 
     // Quiz Master: Pass 5 quizzes
     const quizMasterEl = document.getElementById('quiz-master');
-    if (quizzes >= 5) {
-        quizMasterEl.classList.remove('locked');
-        quizMasterEl.classList.add('unlocked');
-        achievements.push('quiz-master');
-    } else {
-        quizMasterEl.classList.remove('unlocked');
-        quizMasterEl.classList.add('locked');
+    if (quizMasterEl) {
+        if (quizzes >= 5) {
+            quizMasterEl.classList.remove('locked');
+            quizMasterEl.classList.add('unlocked');
+            achievements.push('quiz-master');
+        } else {
+            quizMasterEl.classList.remove('unlocked');
+            quizMasterEl.classList.add('locked');
+        }
     }
 
     // Dedicated Learner: Complete 10 lessons
     const dedicatedEl = document.getElementById('dedicated-learner');
-    if (lessons >= 10) {
-        dedicatedEl.classList.remove('locked');
-        dedicatedEl.classList.add('unlocked');
-        achievements.push('dedicated-learner');
-    } else {
-        dedicatedEl.classList.remove('unlocked');
-        dedicatedEl.classList.add('locked');
+    if (dedicatedEl) {
+        if (lessons >= 10) {
+            dedicatedEl.classList.remove('locked');
+            dedicatedEl.classList.add('unlocked');
+            achievements.push('dedicated-learner');
+        } else {
+            dedicatedEl.classList.remove('unlocked');
+            dedicatedEl.classList.add('locked');
+        }
     }
 
     // Study Group: Join 5 sessions
     const studyGroupEl = document.getElementById('study-group');
-    if (sessions >= 5) {
-        studyGroupEl.classList.remove('locked');
-        studyGroupEl.classList.add('unlocked');
-        achievements.push('study-group');
-    } else {
-        studyGroupEl.classList.remove('unlocked');
-        studyGroupEl.classList.add('locked');
+    if (studyGroupEl) {
+        if (sessions >= 5) {
+            studyGroupEl.classList.remove('locked');
+            studyGroupEl.classList.add('unlocked');
+            achievements.push('study-group');
+        } else {
+            studyGroupEl.classList.remove('unlocked');
+            studyGroupEl.classList.add('locked');
+        }
     }
 
     // Academic Excellence: Complete all subjects (arbitrary: 20 lessons, 10 quizzes, 10 sessions)
     const excellenceEl = document.getElementById('academic-excellence');
-    if (lessons >= 20 && quizzes >= 10 && sessions >= 10) {
-        excellenceEl.classList.remove('locked');
-        excellenceEl.classList.add('unlocked');
-        achievements.push('academic-excellence');
-    } else {
-        excellenceEl.classList.remove('unlocked');
-        excellenceEl.classList.add('locked');
+    if (excellenceEl) {
+        if (lessons >= 20 && quizzes >= 10 && sessions >= 10) {
+            excellenceEl.classList.remove('locked');
+            excellenceEl.classList.add('unlocked');
+            achievements.push('academic-excellence');
+        } else {
+            excellenceEl.classList.remove('unlocked');
+            excellenceEl.classList.add('locked');
+        }
     }
 
-    updateDisplay('achievementsCount', achievements.length);
+    const achievementsCountEl = document.getElementById('achievementsCount');
+    if (achievementsCountEl) {
+        achievementsCountEl.textContent = achievements.length;
+    }
 }
 
 function updateDisplay(id, value) {
@@ -189,16 +202,20 @@ function joinSessionFromDash() {
 }
 
 function addActivity(description) {
-    const activities = JSON.parse(localStorage.getItem('activities') || '[]');
-    const activity = {
-        description,
-        timestamp: new Date().toLocaleString(),
-        icon: getActivityIcon(description)
-    };
-    activities.unshift(activity);
-    if (activities.length > 10) activities.pop();
-    localStorage.setItem('activities', JSON.stringify(activities));
-    updateActivityList();
+    try {
+        const activities = JSON.parse(localStorage.getItem('activities') || '[]');
+        const activity = {
+            description,
+            timestamp: new Date().toLocaleString(),
+            icon: getActivityIcon(description)
+        };
+        activities.unshift(activity);
+        if (activities.length > 10) activities.pop();
+        localStorage.setItem('activities', JSON.stringify(activities));
+        updateActivityList();
+    } catch (e) {
+        console.error('Error adding activity:', e);
+    }
 }
 
 function getActivityIcon(description) {
@@ -209,19 +226,31 @@ function getActivityIcon(description) {
 }
 
 function updateActivityList() {
-    const activities = JSON.parse(localStorage.getItem('activities') || '[]');
-    const listElement = document.getElementById('activityList');
-    if (!listElement) return;
+    try {
+        const activities = JSON.parse(localStorage.getItem('activities') || '[]');
+        const listElement = document.getElementById('activityList');
+        if (!listElement) return;
 
-    listElement.innerHTML = activities.map(activity => `
-        <div class="activity-item">
-            <div class="activity-icon">${activity.icon}</div>
-            <div class="activity-content">
-                <p>${activity.description}</p>
-                <span class="activity-time">${activity.timestamp}</span>
-            </div>
-        </div>
-    `).join('');
+        if (activities.length === 0) {
+            listElement.innerHTML = '<div class="activity-item"><div class="activity-icon">📝</div><div class="activity-content"><p>Welcome to PeerLearn! Complete your first lesson to see activity here.</p><span class="activity-time"></span></div></div>';
+        } else {
+            listElement.innerHTML = activities.map(activity => `
+                <div class="activity-item">
+                    <div class="activity-icon">${activity.icon}</div>
+                    <div class="activity-content">
+                        <p>${activity.description}</p>
+                        <span class="activity-time">${activity.timestamp}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+    } catch (e) {
+        console.error('Error updating activity list:', e);
+        const listElement = document.getElementById('activityList');
+        if (listElement) {
+            listElement.innerHTML = '<div class="activity-item"><div class="activity-icon">⚠️</div><div class="activity-content"><p>Error loading activities</p><span class="activity-time"></span></div></div>';
+        }
+    }
 }
 
 function showToast(message) {
@@ -342,6 +371,9 @@ function completeLesson() {
     const quizzes = parseInt(localStorage.getItem('quizzes') || '0');
     const sessions = parseInt(localStorage.getItem('sessions') || '0');
     updateAchievements(lessons, quizzes, sessions);
+    
+    // Add activity
+    addActivity(`Completed "${currentLessonId.replace('-', ' ')}" lesson`);
     
     showToast('Lesson completed!');
     closeModal();
