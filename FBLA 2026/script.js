@@ -511,6 +511,16 @@ function startQuiz(quizId) {
                     question: 'What is the slope of the line y = 2x + 3?',
                     options: ['1', '2', '3', '4'],
                     correct: 1
+                },
+                {
+                    question: 'Simplify: 2(x + 3) - x',
+                    options: ['x + 3', 'x + 6', '3x + 3', 'x + 9'],
+                    correct: 1
+                },
+                {
+                    question: 'What is the solution to |x| = 5?',
+                    options: ['x = 5', 'x = -5', 'x = ±5', 'x = 0'],
+                    correct: 2
                 }
             ]
         },
@@ -531,6 +541,16 @@ function startQuiz(quizId) {
                     question: 'How many sides does a hexagon have?',
                     options: ['5', '6', '7', '8'],
                     correct: 1
+                },
+                {
+                    question: 'What is the Pythagorean theorem?',
+                    options: ['a² + b² = c²', 'a + b = c', 'a² - b² = c²', 'a × b = c²'],
+                    correct: 0
+                },
+                {
+                    question: 'What is the area of a rectangle with length 8 and width 5?',
+                    options: ['13', '26', '40', '64'],
+                    correct: 2
                 }
             ]
         },
@@ -551,6 +571,16 @@ function startQuiz(quizId) {
                     question: 'Which organelle contains DNA?',
                     options: ['Ribosome', 'Mitochondria', 'Nucleus', 'Vacuole'],
                     correct: 2
+                },
+                {
+                    question: 'What process do plants use to make food?',
+                    options: ['Respiration', 'Photosynthesis', 'Transpiration', 'Digestion'],
+                    correct: 1
+                },
+                {
+                    question: 'What is the function of red blood cells?',
+                    options: ['Fight infection', 'Carry oxygen', 'Clot blood', 'Produce antibodies'],
+                    correct: 1
                 }
             ]
         },
@@ -571,6 +601,136 @@ function startQuiz(quizId) {
                     question: 'What type of bond shares electrons?',
                     options: ['Ionic', 'Covalent', 'Hydrogen', 'Metallic'],
                     correct: 1
+                },
+                {
+                    question: 'What is the pH of pure water?',
+                    options: ['0', '7', '14', '1'],
+                    correct: 1
+                },
+                {
+                    question: 'What is the chemical formula for table salt?',
+                    options: ['H2O', 'CO2', 'NaCl', 'HCl'],
+                    correct: 2
+                }
+            ]
+        },
+        'grammar': {
+            title: 'Grammar Quiz',
+            questions: [
+                {
+                    question: 'Which sentence is grammatically correct?',
+                    options: ['She don\'t like apples.', 'She doesn\'t likes apples.', 'She doesn\'t like apples.', 'She don\'t likes apples.'],
+                    correct: 2
+                },
+                {
+                    question: 'What is the plural of "child"?',
+                    options: ['Childs', 'Childen', 'Children', 'Childes'],
+                    correct: 2
+                },
+                {
+                    question: 'Choose the correct preposition: "I am interested ___ mathematics."',
+                    options: ['at', 'in', 'on', 'with'],
+                    correct: 1
+                },
+                {
+                    question: 'What is the past tense of "go"?',
+                    options: ['Went', 'Gone', 'Going', 'Goes'],
+                    correct: 0
+                },
+                {
+                    question: 'Which word is a synonym for "happy"?',
+                    options: ['Sad', 'Joyful', 'Angry', 'Tired'],
+                    correct: 1
+                }
+            ]
+        },
+        'literature': {
+            title: 'Literature Quiz',
+            questions: [
+                {
+                    question: 'Who wrote "Romeo and Juliet"?',
+                    options: ['Charles Dickens', 'William Shakespeare', 'Jane Austen', 'Mark Twain'],
+                    correct: 1
+                },
+                {
+                    question: 'What is the genre of "Pride and Prejudice"?',
+                    options: ['Science Fiction', 'Romance', 'Mystery', 'Horror'],
+                    correct: 1
+                },
+                {
+                    question: 'What is a metaphor?',
+                    options: ['A comparison using "like" or "as"', 'A direct comparison', 'A story about animals', 'A type of poem'],
+                    correct: 1
+                },
+                {
+                    question: 'Who is the author of "To Kill a Mockingbird"?',
+                    options: ['Harper Lee', 'J.K. Rowling', 'Stephen King', 'Ernest Hemingway'],
+                    correct: 0
+                },
+                {
+                    question: 'What is the main theme of "1984"?',
+                    options: ['Love', 'Totalitarianism', 'Adventure', 'Friendship'],
+                    correct: 1
+                }
+            ]
+        },
+        'world-history': {
+            title: 'World History Quiz',
+            questions: [
+                {
+                    question: 'In which year did World War II end?',
+                    options: ['1944', '1945', '1946', '1947'],
+                    correct: 1
+                },
+                {
+                    question: 'Who was the first President of the United States?',
+                    options: ['Thomas Jefferson', 'John Adams', 'George Washington', 'Benjamin Franklin'],
+                    correct: 2
+                },
+                {
+                    question: 'What ancient civilization built the pyramids?',
+                    options: ['Romans', 'Greeks', 'Egyptians', 'Mayans'],
+                    correct: 2
+                },
+                {
+                    question: 'The Renaissance began in which country?',
+                    options: ['France', 'England', 'Italy', 'Spain'],
+                    correct: 2
+                },
+                {
+                    question: 'What was the main cause of World War I?',
+                    options: ['Assassination of Archduke Franz Ferdinand', 'Economic depression', 'Religious conflict', 'Colonial expansion'],
+                    correct: 0
+                }
+            ]
+        },
+        'us-history': {
+            title: 'US History Quiz',
+            questions: [
+                {
+                    question: 'In which year was the Declaration of Independence signed?',
+                    options: ['1775', '1776', '1777', '1778'],
+                    correct: 1
+                },
+                {
+                    question: 'Who was the first president of the United States?',
+                    options: ['Thomas Jefferson', 'John Adams', 'George Washington', 'James Madison'],
+                    correct: 2
+                },
+                {
+                    question: 'What was the main cause of the American Civil War?',
+                    options: ['Taxes', 'Slavery', 'Land disputes', 'Religious differences'],
+                    correct: 1
+                },
+                {
+                    question: 'In which year did the United States enter World War II?',
+                    options: ['1939', '1940', '1941', '1942'],
+                    correct: 2
+                },
+                {
+                    question: 'Who wrote the Gettysburg Address?',
+                    options: ['Abraham Lincoln', 'Ulysses S. Grant', 'Robert E. Lee', 'Jefferson Davis'],
+                    correct: 0
                 }
             ]
         }
@@ -727,7 +887,9 @@ function getCurrentQuizData() {
             questions: [
                 { question: 'What is the value of x in the equation 2x + 3 = 7?', options: ['2', '3', '4', '5'], correct: 0 },
                 { question: 'Solve for y: 3y - 5 = 13', options: ['6', '7', '8', '9'], correct: 0 },
-                { question: 'What is the slope of the line y = 2x + 3?', options: ['1', '2', '3', '4'], correct: 1 }
+                { question: 'What is the slope of the line y = 2x + 3?', options: ['1', '2', '3', '4'], correct: 1 },
+                { question: 'Simplify: 2(x + 3) - x', options: ['x + 3', 'x + 6', '3x + 3', 'x + 9'], correct: 1 },
+                { question: 'What is the solution to |x| = 5?', options: ['x = 5', 'x = -5', 'x = ±5', 'x = 0'], correct: 2 }
             ]
         },
         'geometry': {
@@ -735,7 +897,9 @@ function getCurrentQuizData() {
             questions: [
                 { question: 'What is the sum of angles in a triangle?', options: ['90°', '180°', '270°', '360°'], correct: 1 },
                 { question: 'What is the area of a circle with radius 5?', options: ['25π', '10π', '15π', '20π'], correct: 0 },
-                { question: 'How many sides does a hexagon have?', options: ['5', '6', '7', '8'], correct: 1 }
+                { question: 'How many sides does a hexagon have?', options: ['5', '6', '7', '8'], correct: 1 },
+                { question: 'What is the Pythagorean theorem?', options: ['a² + b² = c²', 'a + b = c', 'a² - b² = c²', 'a × b = c²'], correct: 0 },
+                { question: 'What is the area of a rectangle with length 8 and width 5?', options: ['13', '26', '40', '64'], correct: 2 }
             ]
         },
         'biology': {
@@ -743,7 +907,9 @@ function getCurrentQuizData() {
             questions: [
                 { question: 'What is the powerhouse of the cell?', options: ['Nucleus', 'Mitochondria', 'Ribosome', 'Golgi Body'], correct: 1 },
                 { question: 'What is the basic unit of life?', options: ['Atom', 'Molecule', 'Cell', 'Tissue'], correct: 2 },
-                { question: 'Which organelle contains DNA?', options: ['Ribosome', 'Mitochondria', 'Nucleus', 'Vacuole'], correct: 2 }
+                { question: 'Which organelle contains DNA?', options: ['Ribosome', 'Mitochondria', 'Nucleus', 'Vacuole'], correct: 2 },
+                { question: 'What process do plants use to make food?', options: ['Respiration', 'Photosynthesis', 'Transpiration', 'Digestion'], correct: 1 },
+                { question: 'What is the function of red blood cells?', options: ['Fight infection', 'Carry oxygen', 'Clot blood', 'Produce antibodies'], correct: 1 }
             ]
         },
         'chemistry': {
@@ -751,7 +917,49 @@ function getCurrentQuizData() {
             questions: [
                 { question: 'What is the chemical symbol for water?', options: ['H2O', 'CO2', 'O2', 'NaCl'], correct: 0 },
                 { question: 'What is the atomic number of carbon?', options: ['4', '6', '8', '12'], correct: 1 },
-                { question: 'What type of bond shares electrons?', options: ['Ionic', 'Covalent', 'Hydrogen', 'Metallic'], correct: 1 }
+                { question: 'What type of bond shares electrons?', options: ['Ionic', 'Covalent', 'Hydrogen', 'Metallic'], correct: 1 },
+                { question: 'What is the pH of pure water?', options: ['0', '7', '14', '1'], correct: 1 },
+                { question: 'What is the chemical formula for table salt?', options: ['H2O', 'CO2', 'NaCl', 'HCl'], correct: 2 }
+            ]
+        },
+        'grammar': {
+            title: 'Grammar Quiz',
+            questions: [
+                { question: 'Which sentence is grammatically correct?', options: ['She don\'t like apples.', 'She doesn\'t likes apples.', 'She doesn\'t like apples.', 'She don\'t likes apples.'], correct: 2 },
+                { question: 'What is the plural of "child"?', options: ['Childs', 'Childen', 'Children', 'Childes'], correct: 2 },
+                { question: 'Choose the correct preposition: "I am interested ___ mathematics."', options: ['at', 'in', 'on', 'with'], correct: 1 },
+                { question: 'What is the past tense of "go"?', options: ['Went', 'Gone', 'Going', 'Goes'], correct: 0 },
+                { question: 'Which word is a synonym for "happy"?', options: ['Sad', 'Joyful', 'Angry', 'Tired'], correct: 1 }
+            ]
+        },
+        'literature': {
+            title: 'Literature Quiz',
+            questions: [
+                { question: 'Who wrote "Romeo and Juliet"?', options: ['Charles Dickens', 'William Shakespeare', 'Jane Austen', 'Mark Twain'], correct: 1 },
+                { question: 'What is the genre of "Pride and Prejudice"?', options: ['Science Fiction', 'Romance', 'Mystery', 'Horror'], correct: 1 },
+                { question: 'What is a metaphor?', options: ['A comparison using "like" or "as"', 'A direct comparison', 'A story about animals', 'A type of poem'], correct: 1 },
+                { question: 'Who is the author of "To Kill a Mockingbird"?', options: ['Harper Lee', 'J.K. Rowling', 'Stephen King', 'Ernest Hemingway'], correct: 0 },
+                { question: 'What is the main theme of "1984"?', options: ['Love', 'Totalitarianism', 'Adventure', 'Friendship'], correct: 1 }
+            ]
+        },
+        'world-history': {
+            title: 'World History Quiz',
+            questions: [
+                { question: 'In which year did World War II end?', options: ['1944', '1945', '1946', '1947'], correct: 1 },
+                { question: 'Who was the first President of the United States?', options: ['Thomas Jefferson', 'John Adams', 'George Washington', 'Benjamin Franklin'], correct: 2 },
+                { question: 'What ancient civilization built the pyramids?', options: ['Romans', 'Greeks', 'Egyptians', 'Mayans'], correct: 2 },
+                { question: 'The Renaissance began in which country?', options: ['France', 'England', 'Italy', 'Spain'], correct: 2 },
+                { question: 'What was the main cause of World War I?', options: ['Assassination of Archduke Franz Ferdinand', 'Economic depression', 'Religious conflict', 'Colonial expansion'], correct: 0 }
+            ]
+        },
+        'us-history': {
+            title: 'US History Quiz',
+            questions: [
+                { question: 'In which year was the Declaration of Independence signed?', options: ['1775', '1776', '1777', '1778'], correct: 1 },
+                { question: 'Who was the first president of the United States?', options: ['Thomas Jefferson', 'John Adams', 'George Washington', 'James Madison'], correct: 2 },
+                { question: 'What was the main cause of the American Civil War?', options: ['Taxes', 'Slavery', 'Land disputes', 'Religious differences'], correct: 1 },
+                { question: 'In which year did the United States enter World War II?', options: ['1939', '1940', '1941', '1942'], correct: 2 },
+                { question: 'Who wrote the Gettysburg Address?', options: ['Abraham Lincoln', 'Ulysses S. Grant', 'Robert E. Lee', 'Jefferson Davis'], correct: 0 }
             ]
         }
     };
@@ -776,14 +984,22 @@ function updateQuizProgress() {
         'algebra': 'algebra-quiz-status',
         'geometry': 'geometry-quiz-status',
         'biology': 'biology-quiz-status',
-        'chemistry': 'chemistry-quiz-status'
+        'chemistry': 'chemistry-quiz-status',
+        'grammar': 'grammar-quiz-status',
+        'literature': 'literature-quiz-status',
+        'world-history': 'world-history-quiz-status',
+        'us-history': 'us-history-quiz-status'
     };
 
     const quizBtns = {
         'algebra': 'algebra-quiz-btn',
         'geometry': 'geometry-quiz-btn',
         'biology': 'biology-quiz-btn',
-        'chemistry': 'chemistry-quiz-btn'
+        'chemistry': 'chemistry-quiz-btn',
+        'grammar': 'grammar-quiz-btn',
+        'literature': 'literature-quiz-btn',
+        'world-history': 'world-history-quiz-btn',
+        'us-history': 'us-history-quiz-btn'
     };
 
     Object.keys(quizStatus).forEach(quizId => {
@@ -808,7 +1024,9 @@ function updateQuizProgress() {
     // Update course progress
     const quizCourses = {
         'math-quiz': { quizzes: ['algebra', 'geometry'], progressId: 'math-quiz-progress', courseId: 'math-quiz-course' },
-        'science-quiz': { quizzes: ['biology', 'chemistry'], progressId: 'science-quiz-progress', courseId: 'science-quiz-course' }
+        'science-quiz': { quizzes: ['biology', 'chemistry'], progressId: 'science-quiz-progress', courseId: 'science-quiz-course' },
+        'english-quiz': { quizzes: ['grammar', 'literature'], progressId: 'english-quiz-progress', courseId: 'english-quiz-course' },
+        'history-quiz': { quizzes: ['world-history', 'us-history'], progressId: 'history-quiz-progress', courseId: 'history-quiz-course' }
     };
 
     Object.keys(quizCourses).forEach(courseKey => {
