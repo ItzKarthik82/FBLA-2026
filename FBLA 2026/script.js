@@ -1118,10 +1118,30 @@ function runCode() {
 let calcDisplay = '';
 let calcResult = 0;
 let calcOperator = '';
+let scientificMode = false;
+
+function toggleScientific() {
+    scientificMode = !scientificMode;
+    const basicButtons = document.getElementById('basicButtons');
+    const scientificButtons = document.getElementById('scientificButtons');
+    const sciToggle = document.querySelector('.sci-toggle');
+    
+    if (scientificMode) {
+        basicButtons.style.display = 'none';
+        scientificButtons.style.display = 'grid';
+        if (sciToggle) sciToggle.textContent = 'Basic';
+    } else {
+        basicButtons.style.display = 'grid';
+        scientificButtons.style.display = 'none';
+        if (sciToggle) sciToggle.textContent = 'Scientific';
+    }
+}
 
 function toggleCalculator() {
     const calc = document.getElementById('calculator');
-    calc.style.display = calc.style.display === 'block' ? 'none' : 'block';
+    if (calc) {
+        calc.style.display = calc.style.display === 'block' ? 'none' : 'block';
+    }
 }
 
 function calcPress(value) {
@@ -1136,30 +1156,78 @@ function calcPress(value) {
     }
 
     if (value === '=') {
-        if (calcOperator && calcDisplay) {
-            calcResult = calculate(calcResult, parseFloat(calcDisplay), calcOperator);
-            display.textContent = calcResult;
-            calcDisplay = calcResult.toString();
-            calcOperator = '';
+        if (calcDisplay) {
+            try {
+                // Replace mathematical functions with JavaScript equivalents
+                let expression = calcDisplay
+                    .replace(/sin\(/g, 'Math.sin(')
+                    .replace(/cos\(/g, 'Math.cos(')
+                    .replace(/tan\(/g, 'Math.tan(')
+                    .replace(/sqrt\(/g, 'Math.sqrt(')
+                    .replace(/log\(/g, 'Math.log10(')
+                    .replace(/ln\(/g, 'Math.log(')
+                    .replace(/\^/g, '**');
+                
+                // Evaluate the expression
+                calcResult = eval(expression);
+                display.textContent = calcResult;
+                calcDisplay = calcResult.toString();
+                calcOperator = '';
+            } catch (e) {
+                display.textContent = 'Error';
+                calcDisplay = '';
+            }
         }
         return;
     }
 
-    if (['+', '-', '*', '/'].includes(value)) {
-        if (calcDisplay) {
-            if (calcOperator) {
-                calcResult = calculate(calcResult, parseFloat(calcDisplay), calcOperator);
-            } else {
-                calcResult = parseFloat(calcDisplay);
-            }
+    if (['+', '-', '*', '/', '^'].includes(value)) {
+        if (calcDisplay && !calcDisplay.endsWith('(')) {
             calcOperator = value;
-            calcDisplay = '';
+            calcDisplay += value;
+            display.textContent = calcDisplay;
+        } else if (!calcDisplay) {
+            calcDisplay = '0' + value;
+            display.textContent = calcDisplay;
         }
+        return;
+    }
+
+    if (value === '(' || value === ')') {
+        calcDisplay += value;
+        display.textContent = calcDisplay;
+        return;
+    }
+
+    if (value.includes('sin') || value.includes('cos') || value.includes('tan') || 
+        value.includes('sqrt') || value.includes('log') || value.includes('ln')) {
+        calcDisplay += value;
+        display.textContent = calcDisplay;
         return;
     }
 
     calcDisplay += value;
     display.textContent = calcDisplay;
+}
+
+function calcFactorial() {
+    try {
+        if (calcDisplay) {
+            const num = parseInt(calcDisplay);
+            if (num < 0) {
+                document.getElementById('calcDisplay').textContent = 'Error';
+                return;
+            }
+            let result = 1;
+            for (let i = 2; i <= num; i++) {
+                result *= i;
+            }
+            document.getElementById('calcDisplay').textContent = result;
+            calcDisplay = result.toString();
+        }
+    } catch (e) {
+        document.getElementById('calcDisplay').textContent = 'Error';
+    }
 }
 
 function calculate(a, b, op) {
@@ -1260,3 +1328,14 @@ cards.forEach((card, index) => {
     card.style.animationDelay = `${index * 0.1}s`;
     card.classList.add('fade-in');
 });
+
+// Floating Calculator Functions
+function toggleFloatingCalc() {
+    const floatingCalc = document.getElementById('floatingCalc');
+    floatingCalc.classList.toggle('active');
+}
+
+function closeFloatingCalc() {
+    const floatingCalc = document.getElementById('floatingCalc');
+    floatingCalc.classList.remove('active');
+}
