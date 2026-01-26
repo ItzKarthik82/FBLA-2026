@@ -330,7 +330,9 @@ function startLesson(lessonId) {
         'biology': { file: 'biology-guide.txt', title: 'Biology Basics' },
         'chemistry': { file: 'chemistry-guide.txt', title: 'Chemistry Fundamentals' },
         'essay': { file: 'essay-guide.txt', title: 'Essay Writing' },
-        'history': { file: 'history-guide.txt', title: 'World History' }
+        'grammar': { file: 'grammar-guide.txt', title: 'Grammar Basics' },
+        'history': { file: 'history-guide.txt', title: 'World History' },
+        'us-history': { file: 'us-history-guide.txt', title: 'US History' }
     };
     
     const data = lessonData[lessonId];
@@ -394,7 +396,9 @@ function updateLessonProgress() {
         { id: 'biology', statusId: 'biology-status', btnId: 'biology-btn' },
         { id: 'chemistry', statusId: 'chemistry-status', btnId: 'chemistry-btn' },
         { id: 'essay', statusId: 'essay-status', btnId: 'essay-btn' },
-        { id: 'history', statusId: 'history-status', btnId: 'history-btn' }
+        { id: 'grammar', statusId: 'grammar-status', btnId: 'grammar-btn' },
+        { id: 'history', statusId: 'history-status', btnId: 'history-btn' },
+        { id: 'us-history', statusId: 'us-history-status', btnId: 'us-history-btn' }
     ];
     
     lessons.forEach(lesson => {
@@ -420,8 +424,8 @@ function updateLessonProgress() {
     const courses = {
         'math': { lessons: ['algebra', 'geometry'], progressId: 'math-progress', courseId: 'math-course' },
         'science': { lessons: ['biology', 'chemistry'], progressId: 'science-progress', courseId: 'science-course' },
-        'english': { lessons: ['essay'], progressId: 'english-progress', courseId: 'english-course' },
-        'history': { lessons: ['history'], progressId: 'history-progress', courseId: 'history-course' }
+        'english': { lessons: ['essay', 'grammar'], progressId: 'english-progress', courseId: 'english-course' },
+        'history': { lessons: ['history', 'us-history'], progressId: 'history-progress', courseId: 'history-course' }
     };
     
     Object.keys(courses).forEach(courseKey => {

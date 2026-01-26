@@ -1,0 +1,98 @@
+Grammar Basics Guide
+===================
+
+Grammar is the foundation of clear communication and effective writing.
+
+Parts of Speech:
+- Nouns: People, places, things, ideas (student, school, book, freedom)
+- Pronouns: Replace nouns (I, you, he, she, it, we, they, this, that)
+- Verbs: Action or state words (run, eat, be, have, do)
+- Adjectives: Describe nouns (big, red, happy, intelligent)
+- Adverbs: Describe verbs, adjectives, or other adverbs (quickly, very, well)
+- Prepositions: Show relationships (in, on, at, with, for, by)
+- Conjunctions: Connect words/clauses (and, but, or, so, because, although)
+- Interjections: Express emotion (wow, oh, hey, ouch)
+
+Sentence Structure:
+- Subject: Who/what the sentence is about
+- Predicate: What the subject does or is
+- Complete sentences have both subject and predicate
+- Fragments: Incomplete sentences missing subject or predicate
+- Run-ons: Two complete sentences joined incorrectly
+
+Subject-Verb Agreement:
+- Singular subjects take singular verbs (The dog barks)
+- Plural subjects take plural verbs (The dogs bark)
+- Compound subjects joined by "and" are plural (Tom and Jerry play)
+- Subjects joined by "or" agree with the nearer subject (Either the dog or the cats bark)
+
+Verb Tenses:
+- Present: I eat, I am eating (habitual or ongoing action)
+- Past: I ate, I was eating (completed action)
+- Future: I will eat, I am going to eat (action that will happen)
+- Present Perfect: I have eaten (action completed at unspecified time)
+- Past Perfect: I had eaten (action completed before another past action)
+- Future Perfect: I will have eaten (action completed before future time)
+
+Pronoun Usage:
+- Personal: I, me, you, he, him, she, her, it, we, us, they, them
+- Possessive: my, your, his, her, its, our, their
+- Reflexive: myself, yourself, himself, herself, ourselves, themselves
+- Relative: who, whom, whose, which, that
+- Avoid pronoun confusion and unclear antecedents
+
+Common Grammar Rules:
+- I vs Me: Use "I" as subject, "me" as object
+- Who vs Whom: "Who" is subject, "whom" is object
+- Its vs It's: "Its" shows possession, "it's" means "it is"
+- Your vs You're: "Your" shows possession, "you're" means "you are"
+- There vs Their vs They're: Location, possession, "they are"
+- Affect vs Effect: "Affect" is verb, "effect" is noun
+
+Punctuation:
+- Period (.): Ends declarative sentences and abbreviations
+- Question Mark (?): Ends questions
+- Exclamation Point (!): Shows strong emotion
+- Comma (,): Separates items, clauses, and phrases
+- Semicolon (;): Joins related independent clauses
+- Colon (:): Introduces lists or explanations
+- Apostrophe ('): Shows possession or contractions
+- Quotation Marks (" "): Enclose direct speech or titles
+- Parentheses ( ): Contain additional information
+- Hyphen (-): Joins compound words
+- Dash (—): Shows interruption or emphasis
+
+Capitalization:
+- First word of sentences
+- Proper nouns (names, places, organizations)
+- Days, months, holidays (but not seasons)
+- Titles of books, movies, songs
+- "I" is always capitalized
+- First word after colon in some cases
+
+Common Errors to Avoid:
+- Double negatives: "I don't have no money"
+- Dangling modifiers: "Running down the street, the mailbox was hit"
+- Misplaced modifiers: "I almost ate all the pizza"
+- Parallel structure: "I like swimming, biking, and to run"
+- Split infinitives: "To boldly go where no one has gone before"
+
+Active vs Passive Voice:
+- Active: Subject performs the action (The dog chased the cat)
+- Passive: Subject receives the action (The cat was chased by the dog)
+- Active voice is usually clearer and more direct
+
+Word Choice and Usage:
+- Homophones: Words that sound alike but are spelled differently
+  (their/there/they're, to/too/two, accept/except)
+- Homographs: Words spelled the same but pronounced differently
+  (lead/lead, read/read, present/present)
+- Synonyms: Words with similar meanings (big/large/huge)
+- Antonyms: Words with opposite meanings (hot/cold, happy/sad)
+
+Practice Tips:
+- Read widely to see grammar in context
+- Write regularly and self-edit
+- Use grammar checkers as tools, not crutches
+- Learn rules gradually, don't try to memorize everything at once
+- Focus on common errors you personally make
