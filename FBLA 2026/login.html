@@ -506,6 +506,59 @@
             }
         });
 
+        // Login email validation
+        document.getElementById('loginEmail').addEventListener('blur', function() {
+            const email = this.value.trim();
+            const errorEl = document.getElementById('loginEmailError');
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            
+            if (!email) {
+                errorEl.textContent = 'Please enter your email';
+                errorEl.style.display = 'block';
+                this.style.borderColor = '#ef4444';
+                showNotification('⚠️ PLEASE ENTER YOUR EMAIL!', 'error');
+                return;
+            }
+            
+            if (!emailRegex.test(email)) {
+                errorEl.textContent = 'Please enter a valid email address';
+                errorEl.style.display = 'block';
+                this.style.borderColor = '#ef4444';
+                showNotification('⚠️ INVALID EMAIL FORMAT!', 'error');
+                return;
+            }
+            
+            // Email is valid, clear error
+            errorEl.style.display = 'none';
+            this.style.borderColor = '';
+        });
+
+        // Login password validation
+        document.getElementById('loginPassword').addEventListener('blur', function() {
+            const password = this.value;
+            const errorEl = document.getElementById('loginPasswordError');
+            
+            if (!password) {
+                errorEl.textContent = 'Please enter your password';
+                errorEl.style.display = 'block';
+                this.style.borderColor = '#ef4444';
+                showNotification('⚠️ PLEASE ENTER YOUR PASSWORD!', 'error');
+                return;
+            }
+            
+            if (password.length < 6) {
+                errorEl.textContent = 'Password must be at least 6 characters';
+                errorEl.style.display = 'block';
+                this.style.borderColor = '#ef4444';
+                showNotification('⚠️ PASSWORD MUST BE AT LEAST 6 CHARACTERS!', 'error');
+                return;
+            }
+            
+            // Password is valid, clear error
+            errorEl.style.display = 'none';
+            this.style.borderColor = '';
+        });
+
         // Login form submission
         document.getElementById('loginForm').addEventListener('submit', (e) => {
             e.preventDefault();
@@ -546,9 +599,6 @@
                     window.location.href = 'dashboard.html';
                 }, 1500);
             } else {
-                document.getElementById('loginEmailError').textContent = 'Invalid email or password';
-                document.getElementById('loginEmailError').style.display = 'block';
-                document.getElementById('loginEmail').style.borderColor = '#ef4444';
                 showNotification('❌ Invalid email or password', 'error');
             }
         });
