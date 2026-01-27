@@ -714,7 +714,33 @@ body.dark .calendar-nav h3 {
     color: var(--text);
 }
 
+.current-week-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    background: linear-gradient(135deg, var(--primary), #6366f1);
+    color: white;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-left: 12px;
+    box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
+    animation: pulseGlow 2s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+    0%, 100% {
+        box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
+    }
+    50% {
+        box-shadow: 0 2px 12px rgba(79, 70, 229, 0.5);
+    }
+}
+
 .today-btn {
+    display: none;
     padding: 6px 12px;
     border: 1px solid var(--primary);
     background: transparent;
@@ -809,6 +835,20 @@ body.dark .day-header {
 
 .day-header:last-child {
     border-right: none;
+}
+
+.day-header.today {
+    background: linear-gradient(135deg, rgba(79, 70, 229, 0.05) 0%, rgba(79, 70, 229, 0.1) 100%);
+    border-bottom: 3px solid var(--primary);
+}
+
+body.dark .day-header.today {
+    background: linear-gradient(135deg, rgba(79, 70, 229, 0.1) 0%, rgba(79, 70, 229, 0.2) 100%);
+}
+
+.day-header.today .day-number {
+    color: var(--primary);
+    font-weight: 900;
 }
 
 .day-name {

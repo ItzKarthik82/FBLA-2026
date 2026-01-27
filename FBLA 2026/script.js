@@ -594,9 +594,11 @@ function switchView(view) {
     currentView = view;
     const calendarWrapper = document.querySelector('.calendar-wrapper');
     const monthWrapper = document.querySelector('.month-calendar-wrapper');
+    const currentWeekBadge = document.getElementById('currentWeekBadge');
     
     if (view === 'month') {
         if (calendarWrapper) calendarWrapper.style.display = 'none';
+        if (currentWeekBadge) currentWeekBadge.style.display = 'none';
         if (monthWrapper) {
             monthWrapper.style.display = 'block';
             updateMonthDisplay();
@@ -798,6 +800,16 @@ function updateWeekDisplay() {
         weekDisplay.textContent = dateString;
     }
     
+    // Show/hide current week badge
+    const currentWeekBadge = document.getElementById('currentWeekBadge');
+    if (currentWeekBadge) {
+        if (currentWeekOffset === 0) {
+            currentWeekBadge.style.display = 'inline-flex';
+        } else {
+            currentWeekBadge.style.display = 'none';
+        }
+    }
+    
     // Update day headers
     const dayHeaders = document.querySelectorAll('.day-header');
     for (let i = 0; i < 7; i++) {
@@ -814,10 +826,18 @@ function updateWeekDisplay() {
             if (dayNumberEl) {
                 dayNumberEl.textContent = currentDay.getDate();
             }
+            
+            // Add "today" class only if this day is today and we're in the current week
+            const isToday = currentDay.toDateString() === today.toDateString();
+            if (isToday) {
+                dayHeaders[i].classList.add('today');
+            } else {
+                dayHeaders[i].classList.remove('today');
+            }
         }
     }
     
-    // Update day columns data attributes
+    // Update day columns data attributes and filter events
     const dayColumns = document.querySelectorAll('.day-column');
     for (let i = 0; i < 7; i++) {
         const currentDay = new Date(startOfWeek);
@@ -825,6 +845,40 @@ function updateWeekDisplay() {
         
         if (dayColumns[i]) {
             dayColumns[i].setAttribute('data-day', dayNames[currentDay.getDay()].toLowerCase());
+            
+            // Filter events for this day
+            const allEvents = dayColumns[i].querySelectorAll('.calendar-event');
+            allEvents.forEach(event => {
+                const eventOnclick = event.getAttribute('onclick');
+                if (eventOnclick) {
+                    // Extract the full date string from onclick (e.g., "Sunday, January 25, 6:00 PM")
+                    const match = eventOnclick.match(/['"]([^'"]+)['"](?=[^'"]*$)/);
+                    if (match) {
+                        const dateStr = match[1];
+                        // Extract month and day (e.g., "January 25" from "Sunday, January 25, 6:00 PM")
+                        const dayMatch = dateStr.match(/(\w+)\s+(\d+)/);
+                        
+                        if (dayMatch) {
+                            const monthName = dayMatch[1];
+                            const dayNum = parseInt(dayMatch[2]);
+                            const monthIndex = monthNames.indexOf(monthName);
+                            
+                            // Get the year from current day
+                            const eventYear = currentDay.getFullYear();
+                            const eventDate = new Date(eventYear, monthIndex, dayNum);
+                            
+                            // Compare with current day
+                            if (eventDate.getDate() === currentDay.getDate() && 
+                                eventDate.getMonth() === currentDay.getMonth() &&
+                                eventDate.getFullYear() === currentDay.getFullYear()) {
+                                event.style.display = 'flex';
+                            } else {
+                                event.style.display = 'none';
+                            }
+                        }
+                    }
+                }
+            });
         }
     }
 }
@@ -1764,6 +1818,11 @@ document.addEventListener('DOMContentLoaded', function() {
     updateActivityList();
     updateLessonProgress();
     updateQuizProgress();
+    
+    // Initialize week display for schedule page
+    if (document.querySelector('.calendar-wrapper')) {
+        updateWeekDisplay();
+    }
 
     // Add event listeners
     const themeBtn = document.getElementById('themeToggle');
