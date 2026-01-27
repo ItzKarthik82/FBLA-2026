@@ -1146,7 +1146,7 @@ body.dark .month-grid-body {
 }
 
 .month-day {
-    min-height: 120px;
+    height: 120px;
     padding: 12px;
     background: var(--white);
     position: relative;
@@ -1154,6 +1154,9 @@ body.dark .month-grid-body {
     border: 1px solid var(--gray-200);
     border-top: none;
     border-left: none;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
 body.dark .month-day {
@@ -1221,6 +1224,8 @@ body.dark .month-day.today {
     flex-direction: column;
     gap: 4px;
     margin-top: 4px;
+    overflow-y: auto;
+    flex: 1;
 }
 
 .month-event {
