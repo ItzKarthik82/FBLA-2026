@@ -140,8 +140,6 @@
         /* Notification Styles */
         .notification {
             position: fixed;
-            top: 20px;
-            right: 20px;
             padding: 16px 24px;
             border-radius: 6px;
             color: white;
@@ -154,19 +152,48 @@
 
         .notification.success {
             background: #10b981;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: slideInBottom 0.3s ease;
         }
 
         .notification.error {
             background: #ef4444;
+            top: 20px;
+            right: 20px;
+            animation: slideInRight 0.3s ease;
         }
 
-        @keyframes slideIn {
+        @keyframes slideInBottom {
+            from {
+                transform: translateX(-50%) translateY(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(-50%) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInRight {
             from {
                 transform: translateX(400px);
                 opacity: 0;
             }
             to {
                 transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(-50%) translateY(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(-50%) translateY(0);
                 opacity: 1;
             }
         }
@@ -409,7 +436,6 @@
                 errorEl.textContent = 'Please enter your full name';
                 errorEl.style.display = 'block';
                 this.style.borderColor = '#ef4444';
-                showNotification('⚠️ Please enter your full name', 'error');
             }
         });
 
@@ -422,7 +448,6 @@
                 errorEl.textContent = 'Please enter your email';
                 errorEl.style.display = 'block';
                 this.style.borderColor = '#ef4444';
-                showNotification('⚠️ PLEASE ENTER YOUR EMAIL!', 'error');
                 return;
             }
             
@@ -430,7 +455,6 @@
                 errorEl.textContent = 'Please enter a valid email address';
                 errorEl.style.display = 'block';
                 this.style.borderColor = '#ef4444';
-                showNotification('⚠️ INVALID EMAIL FORMAT!', 'error');
                 return;
             }
             
@@ -439,7 +463,6 @@
                 errorEl.textContent = 'Email already registered';
                 errorEl.style.display = 'block';
                 this.style.borderColor = '#ef4444';
-                showNotification('❌ EMAIL ALREADY REGISTERED! USE A DIFFERENT EMAIL!', 'error');
                 return;
             }
             
@@ -456,12 +479,10 @@
                 errorEl.textContent = 'Please enter a password';
                 errorEl.style.display = 'block';
                 this.style.borderColor = '#ef4444';
-                showNotification('⚠️ Please enter a password', 'error');
             } else if (password.length < 6) {
                 errorEl.textContent = 'Password must be at least 6 characters';
                 errorEl.style.display = 'block';
                 this.style.borderColor = '#ef4444';
-                showNotification('⚠️ Password must be at least 6 characters', 'error');
             }
         });
 
@@ -474,12 +495,10 @@
                 errorEl.textContent = 'Please confirm your password';
                 errorEl.style.display = 'block';
                 this.style.borderColor = '#ef4444';
-                showNotification('⚠️ Please confirm your password', 'error');
             } else if (password !== confirm) {
                 errorEl.textContent = 'Passwords do not match';
                 errorEl.style.display = 'block';
                 this.style.borderColor = '#ef4444';
-                showNotification('❌ Passwords do not match!', 'error');
             }
         });
 
@@ -490,7 +509,6 @@
             if (!value) {
                 errorEl.textContent = 'Please select a security question';
                 errorEl.style.display = 'block';
-                showNotification('⚠️ Please select a security question', 'error');
             }
         });
 
@@ -502,7 +520,6 @@
                 errorEl.textContent = 'Please answer the security question';
                 errorEl.style.display = 'block';
                 this.style.borderColor = '#ef4444';
-                showNotification('⚠️ Please answer the security question', 'error');
             }
         });
 
@@ -516,7 +533,6 @@
                 errorEl.textContent = 'Please enter your email';
                 errorEl.style.display = 'block';
                 this.style.borderColor = '#ef4444';
-                showNotification('⚠️ PLEASE ENTER YOUR EMAIL!', 'error');
                 return;
             }
             
@@ -524,7 +540,6 @@
                 errorEl.textContent = 'Please enter a valid email address';
                 errorEl.style.display = 'block';
                 this.style.borderColor = '#ef4444';
-                showNotification('⚠️ INVALID EMAIL FORMAT!', 'error');
                 return;
             }
             
@@ -542,7 +557,6 @@
                 errorEl.textContent = 'Please enter your password';
                 errorEl.style.display = 'block';
                 this.style.borderColor = '#ef4444';
-                showNotification('⚠️ PLEASE ENTER YOUR PASSWORD!', 'error');
                 return;
             }
             
@@ -550,7 +564,6 @@
                 errorEl.textContent = 'Password must be at least 6 characters';
                 errorEl.style.display = 'block';
                 this.style.borderColor = '#ef4444';
-                showNotification('⚠️ PASSWORD MUST BE AT LEAST 6 CHARACTERS!', 'error');
                 return;
             }
             
@@ -573,7 +586,6 @@
                 document.getElementById('loginEmailError').style.display = 'block';
                 document.getElementById('loginEmail').style.borderColor = '#ef4444';
                 hasError = true;
-                showNotification('⚠️ Please enter your email', 'error');
             }
 
             if (!password) {
@@ -581,7 +593,6 @@
                 document.getElementById('loginPasswordError').style.display = 'block';
                 document.getElementById('loginPassword').style.borderColor = '#ef4444';
                 hasError = true;
-                showNotification('⚠️ Please enter your password', 'error');
             }
 
             if (hasError) return;
@@ -599,7 +610,7 @@
                     window.location.href = 'dashboard.html';
                 }, 1500);
             } else {
-                showNotification('❌ Invalid email or password', 'error');
+                showNotification('❌ Invalid email or password', 'success');
             }
         });
 
@@ -668,7 +679,6 @@
             }
 
             if (hasError) {
-                showNotification('❌ Please fix the errors above', 'error');
                 return;
             }
 
@@ -678,7 +688,6 @@
                 document.getElementById('signupEmailError').textContent = 'Email already registered';
                 document.getElementById('signupEmailError').style.display = 'block';
                 document.getElementById('signupEmail').style.borderColor = '#ef4444';
-                showNotification('❌ Email already registered! Please login instead.', 'error');
                 return;
             }
 
