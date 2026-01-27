@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PeerLearn - Login & Sign Up</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js"></script>
+    <style>
+        .login-container {
+            max-width: 400px;
+            margin: 80px auto;
+            padding: 40px;
+            background: var(--white);
+            border: 1px solid #e5e7eb;
+            border-radius: var(--border-radius-lg);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-header h2 {
+            font-size: 28px;
+            margin-bottom: 8px;
+            color: var(--gray-900);
+        }
+
+        .login-header p {
+            color: var(--gray-600);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--gray-700);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #e5e7eb;
+            border-radius: var(--border-radius);
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .form-actions button {
+            flex: 1;
+            padding: 10px 16px;
+            border: 2px solid var(--gray-300);
+            background: var(--white);
+            border-radius: var(--border-radius);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--gray-700);
+        }
+
+        .form-actions button.active {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .form-actions button:hover {
+            border-color: var(--gray-400);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .submit-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .login-footer {
+            text-align: center;
+            margin-top: 20px;
+            color: var(--gray-600);
+            font-size: 14px;
+        }
+
+        .login-footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .login-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .form-hidden {
+            display: none;
+        }
+
+        body.dark .login-container {
+            background: var(--card-bg);
+            border-color: var(--gray-700);
+        }
+
+        body.dark .login-header h2 {
+            color: var(--text);
+        }
+
+        body.dark .login-header p {
+            color: var(--text-muted);
+        }
+
+        body.dark .form-group label {
+            color: var(--text);
+        }
+
+        body.dark .form-group input {
+            background: var(--input-bg);
+            border-color: var(--gray-700);
+            color: var(--text);
+        }
+
+        body.dark .form-group input:focus {
+            border-color: var(--primary);
+        }
+
+        body.dark .form-actions button {
+            background: var(--input-bg);
+            border-color: var(--gray-700);
+            color: var(--text);
+        }
+
+        body.dark .form-actions button.active {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        body.dark .login-footer {
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="container">
+            <h1 class="brand">PeerLearn</h1>
+            <p class="tag">Academic Learning Hub</p>
+            <nav>
+                <ul class="nav">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="schedule.html">Schedule</a></li>
+                    <li><a href="resources.html">Resources</a></li>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <button id="themeToggle" class="btn outline">🌙 Dark</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="content">
+        <div class="login-container">
+            <div class="login-header">
+                <h2>Welcome to PeerLearn</h2>
+                <p>Your academic learning community</p>
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm">
+                <div class="form-actions">
+                    <button type="button" class="login-toggle active" data-form="login">Login</button>
+                    <button type="button" class="login-toggle" data-form="signup">Sign Up</button>
+                </div>
+
+                <div id="login-form-content">
+                    <div class="form-group">
+                        <label for="loginEmail">Email or Username</label>
+                        <input type="text" id="loginEmail" name="email" placeholder="student@example.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" name="password" placeholder="••••••••" required>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Login</button>
+
+                    <div class="login-footer">
+                        <p><a href="#forgot">Forgot password?</a></p>
+                    </div>
+                </div>
+
+                <!-- Sign Up Form -->
+                <div id="signup-form-content" class="form-hidden">
+                    <div class="form-group">
+                        <label for="signupName">Full Name</label>
+                        <input type="text" id="signupName" name="name" placeholder="John Doe" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="signupEmail">Email</label>
+                        <input type="email" id="signupEmail" name="email" placeholder="student@example.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="signupPassword">Password</label>
+                        <input type="password" id="signupPassword" name="password" placeholder="••••••••" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="signupConfirm">Confirm Password</label>
+                        <input type="password" id="signupConfirm" name="confirm" placeholder="••••••••" required>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Create Account</button>
+
+                    <div class="login-footer">
+                        <p>By signing up, you agree to our <a href="#">Terms of Service</a></p>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>PeerLearn</h4>
+                    <p>Student-built, student-powered learning platform.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="schedule.html">Schedule</a></li>
+                        <li><a href="resources.html">Resources</a></li>
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect</h4>
+                    <p>Built for FBLA 2026</p>
+                    <p>Created by students, for students</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 PeerLearn. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <button id="calcToggle" class="calc-toggle-btn" onclick="toggleFloatingCalc()" title="Open Calculator">÷</button>
+
+    <script>
+        // Form Toggle
+        document.querySelectorAll('.login-toggle').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const formType = btn.dataset.form;
+                
+                // Update active button
+                document.querySelectorAll('.login-toggle').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                // Toggle forms
+                document.getElementById('login-form-content').classList.toggle('form-hidden');
+                document.getElementById('signup-form-content').classList.toggle('form-hidden');
+            });
+        });
+
+        // Form Submission
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const isLoginForm = !document.getElementById('login-form-content').classList.contains('form-hidden');
+            
+            if (isLoginForm) {
+                const email = document.getElementById('loginEmail').value;
+                const password = document.getElementById('loginPassword').value;
+                console.log('Login attempt:', { email, password });
+                
+                // Set login status and redirect to dashboard
+                localStorage.setItem('userLoggedIn', 'true');
+                localStorage.setItem('userEmail', email);
+                alert('Successfully logged in!');
+                window.location.href = 'dashboard.html';
+            } else {
+                const name = document.getElementById('signupName').value;
+                const email = document.getElementById('signupEmail').value;
+                const password = document.getElementById('signupPassword').value;
+                const confirm = document.getElementById('signupConfirm').value;
+                
+                if (password !== confirm) {
+                    alert('Passwords do not match!');
+                    return;
+                }
+                
+                console.log('Sign up attempt:', { name, email, password });
+                
+                // Set login status and redirect to dashboard
+                localStorage.setItem('userLoggedIn', 'true');
+                localStorage.setItem('userName', name);
+                localStorage.setItem('userEmail', email);
+                alert('Account created successfully!');
+                window.location.href = 'dashboard.html';
+            }
+        });
+    </script>
+</body>
+</html>

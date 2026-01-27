@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PeerLearn - Academic Learning Hub</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>�</text></svg>">
     <script src="script.js"></script>
 </head>
 <body>
@@ -103,7 +102,7 @@
                 <div class="cta-card">
                     <h2>Ready to Start Learning?</h2>
                     <p>Join thousands of students mastering Math, Science, English, and History together.</p>
-                    <a href="dashboard.html" class="btn primary large">Get Started</a>
+                    <button onclick="checkLoginAndRedirect()" class="btn primary large">Get Started</button>
                 </div>
             </div>
         </section>
@@ -187,5 +186,16 @@
 
     <!-- Floating Calculator Toggle Button -->
     <button id="calcToggle" class="calc-toggle-btn" onclick="toggleFloatingCalc()" title="Open Calculator">÷</button>
+
+    <script>
+        function checkLoginAndRedirect() {
+            const isLoggedIn = localStorage.getItem('userLoggedIn');
+            if (isLoggedIn) {
+                window.location.href = 'dashboard.html';
+            } else {
+                window.location.href = 'login.html';
+            }
+        }
+    </script>
 </body>
 </html>
