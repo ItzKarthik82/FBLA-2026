@@ -170,6 +170,17 @@ body.dark .nav a {
     box-shadow: var(--shadow-md);
 }
 
+.btn.danger {
+    background: #dc2626;
+    color: white;
+}
+
+.btn.danger:hover {
+    background: #b91c1c;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
 .btn.outline {
     background: transparent;
     border: 1px solid var(--gray-300);

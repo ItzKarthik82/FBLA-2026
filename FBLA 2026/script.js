@@ -27,6 +27,7 @@ function loadTheme() {
 // Progress Management
 let sessionStartTime = null;
 let isPageVisible = true;
+let editingSession = null; // Track which session is being edited
 
 function loadProgress() {
     const completedLessons = JSON.parse(localStorage.getItem('completedLessons') || '[]');
@@ -301,6 +302,33 @@ function proposeSession() {
         showToast('Please fill in all fields');
         return;
     }
+    
+    // Track if we're editing
+    const isEditing = editingSession !== null;
+    
+    // If we're editing a session, delete the old one first
+    if (editingSession) {
+        let deleted = false;
+        const allEvents = document.querySelectorAll('.calendar-event[data-custom="true"]');
+        allEvents.forEach(event => {
+            const onclick = event.getAttribute('onclick');
+            // Check if this event matches the old session we're editing
+            if (onclick && onclick.includes(editingSession.title) && onclick.includes(editingSession.dateTime)) {
+                const timeBlock = event.closest('.time-block');
+                if (timeBlock) {
+                    timeBlock.innerHTML = '';
+                    timeBlock.classList.remove('session-slot');
+                    deleted = true;
+                }
+            }
+        });
+        
+        if (!deleted) {
+            console.log('Could not find old event to delete:', editingSession);
+        }
+        
+        editingSession = null; // Clear the editing state
+    }
 
     // Parse the date/time
     const sessionDate = new Date(time);
@@ -342,7 +370,8 @@ function proposeSession() {
             const eventDiv = document.createElement('div');
             eventDiv.className = `calendar-event ${category}`;
             eventDiv.setAttribute('data-category', category);
-            eventDiv.setAttribute('onclick', `joinSession('${title}', '${meetingLink}', '${host}', '${level}', '${fullDateTimeStr}')`);
+            eventDiv.setAttribute('data-custom', 'true');
+            eventDiv.setAttribute('onclick', `joinSession('${title}', '${meetingLink}', '${host}', '${level}', '${fullDateTimeStr}', true)`);
             eventDiv.innerHTML = `
                 <div class="event-time">${timeStr}</div>
                 <div class="event-title">${title}</div>
@@ -364,7 +393,8 @@ function proposeSession() {
         updateMonthDisplay();
     }
 
-    showToast('Session added successfully!');
+    const actionText = isEditing ? 'updated' : 'added';
+    showToast(`Session ${actionText} successfully!`);
     document.getElementById('hostForm').reset();
 }
 
@@ -505,7 +535,7 @@ function copyToClipboard(text, button) {
 }
 
 // Join session with modal
-function joinSession(sessionTitle, meetingLink, host, level, dateTime) {
+function joinSession(sessionTitle, meetingLink, host, level, dateTime, isCustom = false) {
     const sessionId = generateSessionId(sessionTitle, dateTime);
     const isInterested = isSessionInterested(sessionId);
     
@@ -523,6 +553,11 @@ function joinSession(sessionTitle, meetingLink, host, level, dateTime) {
             <p class="text-muted">No meeting link provided</p>
         </div>
     `;
+    
+    const customActionsHTML = isCustom ? `
+        <button class="btn small" onclick="editSession('${sessionTitle}', '${meetingLink}', '${host}', '${level}', '${dateTime}', '${sessionTitle.replace(/'/g, "\\'")}', this.closest('.session-modal'))">Edit Session</button>
+        <button class="btn small danger" onclick="deleteSession('${sessionTitle}', '${dateTime}', this.closest('.session-modal'))">Delete Session</button>
+    ` : '';
     
     const modal = document.createElement('div');
     modal.className = 'session-modal';
@@ -550,6 +585,7 @@ function joinSession(sessionTitle, meetingLink, host, level, dateTime) {
                 </div>
             </div>
             <div class="modal-footer">
+                ${customActionsHTML}
                 <button class="btn small ${isInterested ? 'interested' : ''}" onclick="toggleSessionInterest('${sessionId}', '${sessionTitle}', '${dateTime}', this)">
                     ${isInterested ? '❤️ Interested' : '🤍 Mark Interested'}
                 </button>
@@ -559,6 +595,82 @@ function joinSession(sessionTitle, meetingLink, host, level, dateTime) {
     `;
     
     document.body.appendChild(modal);
+}
+
+function deleteSession(sessionTitle, dateTime, modal) {
+    if (confirm(`Are you sure you want to delete "${sessionTitle}"?`)) {
+        // Find and remove the event from the calendar
+        const allEvents = document.querySelectorAll('.calendar-event[data-custom="true"]');
+        allEvents.forEach(event => {
+            const onclick = event.getAttribute('onclick');
+            if (onclick && onclick.includes(sessionTitle) && onclick.includes(dateTime)) {
+                const timeBlock = event.closest('.time-block');
+                if (timeBlock) {
+                    timeBlock.innerHTML = '';
+                    timeBlock.classList.remove('session-slot');
+                }
+            }
+        });
+        
+        // Close the modal
+        modal.remove();
+        showToast('Session deleted successfully');
+        
+        // Update month view if needed
+        if (currentView === 'month') {
+            updateMonthDisplay();
+        }
+    }
+}
+
+function editSession(oldTitle, oldMeetingLink, oldHost, oldLevel, oldDateTime, displayTitle, modal) {
+    // Parse the date/time from the string
+    const dateMatch = oldDateTime.match(/(\w+), (\w+) (\d+), (\d+):(\d+) (AM|PM)/);
+    if (!dateMatch) {
+        showToast('Error parsing session date');
+        return;
+    }
+    
+    const [, , monthName, day, hours, minutes, ampm] = dateMatch;
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
+                        'July', 'August', 'September', 'October', 'November', 'December'];
+    const month = monthNames.indexOf(monthName);
+    let hour = parseInt(hours);
+    if (ampm === 'PM' && hour !== 12) hour += 12;
+    if (ampm === 'AM' && hour === 12) hour = 0;
+    
+    // Create datetime-local string
+    const year = new Date().getFullYear();
+    const dateTimeLocal = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}T${String(hour).padStart(2, '0')}:${minutes}`;
+    
+    // Populate the form with current values
+    document.getElementById('sessionTitle').value = oldTitle;
+    document.getElementById('sessionHost').value = oldHost;
+    document.getElementById('sessionTime').value = dateTimeLocal;
+    document.getElementById('sessionLevel').value = oldLevel;
+    document.getElementById('meetingLink').value = oldMeetingLink;
+    
+    // Find and set the category
+    const allEvents = document.querySelectorAll('.calendar-event[data-custom="true"]');
+    allEvents.forEach(event => {
+        const onclick = event.getAttribute('onclick');
+        if (onclick && onclick.includes(oldTitle) && onclick.includes(oldDateTime)) {
+            const category = event.getAttribute('data-category');
+            if (category) {
+                document.getElementById('sessionCategory').value = category;
+            }
+        }
+    });
+    
+    // Store the old session info so we can delete it when form is submitted
+    editingSession = { title: oldTitle, dateTime: oldDateTime };
+    
+    // Close the modal
+    modal.remove();
+    
+    // Scroll to the form
+    document.getElementById('hostForm').scrollIntoView({ behavior: 'smooth' });
+    showToast('Edit the session details and click Create Session');
 }
 
 function copyMeetingLink() {
