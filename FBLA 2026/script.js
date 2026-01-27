@@ -406,14 +406,6 @@ function setupReminder(sessionId, sessionTitle, dateTime) {
     console.log('Reminder set for:', sessionTitle, 'at', dateTime);
 }
 
-// For testing - sends a test reminder immediately
-function sendTestReminder() {
-    const testDate = new Date();
-    testDate.setSeconds(testDate.getSeconds() + 5);
-    const timeStr = testDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
-    sendReminder('Test Session', testDate);
-}
-
 function checkReminders() {
     const reminders = JSON.parse(localStorage.getItem('sessionReminders') || '{}');
     const now = new Date();
