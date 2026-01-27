@@ -290,6 +290,7 @@ function proposeSession() {
     const host = document.getElementById('sessionHost').value;
     const time = document.getElementById('sessionTime').value;
     const category = document.getElementById('sessionCategory').value;
+    const meetingLink = document.getElementById('meetingLink').value;
 
     if (!title || !host || !time) {
         showToast('Please fill in all fields');
@@ -301,21 +302,334 @@ function proposeSession() {
     document.getElementById('hostForm').reset();
 }
 
+// Join session with modal
+function joinSession(sessionTitle, meetingLink, host, level, dateTime) {
+    const modal = document.createElement('div');
+    modal.className = 'session-modal';
+    modal.innerHTML = `
+        <div class="modal-content session-modal-content">
+            <div class="modal-header">
+                <h3>${sessionTitle}</h3>
+                <span class="close" onclick="this.parentElement.parentElement.parentElement.remove()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="session-modal-info">
+                    <div class="info-group">
+                        <span class="info-label">📅 Session Time</span>
+                        <p>${dateTime}</p>
+                    </div>
+                    <div class="info-group">
+                        <span class="info-label">👨‍🏫 Host</span>
+                        <p>${host}</p>
+                    </div>
+                    <div class="info-group">
+                        <span class="info-label">📊 Level</span>
+                        <p>${level}</p>
+                    </div>
+                    <div class="info-group">
+                        <span class="info-label">🔗 Meeting Link</span>
+                        <div class="meeting-link-container">
+                            <input type="text" value="${meetingLink}" id="linkCopy" readonly class="meeting-link-input">
+                            <button class="btn small" onclick="copyMeetingLink()">📋 Copy</button>
+                        </div>
+                    </div>
+                    <div class="info-group">
+                        <span class="info-label">👥 Participants</span>
+                        <p id="participantCount">5 students have joined this session</p>
+                    </div>
+                    <div class="info-group">
+                        <span class="info-label">⚡ Session Status</span>
+                        <div class="status-badge active">🟢 Live Now - Join Anytime</div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="${meetingLink}" target="_blank" class="btn primary">🎥 Join on Google Meet</a>
+                <button class="btn outline" onclick="this.parentElement.parentElement.parentElement.remove()">Close</button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+}
+
+function copyMeetingLink() {
+    const linkInput = document.getElementById('linkCopy');
+    linkInput.select();
+    document.execCommand('copy');
+    showToast('Meeting link copied!');
+}
+
 // Filter sessions
-function filterSessions(category) {
-    const cards = document.querySelectorAll('.session-card');
-    const buttons = document.querySelectorAll('.filter-btn');
+function filterSessions(category, clickedButton) {
+    const weekEvents = document.querySelectorAll('.calendar-event');
+    const monthEvents = document.querySelectorAll('.month-event');
+    const buttons = document.querySelectorAll('.pill-btn');
 
     buttons.forEach(btn => btn.classList.remove('active'));
-    event.target.classList.add('active');
+    if (clickedButton) {
+        clickedButton.classList.add('active');
+    }
 
-    cards.forEach(card => {
-        if (category === 'all' || card.dataset.category === category) {
-            card.style.display = 'block';
+    // Filter week view events
+    weekEvents.forEach(evt => {
+        if (category === 'all' || evt.dataset.category === category) {
+            evt.style.display = 'flex';
         } else {
-            card.style.display = 'none';
+            evt.style.display = 'none';
         }
     });
+    
+    // Filter month view events
+    monthEvents.forEach(evt => {
+        if (category === 'all' || evt.classList.contains(category)) {
+            evt.style.display = 'block';
+        } else {
+            evt.style.display = 'none';
+        }
+    });
+}
+
+// Calendar Navigation
+let currentWeekOffset = 0;
+let currentMonthOffset = 0;
+let currentView = 'week';
+
+function switchView(view) {
+    currentView = view;
+    const calendarWrapper = document.querySelector('.calendar-wrapper');
+    const monthWrapper = document.querySelector('.month-calendar-wrapper');
+    
+    if (view === 'month') {
+        if (calendarWrapper) calendarWrapper.style.display = 'none';
+        if (monthWrapper) {
+            monthWrapper.style.display = 'block';
+            updateMonthDisplay();
+        } else {
+            // Create month view if it doesn't exist
+            createMonthView();
+        }
+    } else {
+        if (calendarWrapper) calendarWrapper.style.display = 'block';
+        if (monthWrapper) monthWrapper.style.display = 'none';
+        updateWeekDisplay();
+    }
+}
+
+function previousWeek() {
+    if (currentView === 'week') {
+        currentWeekOffset--;
+        updateWeekDisplay();
+    } else {
+        currentMonthOffset--;
+        updateMonthDisplay();
+    }
+}
+
+function nextWeek() {
+    if (currentView === 'week') {
+        currentWeekOffset++;
+        updateWeekDisplay();
+    } else {
+        currentMonthOffset++;
+        updateMonthDisplay();
+    }
+}
+
+function goToToday() {
+    if (currentView === 'week') {
+        currentWeekOffset = 0;
+        updateWeekDisplay();
+    } else {
+        currentMonthOffset = 0;
+        updateMonthDisplay();
+    }
+}
+
+function createMonthView() {
+    const calendarWrapper = document.querySelector('.calendar-wrapper');
+    if (!calendarWrapper) return;
+    
+    const monthWrapper = document.createElement('div');
+    monthWrapper.className = 'month-calendar-wrapper';
+    monthWrapper.innerHTML = `
+        <div class="month-calendar">
+            <div class="month-grid-header">
+                <div class="month-day-name">Sun</div>
+                <div class="month-day-name">Mon</div>
+                <div class="month-day-name">Tue</div>
+                <div class="month-day-name">Wed</div>
+                <div class="month-day-name">Thu</div>
+                <div class="month-day-name">Fri</div>
+                <div class="month-day-name">Sat</div>
+            </div>
+            <div class="month-grid-body" id="monthGridBody"></div>
+        </div>
+    `;
+    
+    calendarWrapper.parentNode.insertBefore(monthWrapper, calendarWrapper.nextSibling);
+    updateMonthDisplay();
+}
+
+function updateMonthDisplay() {
+    const weekDisplay = document.getElementById('weekDisplay');
+    const today = new Date();
+    const displayDate = new Date(today.getFullYear(), today.getMonth() + currentMonthOffset, 1);
+    
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
+                        'July', 'August', 'September', 'October', 'November', 'December'];
+    
+    if (weekDisplay) {
+        weekDisplay.textContent = `${monthNames[displayDate.getMonth()]} ${displayDate.getFullYear()}`;
+    }
+    
+    const monthGridBody = document.getElementById('monthGridBody');
+    if (!monthGridBody) return;
+    
+    monthGridBody.innerHTML = '';
+    
+    const firstDay = new Date(displayDate.getFullYear(), displayDate.getMonth(), 1);
+    const lastDay = new Date(displayDate.getFullYear(), displayDate.getMonth() + 1, 0);
+    const firstDayOfWeek = firstDay.getDay();
+    const daysInMonth = lastDay.getDate();
+    
+    // Get all events from the calendar
+    const allEvents = document.querySelectorAll('.calendar-event');
+    const eventsMap = new Map();
+    
+    allEvents.forEach(event => {
+        const dateTime = event.getAttribute('onclick');
+        if (dateTime) {
+            // Extract date from onclick attribute (e.g., "Tuesday, January 27, 4:00 PM")
+            const match = dateTime.match(/['"]([^'"]+)['"](?=[^'"]*$)/);
+            if (match) {
+                const dateStr = match[1];
+                const dayMatch = dateStr.match(/\w+,\s+(\w+)\s+(\d+)/);
+                
+                if (dayMatch) {
+                    const monthName = dayMatch[1];
+                    const dayNum = parseInt(dayMatch[2]);
+                    const monthIndex = monthNames.indexOf(monthName);
+                    
+                    // Check if event belongs to current displayed month
+                    if (monthIndex === displayDate.getMonth()) {
+                        if (!eventsMap.has(dayNum)) {
+                            eventsMap.set(dayNum, []);
+                        }
+                        
+                        eventsMap.get(dayNum).push({
+                            title: event.querySelector('.event-title')?.textContent || '',
+                            time: event.querySelector('.event-time')?.textContent || '',
+                            category: event.getAttribute('data-category') || '',
+                            onclick: event.getAttribute('onclick')
+                        });
+                    }
+                }
+            }
+        }
+    });
+    
+    // Create calendar cells
+    for (let i = 0; i < firstDayOfWeek; i++) {
+        const emptyCell = document.createElement('div');
+        emptyCell.className = 'month-day empty';
+        monthGridBody.appendChild(emptyCell);
+    }
+    
+    for (let day = 1; day <= daysInMonth; day++) {
+        const dayCell = document.createElement('div');
+        dayCell.className = 'month-day';
+        
+        const currentDate = new Date(displayDate.getFullYear(), displayDate.getMonth(), day);
+        const isToday = currentDate.toDateString() === today.toDateString();
+        
+        if (isToday) {
+            dayCell.classList.add('today');
+        }
+        
+        const eventsHTML = [];
+        const dayEvents = eventsMap.get(day) || [];
+        
+        if (dayEvents.length > 0) {
+            dayCell.classList.add('has-events');
+        }
+        
+        dayEvents.forEach(evt => {
+            eventsHTML.push(`
+                <div class="month-event ${evt.category}" onclick="${evt.onclick}">
+                    ${evt.time} ${evt.title}
+                </div>
+            `);
+        });
+        
+        dayCell.innerHTML = `
+            <div class="month-day-number">${day}</div>
+            <div class="month-events">${eventsHTML.join('')}</div>
+        `;
+        
+        monthGridBody.appendChild(dayCell);
+    }
+}
+
+function updateWeekDisplay() {
+    const weekDisplay = document.getElementById('weekDisplay');
+    const today = new Date();
+    const startOfWeek = new Date(today);
+    
+    // Start on Tuesday (Jan 27, 2026)
+    startOfWeek.setDate(today.getDate() - today.getDay() + 2 + (currentWeekOffset * 7));
+    
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(startOfWeek.getDate() + 6);
+    
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
+                        'July', 'August', 'September', 'October', 'November', 'December'];
+    
+    const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    
+    const startMonth = monthNames[startOfWeek.getMonth()];
+    const endMonth = monthNames[endOfWeek.getMonth()];
+    
+    let dateString = `${startMonth} ${startOfWeek.getDate()}`;
+    if (startMonth !== endMonth) {
+        dateString += ` - ${endMonth} ${endOfWeek.getDate()}`;
+    } else {
+        dateString += ` - ${endOfWeek.getDate()}`;
+    }
+    dateString += `, ${endOfWeek.getFullYear()}`;
+    
+    if (weekDisplay) {
+        weekDisplay.textContent = dateString;
+    }
+    
+    // Update day headers
+    const dayHeaders = document.querySelectorAll('.day-header');
+    for (let i = 0; i < 7; i++) {
+        const currentDay = new Date(startOfWeek);
+        currentDay.setDate(startOfWeek.getDate() + i);
+        
+        if (dayHeaders[i]) {
+            const dayNameEl = dayHeaders[i].querySelector('.day-name');
+            const dayNumberEl = dayHeaders[i].querySelector('.day-number');
+            
+            if (dayNameEl) {
+                dayNameEl.textContent = dayNames[currentDay.getDay()];
+            }
+            if (dayNumberEl) {
+                dayNumberEl.textContent = currentDay.getDate();
+            }
+        }
+    }
+    
+    // Update day columns data attributes
+    const dayColumns = document.querySelectorAll('.day-column');
+    for (let i = 0; i < 7; i++) {
+        const currentDay = new Date(startOfWeek);
+        currentDay.setDate(startOfWeek.getDate() + i);
+        
+        if (dayColumns[i]) {
+            dayColumns[i].setAttribute('data-day', dayNames[currentDay.getDay()].toLowerCase());
+        }
+    }
 }
 
 // Resources Functions
@@ -1281,6 +1595,42 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    // Pill filter event listeners
+    document.querySelectorAll('.pill-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const filter = this.dataset.filter;
+            filterSessions(filter, this);
+        });
+    });
+
+    // Calendar navigation event listeners
+    const prevWeekBtn = document.querySelector('[onclick="previousWeek()"]');
+    const nextWeekBtn = document.querySelector('[onclick="nextWeek()"]');
+    const todayBtn = document.querySelector('[onclick="goToToday()"]');
+    
+    if (prevWeekBtn) {
+        prevWeekBtn.onclick = previousWeek;
+    }
+    if (nextWeekBtn) {
+        nextWeekBtn.onclick = nextWeek;
+    }
+    if (todayBtn) {
+        todayBtn.onclick = goToToday;
+    }
+
+    // View toggle event listener
+    const viewToggle = document.getElementById('viewToggle');
+    if (viewToggle) {
+        viewToggle.addEventListener('change', function() {
+            switchView(this.value);
+        });
+    }
+
+    // Initialize calendar display
+    if (document.querySelector('.calendar-wrapper')) {
+        updateWeekDisplay();
+    }
+
     // Add fade-in animation to cards
     const cards = document.querySelectorAll('.feature-card, .subject-card, .session-card, .resource-card');
     cards.forEach((card, index) => {
@@ -1293,40 +1643,6 @@ document.addEventListener('DOMContentLoaded', function() {
 window.addEventListener('pageshow', () => {
     updateLessonProgress();
     updateQuizProgress();
-});
-
-// Add event listeners
-const themeBtn = document.getElementById('themeToggle');
-if (themeBtn) {
-    themeBtn.addEventListener('click', toggleTheme);
-}
-
-const resetBtn = document.getElementById('resetBtn');
-if (resetBtn) {
-    resetBtn.addEventListener('click', resetAll);
-}
-
-// Tab event listeners for resources page
-document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-        const tabId = this.dataset.tab;
-        switchTab(tabId);
-    });
-});
-
-// Filter event listeners for schedule page
-document.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-        const filter = this.dataset.filter;
-        filterSessions(filter);
-    });
-});
-
-// Add fade-in animation to cards
-const cards = document.querySelectorAll('.feature-card, .subject-card, .session-card, .resource-card');
-cards.forEach((card, index) => {
-    card.style.animationDelay = `${index * 0.1}s`;
-    card.classList.add('fade-in');
 });
 
 // Floating Calculator Functions

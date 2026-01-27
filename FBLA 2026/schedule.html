@@ -29,116 +29,244 @@
 
     <main class="content">
         <div class="container">
-            <h2>Live Tutoring & Study Sessions</h2>
-            <p>Join interactive study sessions, group discussions, and peer tutoring. All times in your local timezone.</p>
-
-            <div class="schedule-filters">
-                <button class="filter-btn active" data-filter="all">All Sessions</button>
-                <button class="filter-btn" data-filter="math">Math</button>
-                <button class="filter-btn" data-filter="science">Science</button>
-                <button class="filter-btn" data-filter="english">English</button>
+            <div class="schedule-header">
+                <div>
+                    <h2>Live Tutoring & Study Sessions</h2>
+                    <p>Join interactive study sessions, group discussions, and peer tutoring</p>
+                </div>
+                <div class="schedule-actions">
+                    <select id="viewToggle" class="view-selector">
+                        <option value="week">Week View</option>
+                        <option value="month">Month View</option>
+                    </select>
+                    <button class="btn primary" onclick="document.getElementById('hostForm').scrollIntoView({behavior: 'smooth'})">+ Create Session</button>
+                </div>
             </div>
 
-            <div class="schedule-grid">
-                <div class="session-card" data-category="math">
-                    <div class="session-time">
-                        <span class="day">Mon</span>
-                        <span class="time">4:00 PM</span>
-                    </div>
-                    <div class="session-details">
-                        <h3>Algebra Fundamentals</h3>
-                        <p>Master variables, equations, and basic algebraic concepts.</p>
-                        <div class="session-meta">
-                            <span>Host: Alex</span>
-                            <span>Level: Beginner</span>
-                        </div>
-                    </div>
-                    <button class="btn primary join-btn" onclick="joinSession('Algebra Fundamentals')">Join Session</button>
+            <!-- Calendar Navigation -->
+            <div class="calendar-nav">
+                <button class="nav-btn" onclick="previousWeek()">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"/>
+                    </svg>
+                </button>
+                <div class="week-info">
+                    <h3 id="weekDisplay">January 27 - February 2, 2026</h3>
+                    <button class="today-btn" onclick="goToToday()">Today</button>
                 </div>
+                <button class="nav-btn" onclick="nextWeek()">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"/>
+                    </svg>
+                </button>
+            </div>
 
-                <div class="session-card" data-category="science">
-                    <div class="session-time">
-                        <span class="day">Tue</span>
-                        <span class="time">6:00 PM</span>
+            <!-- Subject Filter Pills -->
+            <div class="filter-pills">
+                <button class="pill-btn active" data-filter="all">
+                    <span class="pill-indicator all"></span>All Sessions
+                </button>
+                <button class="pill-btn" data-filter="math">
+                    <span class="pill-indicator math"></span>Mathematics
+                </button>
+                <button class="pill-btn" data-filter="science">
+                    <span class="pill-indicator science"></span>Science
+                </button>
+                <button class="pill-btn" data-filter="english">
+                    <span class="pill-indicator english"></span>English
+                </button>
+                <button class="pill-btn" data-filter="history">
+                    <span class="pill-indicator history"></span>History
+                </button>
+            </div>
+
+            <!-- Calendar View -->
+            <div class="calendar-wrapper">
+                <div class="calendar-header">
+                    <div class="time-column-header">Time</div>
+                    <div class="day-header">
+                        <div class="day-name">Tuesday</div>
+                        <div class="day-number">27</div>
                     </div>
-                    <div class="session-details">
-                        <h3>Biology Basics</h3>
-                        <p>Explore cells, organisms, and the fundamentals of life science.</p>
-                        <div class="session-meta">
-                            <span>Host: Jordan</span>
-                            <span>Level: Beginner</span>
-                        </div>
+                    <div class="day-header">
+                        <div class="day-name">Wednesday</div>
+                        <div class="day-number">28</div>
                     </div>
-                    <button class="btn primary join-btn" onclick="joinSession('Biology Basics')">Join Session</button>
+                    <div class="day-header">
+                        <div class="day-name">Thursday</div>
+                        <div class="day-number">29</div>
+                    </div>
+                    <div class="day-header">
+                        <div class="day-name">Friday</div>
+                        <div class="day-number">30</div>
+                    </div>
+                    <div class="day-header">
+                        <div class="day-name">Saturday</div>
+                        <div class="day-number">31</div>
+                    </div>
+                    <div class="day-header">
+                        <div class="day-name">Sunday</div>
+                        <div class="day-number">1</div>
+                    </div>
+                    <div class="day-header">
+                        <div class="day-name">Monday</div>
+                        <div class="day-number">2</div>
+                    </div>
                 </div>
-
-                <div class="session-card" data-category="english">
-                    <div class="session-time">
-                        <span class="day">Wed</span>
-                        <span class="time">5:30 PM</span>
+                
+                <div class="calendar-body">
+                    <!-- Time Slots Column -->
+                    <div class="time-column">
+                        <div class="time-slot">12 PM</div>
+                        <div class="time-slot">1 PM</div>
+                        <div class="time-slot">2 PM</div>
+                        <div class="time-slot">3 PM</div>
+                        <div class="time-slot">4 PM</div>
+                        <div class="time-slot">5 PM</div>
+                        <div class="time-slot">6 PM</div>
+                        <div class="time-slot">7 PM</div>
                     </div>
-                    <div class="session-details">
-                        <h3>Essay Writing</h3>
-                        <p>Learn structure, thesis statements, and effective writing techniques.</p>
-                        <div class="session-meta">
-                            <span>Host: Sam</span>
-                            <span>Level: Intermediate</span>
+                    
+                    <!-- Calendar Grid -->
+                    <div class="calendar-grid-body">
+                        <!-- Tuesday (Jan 27) -->
+                        <div class="day-column" data-day="tuesday">
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block session-slot">
+                                <div class="calendar-event math" data-category="math" onclick="joinSession('Algebra Fundamentals', 'https://meet.google.com/abc-defg-hij', 'Alex', 'Beginner', 'Tuesday, January 27, 4:00 PM')">
+                                    <div class="event-time">4:00 PM</div>
+                                    <div class="event-title">Algebra Fundamentals</div>
+                                    <div class="event-meta">
+                                        <span>👤 Alex</span>
+                                        <span>📊 Beginner</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                        </div>
+                        <!-- Wednesday (Jan 28) -->
+                        <div class="day-column" data-day="wednesday">
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block session-slot">
+                                <div class="calendar-event science" data-category="science" onclick="joinSession('Biology Basics', 'https://meet.google.com/bio-logy-101', 'Jordan', 'Beginner', 'Wednesday, January 28, 6:00 PM')">
+                                    <div class="event-time">6:00 PM</div>
+                                    <div class="event-title">Biology Basics</div>
+                                    <div class="event-meta">
+                                        <span>👤 Jordan</span>
+                                        <span>📊 Beginner</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="time-block"></div>
+                        </div>
+                        <!-- Thursday (Jan 29) -->
+                        <div class="day-column" data-day="thursday">
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block session-slot">
+                                <div class="calendar-event english" data-category="english" onclick="joinSession('Essay Writing', 'https://meet.google.com/essay-write', 'Sam', 'Intermediate', 'Thursday, January 29, 5:30 PM')">
+                                    <div class="event-time">5:30 PM</div>
+                                    <div class="event-title">Essay Writing</div>
+                                    <div class="event-meta">
+                                        <span>👤 Sam</span>
+                                        <span>📊 Intermediate</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                        </div>
+                        <!-- Friday (Jan 30) -->
+                        <div class="day-column" data-day="friday">
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block session-slot">
+                                <div class="calendar-event history" data-category="history" onclick="joinSession('World History Overview', 'https://meet.google.com/world-hist', 'Taylor', 'Beginner', 'Friday, January 30, 7:00 PM')">
+                                    <div class="event-time">7:00 PM</div>
+                                    <div class="event-title">World History Overview</div>
+                                    <div class="event-meta">
+                                        <span>👤 Taylor</span>
+                                        <span>📊 Beginner</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Saturday (Jan 31) -->
+                        <div class="day-column" data-day="saturday">
+                            <div class="time-block session-slot">
+                                <div class="calendar-event math" data-category="math" onclick="joinSession('Geometry Concepts', 'https://meet.google.com/geo-metri', 'Casey', 'Intermediate', 'Saturday, January 31, 10:00 AM')">
+                                    <div class="event-time">10:00 AM</div>
+                                    <div class="event-title">Geometry Concepts</div>
+                                    <div class="event-meta">
+                                        <span>👤 Casey</span>
+                                        <span>📊 Intermediate</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                        </div>
+                        <!-- Sunday (Feb 1) -->
+                        <div class="day-column" data-day="sunday">
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block session-slot">
+                                <div class="calendar-event science" data-category="science" onclick="joinSession('Chemistry Lab Basics', 'https://meet.google.com/chem-lab', 'Riley', 'Intermediate', 'Sunday, February 1, 6:00 PM')">
+                                    <div class="event-time">6:00 PM</div>
+                                    <div class="event-title">Chemistry Lab Basics</div>
+                                    <div class="event-meta">
+                                        <span>👤 Riley</span>
+                                        <span>📊 Intermediate</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="time-block"></div>
+                        </div>
+                        <!-- Monday (Feb 2) -->
+                        <div class="day-column" data-day="monday">
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
                         </div>
                     </div>
-                    <button class="btn primary join-btn" onclick="joinSession('Essay Writing')">Join Session</button>
-                </div>
-
-                <div class="session-card" data-category="history">
-                    <div class="session-time">
-                        <span class="day">Thu</span>
-                        <span class="time">7:00 PM</span>
-                    </div>
-                    <div class="session-details">
-                        <h3>World History Overview</h3>
-                        <p>Journey through major civilizations and historical events.</p>
-                        <div class="session-meta">
-                            <span>Host: Taylor</span>
-                            <span>Level: Beginner</span>
-                        </div>
-                    </div>
-                    <button class="btn primary join-btn" onclick="joinSession('World History Overview')">Join Session</button>
-                </div>
-
-                <div class="session-card" data-category="math">
-                    <div class="session-time">
-                        <span class="day">Fri</span>
-                        <span class="time">3:00 PM</span>
-                    </div>
-                    <div class="session-details">
-                        <h3>Geometry Concepts</h3>
-                        <p>Shapes, angles, theorems, and geometric problem-solving.</p>
-                        <div class="session-meta">
-                            <span>Host: Casey</span>
-                            <span>Level: Intermediate</span>
-                        </div>
-                    </div>
-                    <button class="btn primary join-btn" onclick="joinSession('Geometry Concepts')">Join Session</button>
-                </div>
-
-                <div class="session-card" data-category="science">
-                    <div class="session-time">
-                        <span class="day">Sat</span>
-                        <span class="time">10:00 AM</span>
-                    </div>
-                    <div class="session-details">
-                        <h3>Chemistry Lab Basics</h3>
-                        <p>Elements, compounds, reactions, and laboratory techniques.</p>
-                        <div class="session-meta">
-                            <span>Host: Riley</span>
-                            <span>Level: Intermediate</span>
-                        </div>
-                    </div>
-                    <button class="btn primary join-btn" onclick="joinSession('Chemistry Lab Basics')">Join Session</button>
                 </div>
             </div>
 
             <div class="propose-session">
-                <h3>Host Your Own Session</h3>
+                <h3>📅 Host Your Own Session</h3>
+                <p>Share your knowledge with fellow students</p>
                 <form id="hostForm" onsubmit="proposeSession(); return false;">
                     <input type="text" id="sessionTitle" placeholder="Session Title" required>
                     <input type="text" id="sessionHost" placeholder="Your Name" required>
@@ -149,7 +277,8 @@
                         <option value="english">English</option>
                         <option value="history">History</option>
                     </select>
-                    <button type="submit" class="btn primary">Propose Session</button>
+                    <input type="url" id="meetingLink" placeholder="Google Meet Link (optional)" />
+                    <button type="submit" class="btn primary">Create Session</button>
                 </form>
             </div>
         </div>
