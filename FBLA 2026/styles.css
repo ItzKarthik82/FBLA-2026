@@ -965,6 +965,20 @@ body.dark .calendar-event.history {
     z-index: 10;
 }
 
+.calendar-event.interested-event {
+    border: 2px solid #ff6b6b;
+    box-shadow: 0 0 12px rgba(255, 107, 107, 0.3);
+    position: relative;
+}
+
+.calendar-event.interested-event::after {
+    content: '❤️';
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    font-size: 12px;
+}
+
 .event-time {
     font-size: 11px;
     font-weight: 700;
@@ -2042,11 +2056,35 @@ body.dark .status-badge.active {
     border-top: 1px solid var(--gray-200);
     display: flex;
     gap: 12px;
-    justify-content: flex-end;
+    justify-content: space-between;
 }
 
 body.dark .session-modal-content .modal-footer {
     border-top-color: var(--gray-700);
+}
+
+.session-modal-content .modal-footer .btn {
+    flex: 1;
+}
+
+.session-modal-content .modal-footer .btn.interested {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+    color: white;
+    border: none;
+}
+
+.session-modal-content .modal-footer .btn.interested:hover {
+    background: linear-gradient(135deg, #ff5252 0%, #dd4a42 100%);
+    transform: scale(1.02);
+}
+
+.session-modal-content .modal-footer .btn.secondary {
+    background: var(--gray-200);
+    color: var(--text);
+}
+
+body.dark .session-modal-content .modal-footer .btn.secondary {
+    background: var(--gray-700);
 }
 
 .playground-container {

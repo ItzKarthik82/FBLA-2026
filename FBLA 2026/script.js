@@ -290,20 +290,228 @@ function proposeSession() {
     const host = document.getElementById('sessionHost').value;
     const time = document.getElementById('sessionTime').value;
     const category = document.getElementById('sessionCategory').value;
-    const meetingLink = document.getElementById('meetingLink').value;
+    const meetingLink = document.getElementById('meetingLink').value || 'https://meet.google.com/new';
 
     if (!title || !host || !time) {
         showToast('Please fill in all fields');
         return;
     }
 
-    // In a real app, this would send to server
-    showToast('Session proposed successfully!');
+    // Parse the date/time
+    const sessionDate = new Date(time);
+    const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
+                        'July', 'August', 'September', 'October', 'November', 'December'];
+    
+    const dayName = dayNames[sessionDate.getDay()];
+    const monthName = monthNames[sessionDate.getMonth()];
+    const dayNum = sessionDate.getDate();
+    const hours = sessionDate.getHours();
+    const minutes = sessionDate.getMinutes();
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    const displayHours = hours % 12 || 12;
+    const displayMinutes = minutes.toString().padStart(2, '0');
+    const timeStr = `${displayHours}:${displayMinutes} ${ampm}`;
+    const fullDateTimeStr = `${dayName}, ${monthName} ${dayNum}, ${timeStr}`;
+    
+    // Calculate which time slot (12 PM = 0, 1 PM = 1, etc.)
+    const slotIndex = hours - 12; // Assuming 12 PM to 7 PM slots (0-7)
+    
+    // Find the correct day column
+    const dayColumns = document.querySelectorAll('.day-column');
+    let targetColumn = null;
+    
+    dayColumns.forEach(col => {
+        if (col.getAttribute('data-day') === dayName.toLowerCase()) {
+            targetColumn = col;
+        }
+    });
+    
+    if (targetColumn && slotIndex >= 0 && slotIndex < 8) {
+        // Find the time block at the correct slot
+        const timeBlocks = targetColumn.querySelectorAll('.time-block');
+        const targetBlock = timeBlocks[slotIndex];
+        
+        if (targetBlock) {
+            // Create new event element
+            const eventDiv = document.createElement('div');
+            eventDiv.className = `calendar-event ${category}`;
+            eventDiv.setAttribute('data-category', category);
+            eventDiv.setAttribute('onclick', `joinSession('${title}', '${meetingLink}', '${host}', 'Custom', '${fullDateTimeStr}')`);
+            eventDiv.innerHTML = `
+                <div class="event-time">${timeStr}</div>
+                <div class="event-title">${title}</div>
+                <div class="event-meta">
+                    <span>👤 ${host}</span>
+                    <span>📊 Custom</span>
+                </div>
+            `;
+            
+            // Clear any existing content and add the event
+            targetBlock.innerHTML = '';
+            targetBlock.appendChild(eventDiv);
+            targetBlock.classList.add('session-slot');
+        }
+    }
+    
+    // Update month view if it exists
+    if (currentView === 'month') {
+        updateMonthDisplay();
+    }
+
+    showToast('Session added successfully!');
     document.getElementById('hostForm').reset();
+}
+
+// Session reminder system
+function generateSessionId(title, dateTime) {
+    return `${title}-${dateTime}`.replace(/[^a-zA-Z0-9]/g, '-');
+}
+
+function isSessionInterested(sessionId) {
+    const interested = JSON.parse(localStorage.getItem('interestedSessions') || '[]');
+    return interested.some(s => s.id === sessionId);
+}
+
+function toggleSessionInterest(sessionId, sessionTitle, dateTime, button) {
+    const interested = JSON.parse(localStorage.getItem('interestedSessions') || '[]');
+    const index = interested.findIndex(s => s.id === sessionId);
+    
+    if (index > -1) {
+        // Remove from interested
+        interested.splice(index, 1);
+        button.textContent = '🤍 Mark Interested';
+        button.classList.remove('interested');
+        showToast('Removed from interested sessions');
+        console.log('Removed session reminder:', sessionId);
+    } else {
+        // Add to interested
+        interested.push({ id: sessionId, title: sessionTitle, dateTime: dateTime });
+        button.textContent = '❤️ Interested';
+        button.classList.add('interested');
+        showToast('✅ Added to interested sessions - you will get a reminder 15 minutes before!');
+        console.log('Added session reminder:', sessionId, 'for', dateTime);
+        
+        // Set up reminder
+        setupReminder(sessionId, sessionTitle, dateTime);
+    }
+    
+    localStorage.setItem('interestedSessions', JSON.stringify(interested));
+}
+
+function setupReminder(sessionId, sessionTitle, dateTime) {
+    const reminders = JSON.parse(localStorage.getItem('sessionReminders') || '{}');
+    reminders[sessionId] = { title: sessionTitle, dateTime: dateTime, set: true, notified: false };
+    localStorage.setItem('sessionReminders', JSON.stringify(reminders));
+    console.log('Reminder set for:', sessionTitle, 'at', dateTime);
+}
+
+// For testing - sends a test reminder immediately
+function sendTestReminder() {
+    const testDate = new Date();
+    testDate.setSeconds(testDate.getSeconds() + 5);
+    const timeStr = testDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+    sendReminder('Test Session', testDate);
+}
+
+function checkReminders() {
+    const reminders = JSON.parse(localStorage.getItem('sessionReminders') || '{}');
+    const now = new Date();
+    
+    Object.keys(reminders).forEach(sessionId => {
+        const reminder = reminders[sessionId];
+        if (reminder.notified) return; // Already notified
+        
+        try {
+            const sessionDateTime = parseSessionDateTime(reminder.dateTime);
+            if (!sessionDateTime) {
+                console.log('Could not parse date for:', reminder.dateTime);
+                return;
+            }
+            
+            const timeDiff = (sessionDateTime - now) / 1000 / 60; // Difference in minutes
+            
+            // Send notification 15 minutes before (between 14-16 minutes before)
+            if (timeDiff <= 15 && timeDiff > 13) {
+                sendReminder(reminder.title, sessionDateTime);
+                reminder.notified = true;
+                localStorage.setItem('sessionReminders', JSON.stringify(reminders));
+            }
+        } catch (e) {
+            console.log('Error parsing session time:', e);
+        }
+    });
+}
+
+function parseSessionDateTime(dateTimeStr) {
+    // Parse format like "Tuesday, January 27, 4:00 PM"
+    const dateParts = dateTimeStr.match(/(\w+),\s+(\w+)\s+(\d+),\s+(\d+):(\d+)\s+(AM|PM)/);
+    if (!dateParts) return null;
+    
+    const [, dayName, monthName, day, hours, minutes, ampm] = dateParts;
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
+                        'July', 'August', 'September', 'October', 'November', 'December'];
+    
+    let hour = parseInt(hours);
+    if (ampm === 'PM' && hour !== 12) hour += 12;
+    if (ampm === 'AM' && hour === 12) hour = 0;
+    
+    const month = monthNames.indexOf(monthName);
+    const now = new Date();
+    const year = now.getFullYear();
+    
+    return new Date(year, month, parseInt(day), hour, parseInt(minutes), 0);
+}
+
+function sendReminder(sessionTitle, sessionDateTime) {
+    const timeStr = sessionDateTime.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+    const message = `Your session "${sessionTitle}" starts in 15 minutes at ${timeStr}`;
+    
+    // Try to send browser notification
+    if ('Notification' in window && Notification.permission === 'granted') {
+        new Notification('📚 Study Session Reminder', {
+            body: message,
+            icon: '📚'
+        });
+    } else {
+        // Fallback to toast notification
+        showToast(`⏰ Reminder: ${message}`, 'info');
+    }
+}
+
+function requestNotificationPermission() {
+    if ('Notification' in window) {
+        if (Notification.permission === 'default') {
+            Notification.requestPermission().then(permission => {
+                if (permission === 'granted') {
+                    showToast('✅ Notifications enabled! You\'ll get reminders 15 minutes before sessions.', 'success');
+                } else {
+                    showToast('⏰ Notifications disabled. You\'ll still get reminders on this page though!', 'info');
+                }
+            });
+        } else if (Notification.permission === 'granted') {
+            console.log('Notifications already enabled');
+        }
+    } else {
+        console.log('Browser does not support notifications');
+    }
+}
+
+function copyToClipboard(text, button) {
+    navigator.clipboard.writeText(text).then(() => {
+        const originalText = button.textContent;
+        button.textContent = '✓ Copied!';
+        setTimeout(() => {
+            button.textContent = originalText;
+        }, 2000);
+    });
 }
 
 // Join session with modal
 function joinSession(sessionTitle, meetingLink, host, level, dateTime) {
+    const sessionId = generateSessionId(sessionTitle, dateTime);
+    const isInterested = isSessionInterested(sessionId);
+    
     const modal = document.createElement('div');
     modal.className = 'session-modal';
     modal.innerHTML = `
@@ -329,26 +537,22 @@ function joinSession(sessionTitle, meetingLink, host, level, dateTime) {
                     <div class="info-group">
                         <span class="info-label">🔗 Meeting Link</span>
                         <div class="meeting-link-container">
-                            <input type="text" value="${meetingLink}" id="linkCopy" readonly class="meeting-link-input">
-                            <button class="btn small" onclick="copyMeetingLink()">📋 Copy</button>
+                            <a href="${meetingLink}" target="_blank" class="btn small primary">Join Meeting</a>
+                            <button class="btn small" onclick="copyToClipboard('${meetingLink}', this)">Copy Link</button>
                         </div>
-                    </div>
-                    <div class="info-group">
-                        <span class="info-label">👥 Participants</span>
-                        <p id="participantCount">5 students have joined this session</p>
-                    </div>
-                    <div class="info-group">
-                        <span class="info-label">⚡ Session Status</span>
-                        <div class="status-badge active">🟢 Live Now - Join Anytime</div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <a href="${meetingLink}" target="_blank" class="btn primary">🎥 Join on Google Meet</a>
-                <button class="btn outline" onclick="this.parentElement.parentElement.parentElement.remove()">Close</button>
+                <button class="btn small ${isInterested ? 'interested' : ''}" onclick="toggleSessionInterest('${sessionId}', '${sessionTitle}', '${dateTime}', this)">
+                    ${isInterested ? '❤️ Interested' : '🤍 Mark Interested'}
+                </button>
+                <button class="btn small secondary" onclick="this.parentElement.parentElement.parentElement.remove()">Close</button>
             </div>
         </div>
     `;
+    
+    document.body.appendChild(modal);
     document.body.appendChild(modal);
 }
 
@@ -575,8 +779,8 @@ function updateWeekDisplay() {
     const today = new Date();
     const startOfWeek = new Date(today);
     
-    // Start on Tuesday (Jan 27, 2026)
-    startOfWeek.setDate(today.getDate() - today.getDay() + 2 + (currentWeekOffset * 7));
+    // Start on Sunday
+    startOfWeek.setDate(today.getDate() - today.getDay() + (currentWeekOffset * 7));
     
     const endOfWeek = new Date(startOfWeek);
     endOfWeek.setDate(startOfWeek.getDate() + 6);
@@ -1626,10 +1830,14 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Initialize calendar display
-    if (document.querySelector('.calendar-wrapper')) {
-        updateWeekDisplay();
-    }
+    // Request notification permission
+    requestNotificationPermission();
+    
+    // Set up reminder checking every minute
+    setInterval(checkReminders, 60000);
+    
+    // Also check immediately on load
+    checkReminders();
 
     // Add fade-in animation to cards
     const cards = document.querySelectorAll('.feature-card, .subject-card, .session-card, .resource-card');

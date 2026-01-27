@@ -39,6 +39,7 @@
                         <option value="week">Week View</option>
                         <option value="month">Month View</option>
                     </select>
+                    <button class="btn secondary" onclick="sendTestReminder()" title="Click to test reminder notification">🧪 Test Reminder</button>
                     <button class="btn primary" onclick="document.getElementById('hostForm').scrollIntoView({behavior: 'smooth'})">+ Create Session</button>
                 </div>
             </div>
@@ -51,7 +52,7 @@
                     </svg>
                 </button>
                 <div class="week-info">
-                    <h3 id="weekDisplay">January 27 - February 2, 2026</h3>
+                    <h3 id="weekDisplay">January 25 - 31, 2026</h3>
                     <button class="today-btn" onclick="goToToday()">Today</button>
                 </div>
                 <button class="nav-btn" onclick="nextWeek()">
@@ -85,6 +86,14 @@
                 <div class="calendar-header">
                     <div class="time-column-header">Time</div>
                     <div class="day-header">
+                        <div class="day-name">Sunday</div>
+                        <div class="day-number">25</div>
+                    </div>
+                    <div class="day-header">
+                        <div class="day-name">Monday</div>
+                        <div class="day-number">26</div>
+                    </div>
+                    <div class="day-header">
                         <div class="day-name">Tuesday</div>
                         <div class="day-number">27</div>
                     </div>
@@ -104,14 +113,6 @@
                         <div class="day-name">Saturday</div>
                         <div class="day-number">31</div>
                     </div>
-                    <div class="day-header">
-                        <div class="day-name">Sunday</div>
-                        <div class="day-number">1</div>
-                    </div>
-                    <div class="day-header">
-                        <div class="day-name">Monday</div>
-                        <div class="day-number">2</div>
-                    </div>
                 </div>
                 
                 <div class="calendar-body">
@@ -129,6 +130,37 @@
                     
                     <!-- Calendar Grid -->
                     <div class="calendar-grid-body">
+                        <!-- Sunday (Jan 25) -->
+                        <div class="day-column" data-day="sunday">
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block session-slot">
+                                <div class="calendar-event science" data-category="science" onclick="joinSession('Chemistry Lab Basics', 'https://meet.google.com/chem-lab', 'Riley', 'Intermediate', 'Sunday, January 25, 6:00 PM')">
+                                    <div class="event-time">6:00 PM</div>
+                                    <div class="event-title">Chemistry Lab Basics</div>
+                                    <div class="event-meta">
+                                        <span>👤 Riley</span>
+                                        <span>📊 Intermediate</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="time-block"></div>
+                        </div>
+                        <!-- Monday (Jan 26) -->
+                        <div class="day-column" data-day="monday">
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                        </div>
                         <!-- Tuesday (Jan 27) -->
                         <div class="day-column" data-day="tuesday">
                             <div class="time-block"></div>
@@ -212,8 +244,8 @@
                         <!-- Saturday (Jan 31) -->
                         <div class="day-column" data-day="saturday">
                             <div class="time-block session-slot">
-                                <div class="calendar-event math" data-category="math" onclick="joinSession('Geometry Concepts', 'https://meet.google.com/geo-metri', 'Casey', 'Intermediate', 'Saturday, January 31, 10:00 AM')">
-                                    <div class="event-time">10:00 AM</div>
+                                <div class="calendar-event math" data-category="math" onclick="joinSession('Geometry Concepts', 'https://meet.google.com/geo-metri', 'Casey', 'Intermediate', 'Saturday, January 31, 12:00 PM')">
+                                    <div class="event-time">12:00 PM</div>
                                     <div class="event-title">Geometry Concepts</div>
                                     <div class="event-meta">
                                         <span>👤 Casey</span>
@@ -221,37 +253,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                        </div>
-                        <!-- Sunday (Feb 1) -->
-                        <div class="day-column" data-day="sunday">
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block session-slot">
-                                <div class="calendar-event science" data-category="science" onclick="joinSession('Chemistry Lab Basics', 'https://meet.google.com/chem-lab', 'Riley', 'Intermediate', 'Sunday, February 1, 6:00 PM')">
-                                    <div class="event-time">6:00 PM</div>
-                                    <div class="event-title">Chemistry Lab Basics</div>
-                                    <div class="event-meta">
-                                        <span>👤 Riley</span>
-                                        <span>📊 Intermediate</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="time-block"></div>
-                        </div>
-                        <!-- Monday (Feb 2) -->
-                        <div class="day-column" data-day="monday">
-                            <div class="time-block"></div>
                             <div class="time-block"></div>
                             <div class="time-block"></div>
                             <div class="time-block"></div>
