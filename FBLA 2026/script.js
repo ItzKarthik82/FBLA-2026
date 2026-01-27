@@ -647,6 +647,7 @@ function createMonthView() {
     
     const monthWrapper = document.createElement('div');
     monthWrapper.className = 'month-calendar-wrapper';
+    monthWrapper.style.display = 'block';
     monthWrapper.innerHTML = `
         <div class="month-calendar">
             <div class="month-grid-header">
