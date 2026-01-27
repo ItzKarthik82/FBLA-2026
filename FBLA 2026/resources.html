@@ -21,6 +21,7 @@
                 </ul>
             </nav>
             <div class="header-actions">
+                <button id="authBtn" class="btn outline">🔐 Login</button>
                 <button id="themeToggle" class="btn outline">🌙 Dark</button>
                 <button id="resetBtn" class="btn outline">🔄 Reset</button>
             </div>
@@ -376,5 +377,12 @@
             </div>
         </div>
     </div>
+    
+    <script>
+        // Initialize auth UI for resources page
+        window.addEventListener('DOMContentLoaded', () => {
+            updateAuthUI();
+        });
+    </script>
 </body>
 </html>

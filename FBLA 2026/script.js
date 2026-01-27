@@ -1,3 +1,52 @@
+// Authentication Management
+function checkAuth() {
+    return localStorage.getItem('userLoggedIn') === 'true';
+}
+
+function getUserInfo() {
+    return {
+        name: localStorage.getItem('userName') || '',
+        email: localStorage.getItem('userEmail') || ''
+    };
+}
+
+function logout() {
+    localStorage.removeItem('userLoggedIn');
+    localStorage.removeItem('userName');
+    localStorage.removeItem('userEmail');
+    alert('You have been logged out successfully!');
+    window.location.href = 'index.html';
+}
+
+function updateAuthUI() {
+    const authBtn = document.getElementById('authBtn');
+    if (!authBtn) return;
+
+    const isLoggedIn = checkAuth();
+    if (isLoggedIn) {
+        const userInfo = getUserInfo();
+        const displayName = userInfo.name || userInfo.email.split('@')[0];
+        authBtn.textContent = `👤 ${displayName}`;
+        authBtn.onclick = () => {
+            if (confirm('Do you want to log out?')) {
+                logout();
+            }
+        };
+    } else {
+        authBtn.textContent = '🔐 Login';
+        authBtn.onclick = () => {
+            window.location.href = 'login.html';
+        };
+    }
+}
+
+function requireAuth() {
+    if (!checkAuth()) {
+        alert('Please log in to access this page');
+        window.location.href = 'login.html';
+    }
+}
+
 // Theme Management
 function toggleTheme() {
     const body = document.body;

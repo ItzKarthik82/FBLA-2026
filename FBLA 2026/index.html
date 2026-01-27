@@ -21,6 +21,7 @@
                 </ul>
             </nav>
             <div class="header-actions">
+                <button id="authBtn" class="btn outline">🔐 Login</button>
                 <button id="themeToggle" class="btn outline">🌙 Dark</button>
                 <button id="resetBtn" class="btn outline">🔄 Reset</button>
             </div>
@@ -196,6 +197,11 @@
                 window.location.href = 'login.html';
             }
         }
+        
+        // Initialize auth UI when page loads
+        window.addEventListener('DOMContentLoaded', () => {
+            updateAuthUI();
+        });
     </script>
 </body>
 </html>

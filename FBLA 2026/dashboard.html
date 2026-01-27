@@ -21,6 +21,7 @@
                 </ul>
             </nav>
             <div class="header-actions">
+                <button id="authBtn" class="btn outline">🔐 Login</button>
                 <button id="themeToggle" class="btn outline">🌙 Dark</button>
                 <button id="resetBtn" class="btn outline">🔄 Reset</button>
             </div>
@@ -30,7 +31,7 @@
     <main class="content">
         <div class="container">
             <div class="dashboard-header">
-                <h2>Welcome back, Student!</h2>
+                <h2 id="welcomeMessage">Welcome back, Student!</h2>
                 <p>Track your progress and continue learning.</p>
             </div>
 
@@ -39,8 +40,8 @@
                     <div class="profile-card">
                         <div class="avatar">👨‍💻</div>
                         <div class="profile-info">
-                            <h3>John Doe</h3>
-                            <p>High School Student</p>
+                            <h3 id="profileName">John Doe</h3>
+                            <p id="profileEmail">student@example.com</p>
                             <div class="level">Level 3 Scholar</div>
                         </div>
                     </div>
@@ -214,5 +215,23 @@
 
     <!-- Floating Calculator Toggle Button -->
     <button id="calcToggle" class="calc-toggle-btn" onclick="toggleFloatingCalc()" title="Open Calculator">÷</button>
+    
+    <script>
+        // Require authentication for dashboard
+        window.addEventListener('DOMContentLoaded', () => {
+            requireAuth();
+            updateAuthUI();
+            
+            // Update dashboard with user info
+            const userInfo = getUserInfo();
+            if (userInfo.name) {
+                document.getElementById('welcomeMessage').textContent = `Welcome back, ${userInfo.name}!`;
+                document.getElementById('profileName').textContent = userInfo.name;
+            }
+            if (userInfo.email) {
+                document.getElementById('profileEmail').textContent = userInfo.email;
+            }
+        });
+    </script>
 </body>
 </html>

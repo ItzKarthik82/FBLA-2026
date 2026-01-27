@@ -21,6 +21,7 @@
                 </ul>
             </nav>
             <div class="header-actions">
+                <button id="authBtn" class="btn outline">🔐 Login</button>
                 <button id="themeToggle" class="btn outline">🌙 Dark</button>
                 <button id="resetBtn" class="btn outline">🔄 Reset</button>
             </div>
@@ -416,5 +417,13 @@
 
     <!-- Floating Calculator Toggle Button -->
     <button id="calcToggle" class="calc-toggle-btn" onclick="toggleFloatingCalc()" title="Open Calculator">÷</button>
+    
+    <script>
+        // Require authentication for schedule
+        window.addEventListener('DOMContentLoaded', () => {
+            requireAuth();
+            updateAuthUI();
+        });
+    </script>
 </body>
 </html>
