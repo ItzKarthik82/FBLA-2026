@@ -878,6 +878,9 @@ body.dark .day-number {
 .calendar-body {
     display: grid;
     grid-template-columns: 80px 1fr;
+    max-height: 600px;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .time-column {

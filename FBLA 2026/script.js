@@ -25,10 +25,14 @@ function loadTheme() {
 }
 
 // Progress Management
+let sessionStartTime = null;
+let isPageVisible = true;
+
 function loadProgress() {
     const completedLessons = JSON.parse(localStorage.getItem('completedLessons') || '[]');
     const quizzes = parseInt(localStorage.getItem('quizzes') || '0');
-    const hours = parseInt(localStorage.getItem('hours') || '0');
+    const totalMinutes = parseInt(localStorage.getItem('studyMinutes') || '0');
+    const hours = Math.floor(totalMinutes / 60);
     const sessions = parseInt(localStorage.getItem('sessions') || '0');
 
     // Count completed lessons per subject
@@ -290,7 +294,8 @@ function proposeSession() {
     const host = document.getElementById('sessionHost').value;
     const time = document.getElementById('sessionTime').value;
     const category = document.getElementById('sessionCategory').value;
-    const meetingLink = document.getElementById('meetingLink').value || 'https://meet.google.com/new';
+    const level = document.getElementById('sessionLevel').value;
+    const meetingLink = document.getElementById('meetingLink').value || '';
 
     if (!title || !host || !time) {
         showToast('Please fill in all fields');
@@ -314,8 +319,8 @@ function proposeSession() {
     const timeStr = `${displayHours}:${displayMinutes} ${ampm}`;
     const fullDateTimeStr = `${dayName}, ${monthName} ${dayNum}, ${timeStr}`;
     
-    // Calculate which time slot (12 PM = 0, 1 PM = 1, etc.)
-    const slotIndex = hours - 12; // Assuming 12 PM to 7 PM slots (0-7)
+    // Calculate which time slot (8 AM = 0, 9 AM = 1, ..., 9 PM = 13)
+    const slotIndex = hours - 8; // 8 AM to 9 PM slots (0-13)
     
     // Find the correct day column
     const dayColumns = document.querySelectorAll('.day-column');
@@ -327,7 +332,7 @@ function proposeSession() {
         }
     });
     
-    if (targetColumn && slotIndex >= 0 && slotIndex < 8) {
+    if (targetColumn && slotIndex >= 0 && slotIndex < 14) {
         // Find the time block at the correct slot
         const timeBlocks = targetColumn.querySelectorAll('.time-block');
         const targetBlock = timeBlocks[slotIndex];
@@ -337,13 +342,13 @@ function proposeSession() {
             const eventDiv = document.createElement('div');
             eventDiv.className = `calendar-event ${category}`;
             eventDiv.setAttribute('data-category', category);
-            eventDiv.setAttribute('onclick', `joinSession('${title}', '${meetingLink}', '${host}', 'Custom', '${fullDateTimeStr}')`);
+            eventDiv.setAttribute('onclick', `joinSession('${title}', '${meetingLink}', '${host}', '${level}', '${fullDateTimeStr}')`);
             eventDiv.innerHTML = `
                 <div class="event-time">${timeStr}</div>
                 <div class="event-title">${title}</div>
                 <div class="event-meta">
                     <span>👤 ${host}</span>
-                    <span>📊 Custom</span>
+                    <span>📊 ${level}</span>
                 </div>
             `;
             
@@ -504,6 +509,21 @@ function joinSession(sessionTitle, meetingLink, host, level, dateTime) {
     const sessionId = generateSessionId(sessionTitle, dateTime);
     const isInterested = isSessionInterested(sessionId);
     
+    const meetingLinkHTML = meetingLink ? `
+        <div class="info-group">
+            <span class="info-label">🔗 Meeting Link</span>
+            <div class="meeting-link-container">
+                <a href="${meetingLink}" target="_blank" class="btn small primary">Join Meeting</a>
+                <button class="btn small" onclick="copyToClipboard('${meetingLink}', this)">Copy Link</button>
+            </div>
+        </div>
+    ` : `
+        <div class="info-group">
+            <span class="info-label">🔗 Meeting Link</span>
+            <p class="text-muted">No meeting link provided</p>
+        </div>
+    `;
+    
     const modal = document.createElement('div');
     modal.className = 'session-modal';
     modal.innerHTML = `
@@ -526,13 +546,7 @@ function joinSession(sessionTitle, meetingLink, host, level, dateTime) {
                         <span class="info-label">📊 Level</span>
                         <p>${level}</p>
                     </div>
-                    <div class="info-group">
-                        <span class="info-label">🔗 Meeting Link</span>
-                        <div class="meeting-link-container">
-                            <a href="${meetingLink}" target="_blank" class="btn small primary">Join Meeting</a>
-                            <button class="btn small" onclick="copyToClipboard('${meetingLink}', this)">Copy Link</button>
-                        </div>
-                    </div>
+                    ${meetingLinkHTML}
                 </div>
             </div>
             <div class="modal-footer">
@@ -544,7 +558,6 @@ function joinSession(sessionTitle, meetingLink, host, level, dateTime) {
         </div>
     `;
     
-    document.body.appendChild(modal);
     document.body.appendChild(modal);
 }
 
@@ -1823,6 +1836,9 @@ document.addEventListener('DOMContentLoaded', function() {
     if (document.querySelector('.calendar-wrapper')) {
         updateWeekDisplay();
     }
+    
+    // Start tracking study time
+    startStudyTimeTracking();
 
     // Add event listeners
     const themeBtn = document.getElementById('themeToggle');
@@ -1914,4 +1930,54 @@ function toggleFloatingCalc() {
 function closeFloatingCalc() {
     const floatingCalc = document.getElementById('floatingCalc');
     floatingCalc.classList.remove('active');
+}
+
+// Study Time Tracking
+function startStudyTimeTracking() {
+    sessionStartTime = Date.now();
+    isPageVisible = !document.hidden;
+    
+    // Track when user leaves or closes the page
+    window.addEventListener('beforeunload', saveStudyTime);
+    
+    // Track when user switches tabs
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    
+    // Save study time every minute as a backup
+    setInterval(saveStudyTime, 60000);
+}
+
+function handleVisibilityChange() {
+    if (document.hidden) {
+        // User switched away - save current session time
+        saveStudyTime();
+        isPageVisible = false;
+    } else {
+        // User came back - restart timer
+        sessionStartTime = Date.now();
+        isPageVisible = true;
+    }
+}
+
+function saveStudyTime() {
+    if (!sessionStartTime || !isPageVisible) return;
+    
+    const now = Date.now();
+    const sessionDuration = Math.floor((now - sessionStartTime) / 1000 / 60); // Convert to minutes
+    
+    if (sessionDuration > 0) {
+        const currentMinutes = parseInt(localStorage.getItem('studyMinutes') || '0');
+        const newMinutes = currentMinutes + sessionDuration;
+        localStorage.setItem('studyMinutes', newMinutes);
+        
+        // Reset session start time
+        sessionStartTime = now;
+        
+        // Update display if on dashboard
+        const hoursElement = document.getElementById('hoursCount');
+        if (hoursElement) {
+            const hours = Math.floor(newMinutes / 60);
+            hoursElement.textContent = hours;
+        }
+    }
 }

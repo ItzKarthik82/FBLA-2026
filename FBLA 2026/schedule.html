@@ -118,6 +118,10 @@
                 <div class="calendar-body">
                     <!-- Time Slots Column -->
                     <div class="time-column">
+                        <div class="time-slot">8 AM</div>
+                        <div class="time-slot">9 AM</div>
+                        <div class="time-slot">10 AM</div>
+                        <div class="time-slot">11 AM</div>
                         <div class="time-slot">12 PM</div>
                         <div class="time-slot">1 PM</div>
                         <div class="time-slot">2 PM</div>
@@ -126,12 +130,18 @@
                         <div class="time-slot">5 PM</div>
                         <div class="time-slot">6 PM</div>
                         <div class="time-slot">7 PM</div>
+                        <div class="time-slot">8 PM</div>
+                        <div class="time-slot">9 PM</div>
                     </div>
                     
                     <!-- Calendar Grid -->
                     <div class="calendar-grid-body">
                         <!-- Sunday (Jan 25) -->
                         <div class="day-column" data-day="sunday">
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
                             <div class="time-block"></div>
                             <div class="time-block"></div>
                             <div class="time-block"></div>
@@ -149,6 +159,8 @@
                                 </div>
                             </div>
                             <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
                         </div>
                         <!-- Monday (Jan 26) -->
                         <div class="day-column" data-day="monday">
@@ -160,9 +172,19 @@
                             <div class="time-block"></div>
                             <div class="time-block"></div>
                             <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
                         </div>
                         <!-- Tuesday (Jan 27) -->
                         <div class="day-column" data-day="tuesday">
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
                             <div class="time-block"></div>
                             <div class="time-block"></div>
                             <div class="time-block"></div>
@@ -180,9 +202,15 @@
                             <div class="time-block"></div>
                             <div class="time-block"></div>
                             <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
                         </div>
                         <!-- Wednesday (Jan 28) -->
                         <div class="day-column" data-day="wednesday">
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
                             <div class="time-block"></div>
                             <div class="time-block"></div>
                             <div class="time-block"></div>
@@ -200,9 +228,15 @@
                                 </div>
                             </div>
                             <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
                         </div>
                         <!-- Thursday (Jan 29) -->
                         <div class="day-column" data-day="thursday">
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
                             <div class="time-block"></div>
                             <div class="time-block"></div>
                             <div class="time-block"></div>
@@ -220,9 +254,15 @@
                             </div>
                             <div class="time-block"></div>
                             <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
                         </div>
                         <!-- Friday (Jan 30) -->
                         <div class="day-column" data-day="friday">
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
                             <div class="time-block"></div>
                             <div class="time-block"></div>
                             <div class="time-block"></div>
@@ -240,9 +280,15 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
                         </div>
                         <!-- Saturday (Jan 31) -->
                         <div class="day-column" data-day="saturday">
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
                             <div class="time-block session-slot">
                                 <div class="calendar-event math" data-category="math" onclick="joinSession('Geometry Concepts', 'https://meet.google.com/geo-metri', 'Casey', 'Intermediate', 'Saturday, January 31, 12:00 PM')">
                                     <div class="event-time">12:00 PM</div>
@@ -253,6 +299,8 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="time-block"></div>
+                            <div class="time-block"></div>
                             <div class="time-block"></div>
                             <div class="time-block"></div>
                             <div class="time-block"></div>
@@ -277,6 +325,11 @@
                         <option value="science">Science</option>
                         <option value="english">English</option>
                         <option value="history">History</option>
+                    </select>
+                    <select id="sessionLevel">
+                        <option value="Beginner">Beginner</option>
+                        <option value="Intermediate">Intermediate</option>
+                        <option value="Advanced">Advanced</option>
                     </select>
                     <input type="url" id="meetingLink" placeholder="Google Meet Link (optional)" />
                     <button type="submit" class="btn primary">Create Session</button>
