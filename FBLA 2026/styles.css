@@ -247,11 +247,10 @@ body.dark .nav a {
 }
 
 .code-preview {
-    background: rgba(255, 255, 255, 0.1);
+    background: #f3f4f6;
     border-radius: var(--border-radius-lg);
     padding: 24px;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid #e5e7eb;
 }
 
 .code-preview pre {
@@ -290,9 +289,10 @@ body.dark .features h2 {
     background: var(--white);
     padding: 32px;
     border-radius: var(--border-radius-lg);
-    box-shadow: var(--shadow);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     text-align: center;
     transition: var(--transition);
+    border: 1px solid #e5e7eb;
 }
 
 body.dark .feature-card {
