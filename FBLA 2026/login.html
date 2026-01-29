@@ -245,6 +245,89 @@
             text-decoration: underline;
         }
 
+        .requirement-msg {
+            color: var(--secondary);
+            font-size: 12px;
+            margin-top: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+        }
+
+        .requirement-msg::before {
+            content: '✓';
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 14px;
+            height: 14px;
+            background: var(--secondary);
+            border-radius: 50%;
+            color: white;
+            font-size: 9px;
+            font-weight: bold;
+        }
+
+        .requirements-list {
+            margin-top: 10px;
+            padding: 12px;
+            background: var(--gray-50);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--gray-200);
+            display: none;
+        }
+
+        body.dark .requirements-list {
+            background: var(--bg);
+            border-color: var(--border);
+        }
+
+        .requirements-list.show {
+            display: block;
+        }
+
+        .req-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            margin-bottom: 6px;
+            color: var(--gray-600);
+        }
+
+        body.dark .req-item {
+            color: var(--text-muted);
+        }
+
+        .req-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .req-check {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid var(--gray-300);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 9px;
+            font-weight: bold;
+            transition: all 0.2s ease;
+        }
+
+        body.dark .req-check {
+            border-color: var(--border);
+        }
+
+        .req-check.met {
+            background: var(--secondary);
+            border-color: var(--secondary);
+            color: white;
+        }
+
         .notification-popup {
             position: fixed;
             padding: 14px 20px;
@@ -336,12 +419,24 @@
                             <label>Email Address</label>
                             <input type="email" id="loginEmail" placeholder="you@example.com">
                             <div class="error-text" id="loginEmailErr"></div>
+                            <div class="requirements-list" id="loginEmailReqs">
+                                <div class="req-item">
+                                    <div class="req-check" id="loginEmailCheck"></div>
+                                    <span>Valid email format</span>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="form-input-group">
                             <label>Password</label>
                             <input type="password" id="loginPass" placeholder="••••••••">
                             <div class="error-text" id="loginPassErr"></div>
+                            <div class="requirements-list" id="loginPassReqs">
+                                <div class="req-item">
+                                    <div class="req-check" id="loginPassCheck"></div>
+                                    <span>Password entered</span>
+                                </div>
+                            </div>
                         </div>
 
                         <button type="submit" class="submit-button">Sign In</button>
@@ -356,24 +451,48 @@
                             <label>Full Name</label>
                             <input type="text" id="regName" placeholder="John Doe">
                             <div class="error-text" id="regNameErr"></div>
+                            <div class="requirements-list" id="regNameReqs">
+                                <div class="req-item">
+                                    <div class="req-check" id="regNameCheck"></div>
+                                    <span>Full name entered</span>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="form-input-group">
                             <label>Email Address</label>
                             <input type="email" id="regEmail" placeholder="you@example.com">
                             <div class="error-text" id="regEmailErr"></div>
+                            <div class="requirements-list" id="regEmailReqs">
+                                <div class="req-item">
+                                    <div class="req-check" id="regEmailCheck"></div>
+                                    <span>Valid email format</span>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="form-input-group">
                             <label>Password</label>
                             <input type="password" id="regPass" placeholder="••••••••">
                             <div class="error-text" id="regPassErr"></div>
+                            <div class="requirements-list" id="regPassReqs">
+                                <div class="req-item">
+                                    <div class="req-check" id="regPassCheck"></div>
+                                    <span>At least 6 characters</span>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="form-input-group">
                             <label>Confirm Password</label>
                             <input type="password" id="regPassConfirm" placeholder="••••••••">
                             <div class="error-text" id="regPassConfirmErr"></div>
+                            <div class="requirements-list" id="regPassConfirmReqs">
+                                <div class="req-item">
+                                    <div class="req-check" id="regPassConfirmCheck"></div>
+                                    <span>Passwords match</span>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="form-input-group">
@@ -387,12 +506,24 @@
                                 <option value="color">What is your favorite color?</option>
                             </select>
                             <div class="error-text" id="regQuestionErr"></div>
+                            <div class="requirements-list" id="regQuestionReqs">
+                                <div class="req-item">
+                                    <div class="req-check" id="regQuestionCheck"></div>
+                                    <span>Question selected</span>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="form-input-group">
                             <label>Your Answer</label>
                             <input type="text" id="regAnswer" placeholder="Your answer">
                             <div class="error-text" id="regAnswerErr"></div>
+                            <div class="requirements-list" id="regAnswerReqs">
+                                <div class="req-item">
+                                    <div class="req-check" id="regAnswerCheck"></div>
+                                    <span>Answer provided</span>
+                                </div>
+                            </div>
                         </div>
 
                         <button type="submit" class="submit-button">Create Account</button>
@@ -463,6 +594,73 @@
                 }
             });
         });
+
+        // Update login requirements
+        function updateLoginReqs() {
+            const email = document.getElementById('loginEmail').value.trim();
+            const pass = document.getElementById('loginPass').value;
+
+            const emailValid = isValidEmail(email);
+            const passValid = pass.length > 0;
+
+            updateReqDisplay('loginEmailReqs', 'loginEmailCheck', emailValid, email.length > 0);
+            updateReqDisplay('loginPassReqs', 'loginPassCheck', passValid, pass.length > 0);
+        }
+
+        // Update signup requirements
+        function updateSignupReqs() {
+            const name = document.getElementById('regName').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const pass = document.getElementById('regPass').value;
+            const confirm = document.getElementById('regPassConfirm').value;
+            const question = document.getElementById('regQuestion').value;
+            const answer = document.getElementById('regAnswer').value.trim();
+
+            const nameValid = name.length > 0;
+            const emailValid = isValidEmail(email);
+            const passValid = pass.length >= 6;
+            const matchValid = pass === confirm && pass.length > 0;
+            const questionValid = question.length > 0;
+            const answerValid = answer.length > 0;
+
+            updateReqDisplay('regNameReqs', 'regNameCheck', nameValid, name.length > 0);
+            updateReqDisplay('regEmailReqs', 'regEmailCheck', emailValid, email.length > 0);
+            updateReqDisplay('regPassReqs', 'regPassCheck', passValid, pass.length > 0);
+            updateReqDisplay('regPassConfirmReqs', 'regPassConfirmCheck', matchValid, pass.length > 0);
+            updateReqDisplay('regQuestionReqs', 'regQuestionCheck', questionValid, question.length > 0);
+            updateReqDisplay('regAnswerReqs', 'regAnswerCheck', answerValid, answer.length > 0);
+        }
+
+        // Helper to update requirement display
+        function updateReqDisplay(containerId, checkId, isMet, show) {
+            const container = document.getElementById(containerId);
+            const check = document.getElementById(checkId);
+            
+            if (show) {
+                container.classList.add('show');
+                if (isMet) {
+                    check.classList.add('met');
+                    check.textContent = '✓';
+                } else {
+                    check.classList.remove('met');
+                    check.textContent = '';
+                }
+            } else {
+                container.classList.remove('show');
+            }
+        }
+
+        // Login input listeners
+        document.getElementById('loginEmail').addEventListener('input', updateLoginReqs);
+        document.getElementById('loginPass').addEventListener('input', updateLoginReqs);
+
+        // Signup input listeners
+        document.getElementById('regName').addEventListener('input', updateSignupReqs);
+        document.getElementById('regEmail').addEventListener('input', updateSignupReqs);
+        document.getElementById('regPass').addEventListener('input', updateSignupReqs);
+        document.getElementById('regPassConfirm').addEventListener('input', updateSignupReqs);
+        document.getElementById('regQuestion').addEventListener('change', updateSignupReqs);
+        document.getElementById('regAnswer').addEventListener('input', updateSignupReqs);
 
         // Tab switching
         document.querySelectorAll('.tab-button').forEach(btn => {
