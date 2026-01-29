@@ -7,165 +7,143 @@
     <link rel="stylesheet" href="styles.css">
     <script src="script.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-        }
-
-        .site-header {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
         .login-page {
+            min-height: calc(100vh - 60px);
             display: flex;
-            min-height: calc(100vh - 100px);
             align-items: center;
             justify-content: center;
             padding: 40px 20px;
+            background: var(--bg);
         }
 
         .auth-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            width: 100%;
             max-width: 1000px;
-            background: white;
-            border-radius: 24px;
+            width: 100%;
+            border-radius: var(--border-radius-lg);
             overflow: hidden;
-            box-shadow: 0 24px 48px rgba(0, 0, 0, 0.2);
+            box-shadow: var(--shadow-xl);
+            background: var(--white);
+        }
+
+        body.dark .auth-container {
+            background: var(--card-bg);
         }
 
         .auth-left {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             padding: 60px 40px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             color: white;
-            position: relative;
-            overflow: hidden;
         }
 
-        .auth-left::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            animation: pulse 15s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 0.3; }
-            50% { transform: scale(1.1); opacity: 0.5; }
-        }
-
-        .welcome-content {
-            position: relative;
-            z-index: 1;
-        }
-
-        .welcome-content h1 {
-            font-size: 48px;
+        .auth-left h1 {
+            font-size: 40px;
+            font-weight: 800;
             margin-bottom: 20px;
-            font-weight: 700;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         }
 
-        .welcome-content p {
-            font-size: 18px;
+        .auth-left p {
+            font-size: 16px;
             line-height: 1.6;
+            margin-bottom: 32px;
             opacity: 0.95;
-            margin-bottom: 40px;
         }
 
-        .feature-list {
+        .features-list {
             list-style: none;
             padding: 0;
+            margin: 0;
         }
 
-        .feature-list li {
-            margin-bottom: 16px;
+        .features-list li {
             display: flex;
             align-items: center;
-            font-size: 16px;
+            margin-bottom: 16px;
+            font-weight: 500;
         }
 
-        .feature-list li::before {
+        .features-list li::before {
             content: '✓';
-            display: inline-block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             width: 28px;
             height: 28px;
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.25);
             border-radius: 50%;
-            text-align: center;
-            line-height: 28px;
             margin-right: 12px;
             font-weight: bold;
+            flex-shrink: 0;
         }
 
         .auth-right {
             padding: 60px 50px;
-            background: white;
+            background: var(--white);
         }
 
-        .auth-header {
-            text-align: center;
-            margin-bottom: 40px;
+        body.dark .auth-right {
+            background: var(--card-bg);
         }
 
         .auth-header h2 {
-            font-size: 32px;
-            margin-bottom: 8px;
-            color: #1f2937;
+            font-size: 28px;
             font-weight: 700;
+            margin: 0 0 8px 0;
+            color: var(--gray-900);
+        }
+
+        body.dark .auth-header h2 {
+            color: var(--text);
         }
 
         .auth-header p {
-            color: #6b7280;
-            font-size: 15px;
+            color: var(--gray-500);
+            font-size: 14px;
+            margin: 0 0 30px 0;
         }
 
-        .tabs-container {
+        body.dark .auth-header p {
+            color: var(--text-muted);
+        }
+
+        .tabs {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 32px;
+            gap: 10px;
+            margin-bottom: 30px;
         }
 
         .tab-button {
-            padding: 14px;
-            border: 2px solid #e5e7eb;
-            background: white;
-            border-radius: 12px;
-            font-size: 14px;
+            padding: 12px;
+            background: var(--white);
+            border: 2px solid var(--gray-200);
+            border-radius: var(--border-radius);
             font-weight: 600;
-            color: #9ca3af;
+            color: var(--gray-600);
             cursor: pointer;
             transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        body.dark .tab-button {
+            background: var(--bg);
+            border-color: var(--border);
+            color: var(--text-muted);
         }
 
         .tab-button:hover {
-            border-color: #d1d5db;
-            color: #6b7280;
+            border-color: var(--primary);
+            color: var(--primary);
         }
 
         .tab-button.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--primary);
             color: white;
-            border-color: transparent;
-            box-shadow: 0 8px 16px rgba(102, 126, 234, 0.4);
+            border-color: var(--primary);
         }
 
         .form-container {
@@ -174,18 +152,6 @@
 
         .form-container.active {
             display: block;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
 
         .form-input-group {
@@ -195,205 +161,127 @@
         .form-input-group label {
             display: block;
             font-weight: 600;
-            color: #374151;
+            color: var(--gray-700);
             margin-bottom: 8px;
             font-size: 14px;
+        }
+
+        body.dark .form-input-group label {
+            color: var(--text);
         }
 
         .form-input-group input,
         .form-input-group select {
             width: 100%;
-            padding: 12px 14px;
-            border: 2px solid #e5e7eb;
-            border-radius: 10px;
+            padding: 10px 12px;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--border-radius);
             font-size: 14px;
+            background: var(--white);
+            color: var(--gray-900);
+            transition: all 0.2s ease;
             font-family: inherit;
-            transition: all 0.3s ease;
-            background: white;
+        }
+
+        body.dark .form-input-group input,
+        body.dark .form-input-group select {
+            background: var(--bg);
+            border-color: var(--border);
+            color: var(--text);
         }
 
         .form-input-group input:focus,
         .form-input-group select:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
-        .form-error {
-            color: #ef4444;
+        .error-text {
+            color: var(--danger);
             font-size: 12px;
             margin-top: 6px;
             display: none;
-            font-weight: 500;
         }
 
         .submit-button {
             width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 12px;
+            background: var(--primary);
             color: white;
             border: none;
-            border-radius: 10px;
-            font-size: 15px;
+            border-radius: var(--border-radius);
             font-weight: 600;
+            font-size: 15px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 16px;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            transition: all 0.2s ease;
+            margin-top: 20px;
         }
 
         .submit-button:hover {
+            background: #2563eb;
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.5);
         }
 
-        .submit-button:active {
-            transform: translateY(0);
-        }
-
-        .footer-link {
+        .form-link {
             text-align: center;
-            margin-top: 16px;
             font-size: 13px;
-            color: #6b7280;
+            color: var(--gray-600);
+            margin-top: 16px;
         }
 
-        .footer-link a {
-            color: #667eea;
+        body.dark .form-link {
+            color: var(--text-muted);
+        }
+
+        .form-link a {
+            color: var(--primary);
             text-decoration: none;
             font-weight: 600;
         }
 
-        .footer-link a:hover {
+        .form-link a:hover {
             text-decoration: underline;
         }
 
-        .notification {
+        .notification-popup {
             position: fixed;
             padding: 14px 20px;
-            border-radius: 10px;
+            border-radius: var(--border-radius);
             color: white;
             font-weight: 500;
-            z-index: 9999;
+            z-index: 1000;
             font-size: 14px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            animation: popIn 0.3s ease;
         }
 
-        .notification.success {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        .notification-popup.success {
+            background: var(--secondary);
             bottom: 24px;
             left: 24px;
-            animation: slideUp 0.4s ease;
         }
 
-        .notification.error {
-            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        .notification-popup.error {
+            background: var(--danger);
             top: 24px;
             right: 24px;
-            animation: slideDown 0.4s ease;
         }
 
-        @keyframes slideUp {
-            from {
-                transform: translateY(100px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        @keyframes slideDown {
-            from {
-                transform: translateY(-100px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
+        @keyframes popIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         @media (max-width: 900px) {
             .auth-container {
                 grid-template-columns: 1fr;
             }
-
             .auth-left {
                 display: none;
             }
-
             .auth-right {
                 padding: 40px 30px;
             }
-        }
-
-        body.dark {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-        }
-
-        body.dark .site-header {
-            background: rgba(30, 41, 59, 0.1);
-            border-bottom-color: rgba(148, 163, 184, 0.1);
-        }
-
-        body.dark .auth-container {
-            background: #1e293b;
-        }
-
-        body.dark .auth-right {
-            background: #1e293b;
-        }
-
-        body.dark .auth-header h2 {
-            color: #f1f5f9;
-        }
-
-        body.dark .auth-header p {
-            color: #94a3b8;
-        }
-
-        body.dark .tab-button {
-            background: #334155;
-            border-color: #475569;
-            color: #94a3b8;
-        }
-
-        body.dark .tab-button:hover {
-            border-color: #64748b;
-            color: #cbd5e1;
-        }
-
-        body.dark .tab-button.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-color: transparent;
-        }
-
-        body.dark .form-input-group label {
-            color: #e2e8f0;
-        }
-
-        body.dark .form-input-group input,
-        body.dark .form-input-group select {
-            background: #0f172a;
-            border-color: #334155;
-            color: #f1f5f9;
-        }
-
-        body.dark .form-input-group input:focus,
-        body.dark .form-input-group select:focus {
-            border-color: #667eea;
-            background: #1e293b;
-        }
-
-        body.dark .form-error {
-            color: #fca5a5;
-        }
-
-        body.dark .footer-link {
-            color: #94a3b8;
         }
     </style>
 </head>
@@ -416,103 +304,99 @@
         </div>
     </header>
 
-    <main>
+    <main class="content">
         <div class="login-page">
             <div class="auth-container">
                 <div class="auth-left">
-                    <div class="welcome-content">
-                        <h1>PeerLearn</h1>
-                        <p>Join thousands of students achieving their academic goals through collaborative learning.</p>
-                        <ul class="feature-list">
-                            <li>Track your study progress</li>
-                            <li>Access learning materials</li>
-                            <li>Manage your schedule</li>
-                            <li>Connect with peers</li>
-                        </ul>
-                    </div>
+                    <h1>PeerLearn</h1>
+                    <p>Join thousands of students achieving their academic goals through collaborative learning and expert guidance.</p>
+                    <ul class="features-list">
+                        <li>Track your study progress</li>
+                        <li>Access learning materials</li>
+                        <li>Manage your schedule</li>
+                        <li>Connect with peers</li>
+                    </ul>
                 </div>
 
                 <div class="auth-right">
                     <div class="auth-header">
-                        <h2>Welcome Back</h2>
-                        <p>Sign in to continue your learning journey</p>
+                        <h2>Welcome</h2>
+                        <p>Sign in to your account</p>
                     </div>
 
-                    <div class="tabs-container">
-                        <button class="tab-button active" data-tab="login">Login</button>
-                        <button class="tab-button" data-tab="signup">Sign Up</button>
+                    <div class="tabs">
+                        <button class="tab-button active" data-form="login">Login</button>
+                        <button class="tab-button" data-form="signup">Sign Up</button>
                     </div>
 
                     <!-- LOGIN FORM -->
-                    <form id="loginForm" class="form-container active">
+                    <form id="login" class="form-container active">
                         <div class="form-input-group">
-                            <label for="loginEmail">Email Address</label>
-                            <input type="email" id="loginEmail" placeholder="you@example.com" autocomplete="email">
-                            <div class="form-error" id="loginEmailError"></div>
+                            <label>Email Address</label>
+                            <input type="email" id="loginEmail" placeholder="you@example.com">
+                            <div class="error-text" id="loginEmailErr"></div>
                         </div>
 
                         <div class="form-input-group">
-                            <label for="loginPassword">Password</label>
-                            <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password">
-                            <div class="form-error" id="loginPasswordError"></div>
+                            <label>Password</label>
+                            <input type="password" id="loginPass" placeholder="••••••••">
+                            <div class="error-text" id="loginPassErr"></div>
                         </div>
 
                         <button type="submit" class="submit-button">Sign In</button>
-
-                        <div class="footer-link">
-                            <a href="#forgot">Forgot your password?</a>
+                        <div class="form-link">
+                            <a href="#">Forgot password?</a>
                         </div>
                     </form>
 
                     <!-- SIGNUP FORM -->
-                    <form id="signupForm" class="form-container">
+                    <form id="signup" class="form-container">
                         <div class="form-input-group">
-                            <label for="signupName">Full Name</label>
-                            <input type="text" id="signupName" placeholder="John Doe" autocomplete="name">
-                            <div class="form-error" id="signupNameError"></div>
+                            <label>Full Name</label>
+                            <input type="text" id="regName" placeholder="John Doe">
+                            <div class="error-text" id="regNameErr"></div>
                         </div>
 
                         <div class="form-input-group">
-                            <label for="signupEmail">Email Address</label>
-                            <input type="email" id="signupEmail" placeholder="you@example.com" autocomplete="email">
-                            <div class="form-error" id="signupEmailError"></div>
+                            <label>Email Address</label>
+                            <input type="email" id="regEmail" placeholder="you@example.com">
+                            <div class="error-text" id="regEmailErr"></div>
                         </div>
 
                         <div class="form-input-group">
-                            <label for="signupPassword">Password</label>
-                            <input type="password" id="signupPassword" placeholder="••••••••" autocomplete="new-password">
-                            <div class="form-error" id="signupPasswordError"></div>
+                            <label>Password</label>
+                            <input type="password" id="regPass" placeholder="••••••••">
+                            <div class="error-text" id="regPassErr"></div>
                         </div>
 
                         <div class="form-input-group">
-                            <label for="signupConfirm">Confirm Password</label>
-                            <input type="password" id="signupConfirm" placeholder="••••••••" autocomplete="new-password">
-                            <div class="form-error" id="signupConfirmError"></div>
+                            <label>Confirm Password</label>
+                            <input type="password" id="regPassConfirm" placeholder="••••••••">
+                            <div class="error-text" id="regPassConfirmErr"></div>
                         </div>
 
                         <div class="form-input-group">
-                            <label for="securityQuestion">Security Question</label>
-                            <select id="securityQuestion">
+                            <label>Security Question</label>
+                            <select id="regQuestion">
                                 <option value="">Choose a question...</option>
-                                <option value="pet">What was the name of your first pet?</option>
+                                <option value="pet">What was your first pet's name?</option>
                                 <option value="city">What city were you born in?</option>
-                                <option value="school">What was the name of your elementary school?</option>
-                                <option value="teacher">What was your favorite teacher's name?</option>
+                                <option value="school">What was your elementary school?</option>
+                                <option value="teacher">Favorite teacher's name?</option>
                                 <option value="color">What is your favorite color?</option>
                             </select>
-                            <div class="form-error" id="securityQuestionError"></div>
+                            <div class="error-text" id="regQuestionErr"></div>
                         </div>
 
                         <div class="form-input-group">
-                            <label for="securityAnswer">Your Answer</label>
-                            <input type="text" id="securityAnswer" placeholder="Your answer">
-                            <div class="form-error" id="securityAnswerError"></div>
+                            <label>Your Answer</label>
+                            <input type="text" id="regAnswer" placeholder="Your answer">
+                            <div class="error-text" id="regAnswerErr"></div>
                         </div>
 
                         <button type="submit" class="submit-button">Create Account</button>
-
-                        <div class="footer-link">
-                            <p>By signing up, you agree to our <a href="#">Terms of Service</a></p>
+                        <div class="form-link">
+                            By signing up, you agree to our <a href="#">Terms of Service</a>
                         </div>
                     </form>
                 </div>
@@ -549,235 +433,187 @@
     </footer>
 
     <script>
+        // Redirect if already logged in
         if (typeof checkAuth !== 'undefined' && checkAuth()) {
             window.location.href = 'dashboard.html';
         }
 
-        function showNotification(message, type) {
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.textContent = message;
-            document.body.appendChild(notification);
-            setTimeout(() => notification.remove(), 3500);
+        // Notification helper
+        function showNotif(msg, type) {
+            const notif = document.createElement('div');
+            notif.className = `notification-popup ${type}`;
+            notif.textContent = msg;
+            document.body.appendChild(notif);
+            setTimeout(() => notif.remove(), 3500);
         }
 
-        document.querySelectorAll('.tab-button').forEach(button => {
-            button.addEventListener('click', () => {
-                const tab = button.getAttribute('data-tab');
-                document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
-                document.querySelectorAll('.form-container').forEach(f => f.classList.remove('active'));
-                button.classList.add('active');
-                document.getElementById(`${tab}Form`).classList.add('active');
-                document.querySelectorAll('.form-error').forEach(e => e.style.display = 'none');
-                document.querySelectorAll('input, select').forEach(f => f.style.borderColor = '');
-            });
-        });
-
-        document.querySelectorAll('input, select').forEach(field => {
-            field.addEventListener('input', () => {
-                const errorEl = document.getElementById(field.id + 'Error');
-                if (errorEl) {
-                    errorEl.style.display = 'none';
-                    field.style.borderColor = '';
-                }
-            });
-        });
-
-        function validateEmail(email) {
+        // Email regex
+        function isValidEmail(email) {
             return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
         }
 
-        document.getElementById('signupName').addEventListener('blur', function() {
-            const errorEl = document.getElementById('signupNameError');
-            if (!this.value.trim()) {
-                errorEl.textContent = 'Full name is required';
-                errorEl.style.display = 'block';
-                this.style.borderColor = '#ef4444';
-            }
-        });
-
-        document.getElementById('signupEmail').addEventListener('blur', function() {
-            const errorEl = document.getElementById('signupEmailError');
-            const email = this.value.trim();
-            if (!email) {
-                errorEl.textContent = 'Email is required';
-                errorEl.style.display = 'block';
-                this.style.borderColor = '#ef4444';
-            } else if (!validateEmail(email)) {
-                errorEl.textContent = 'Please enter a valid email';
-                errorEl.style.display = 'block';
-                this.style.borderColor = '#ef4444';
-            } else {
-                const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
-                if (users.some(u => u.email.toLowerCase() === email.toLowerCase())) {
-                    errorEl.textContent = 'Email already registered';
-                    errorEl.style.display = 'block';
-                    this.style.borderColor = '#ef4444';
+        // Clear errors on input
+        document.querySelectorAll('input, select').forEach(field => {
+            field.addEventListener('input', () => {
+                const errorId = field.id + 'Err';
+                const errorEl = document.getElementById(errorId);
+                if (errorEl) {
+                    errorEl.style.display = 'none';
                 }
-            }
+            });
         });
 
-        document.getElementById('signupPassword').addEventListener('blur', function() {
-            const errorEl = document.getElementById('signupPasswordError');
-            if (!this.value) {
-                errorEl.textContent = 'Password is required';
-                errorEl.style.display = 'block';
-                this.style.borderColor = '#ef4444';
-            } else if (this.value.length < 6) {
-                errorEl.textContent = 'Password must be at least 6 characters';
-                errorEl.style.display = 'block';
-                this.style.borderColor = '#ef4444';
-            }
+        // Tab switching
+        document.querySelectorAll('.tab-button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const formId = btn.getAttribute('data-form');
+                
+                document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.form-container').forEach(f => f.classList.remove('active'));
+                
+                btn.classList.add('active');
+                document.getElementById(formId).classList.add('active');
+                
+                // Clear all errors
+                document.querySelectorAll('.error-text').forEach(e => e.style.display = 'none');
+            });
         });
 
-        document.getElementById('signupConfirm').addEventListener('blur', function() {
-            const password = document.getElementById('signupPassword').value;
-            const errorEl = document.getElementById('signupConfirmError');
-            if (!this.value) {
-                errorEl.textContent = 'Please confirm your password';
-                errorEl.style.display = 'block';
-                this.style.borderColor = '#ef4444';
-            } else if (password !== this.value) {
-                errorEl.textContent = 'Passwords do not match';
-                errorEl.style.display = 'block';
-                this.style.borderColor = '#ef4444';
-            }
-        });
-
-        document.getElementById('securityQuestion').addEventListener('change', function() {
-            const errorEl = document.getElementById('securityQuestionError');
-            if (!this.value) {
-                errorEl.textContent = 'Please select a security question';
-                errorEl.style.display = 'block';
-            }
-        });
-
-        document.getElementById('securityAnswer').addEventListener('blur', function() {
-            const errorEl = document.getElementById('securityAnswerError');
-            if (!this.value.trim()) {
-                errorEl.textContent = 'Please answer the security question';
-                errorEl.style.display = 'block';
-                this.style.borderColor = '#ef4444';
-            }
-        });
-
-        document.getElementById('loginEmail').addEventListener('blur', function() {
-            const errorEl = document.getElementById('loginEmailError');
-            const email = this.value.trim();
-            if (!email) {
-                errorEl.textContent = 'Email is required';
-                errorEl.style.display = 'block';
-                this.style.borderColor = '#ef4444';
-            } else if (!validateEmail(email)) {
-                errorEl.textContent = 'Please enter a valid email';
-                errorEl.style.display = 'block';
-                this.style.borderColor = '#ef4444';
-            }
-        });
-
-        document.getElementById('loginPassword').addEventListener('blur', function() {
-            const errorEl = document.getElementById('loginPasswordError');
-            if (!this.value) {
-                errorEl.textContent = 'Password is required';
-                errorEl.style.display = 'block';
-                this.style.borderColor = '#ef4444';
-            }
-        });
-
-        document.getElementById('loginForm').addEventListener('submit', (e) => {
+        // LOGIN FORM
+        document.getElementById('login').addEventListener('submit', (e) => {
             e.preventDefault();
+            
             const email = document.getElementById('loginEmail').value.trim();
-            const password = document.getElementById('loginPassword').value;
-
-            if (!email || !password) {
-                if (!email) {
-                    document.getElementById('loginEmailError').textContent = 'Email is required';
-                    document.getElementById('loginEmailError').style.display = 'block';
-                }
-                if (!password) {
-                    document.getElementById('loginPasswordError').textContent = 'Password is required';
-                    document.getElementById('loginPasswordError').style.display = 'block';
-                }
-                return;
+            const pass = document.getElementById('loginPass').value;
+            
+            const emailErr = document.getElementById('loginEmailErr');
+            const passErr = document.getElementById('loginPassErr');
+            
+            emailErr.style.display = 'none';
+            passErr.style.display = 'none';
+            
+            let valid = true;
+            
+            if (!email) {
+                emailErr.textContent = 'Email is required';
+                emailErr.style.display = 'block';
+                valid = false;
+            } else if (!isValidEmail(email)) {
+                emailErr.textContent = 'Invalid email format';
+                emailErr.style.display = 'block';
+                valid = false;
             }
-
+            
+            if (!pass) {
+                passErr.textContent = 'Password is required';
+                passErr.style.display = 'block';
+                valid = false;
+            }
+            
+            if (!valid) return;
+            
             const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
-            const user = users.find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === password);
-
+            const user = users.find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === pass);
+            
             if (user) {
                 localStorage.setItem('userLoggedIn', 'true');
                 localStorage.setItem('userName', user.name);
                 localStorage.setItem('userEmail', user.email);
-                showNotification('✓ Login successful! Redirecting...', 'success');
+                showNotif('Login successful!', 'success');
                 setTimeout(() => window.location.href = 'dashboard.html', 1500);
             } else {
-                showNotification('✗ Invalid email or password', 'error');
+                showNotif('Invalid email or password', 'error');
             }
         });
 
-        document.getElementById('signupForm').addEventListener('submit', (e) => {
+        // SIGNUP FORM
+        document.getElementById('signup').addEventListener('submit', (e) => {
             e.preventDefault();
-            const name = document.getElementById('signupName').value.trim();
-            const email = document.getElementById('signupEmail').value.trim();
-            const password = document.getElementById('signupPassword').value;
-            const confirm = document.getElementById('signupConfirm').value;
-            const question = document.getElementById('securityQuestion').value;
-            const answer = document.getElementById('securityAnswer').value.trim();
-
-            let hasError = false;
-
+            
+            const name = document.getElementById('regName').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const pass = document.getElementById('regPass').value;
+            const passConfirm = document.getElementById('regPassConfirm').value;
+            const question = document.getElementById('regQuestion').value;
+            const answer = document.getElementById('regAnswer').value.trim();
+            
+            // Clear errors
+            document.querySelectorAll('.error-text').forEach(e => e.style.display = 'none');
+            
+            let valid = true;
+            
             if (!name) {
-                document.getElementById('signupNameError').textContent = 'Full name is required';
-                document.getElementById('signupNameError').style.display = 'block';
-                hasError = true;
+                document.getElementById('regNameErr').textContent = 'Name is required';
+                document.getElementById('regNameErr').style.display = 'block';
+                valid = false;
             }
-
-            if (!email || !validateEmail(email)) {
-                document.getElementById('signupEmailError').textContent = email ? 'Invalid email' : 'Email is required';
-                document.getElementById('signupEmailError').style.display = 'block';
-                hasError = true;
+            
+            if (!email) {
+                document.getElementById('regEmailErr').textContent = 'Email is required';
+                document.getElementById('regEmailErr').style.display = 'block';
+                valid = false;
+            } else if (!isValidEmail(email)) {
+                document.getElementById('regEmailErr').textContent = 'Invalid email format';
+                document.getElementById('regEmailErr').style.display = 'block';
+                valid = false;
             }
-
-            if (!password || password.length < 6) {
-                document.getElementById('signupPasswordError').textContent = password ? 'Min 6 characters' : 'Password is required';
-                document.getElementById('signupPasswordError').style.display = 'block';
-                hasError = true;
+            
+            if (!pass) {
+                document.getElementById('regPassErr').textContent = 'Password is required';
+                document.getElementById('regPassErr').style.display = 'block';
+                valid = false;
+            } else if (pass.length < 6) {
+                document.getElementById('regPassErr').textContent = 'Password must be 6+ characters';
+                document.getElementById('regPassErr').style.display = 'block';
+                valid = false;
             }
-
-            if (password !== confirm) {
-                document.getElementById('signupConfirmError').textContent = 'Passwords do not match';
-                document.getElementById('signupConfirmError').style.display = 'block';
-                hasError = true;
+            
+            if (!passConfirm) {
+                document.getElementById('regPassConfirmErr').textContent = 'Confirm your password';
+                document.getElementById('regPassConfirmErr').style.display = 'block';
+                valid = false;
+            } else if (pass !== passConfirm) {
+                document.getElementById('regPassConfirmErr').textContent = 'Passwords do not match';
+                document.getElementById('regPassConfirmErr').style.display = 'block';
+                valid = false;
             }
-
+            
             if (!question) {
-                document.getElementById('securityQuestionError').textContent = 'Select a security question';
-                document.getElementById('securityQuestionError').style.display = 'block';
-                hasError = true;
+                document.getElementById('regQuestionErr').textContent = 'Select a question';
+                document.getElementById('regQuestionErr').style.display = 'block';
+                valid = false;
             }
-
+            
             if (!answer) {
-                document.getElementById('securityAnswerError').textContent = 'Answer is required';
-                document.getElementById('securityAnswerError').style.display = 'block';
-                hasError = true;
+                document.getElementById('regAnswerErr').textContent = 'Answer is required';
+                document.getElementById('regAnswerErr').style.display = 'block';
+                valid = false;
             }
-
-            if (hasError) return;
-
+            
+            if (!valid) return;
+            
+            // Check if email exists
             const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
             if (users.some(u => u.email.toLowerCase() === email.toLowerCase())) {
-                document.getElementById('signupEmailError').textContent = 'Email already registered';
-                document.getElementById('signupEmailError').style.display = 'block';
+                document.getElementById('regEmailErr').textContent = 'Email already registered';
+                document.getElementById('regEmailErr').style.display = 'block';
                 return;
             }
-
-            users.push({ name, email, password, securityQuestion: question, securityAnswer: answer.toLowerCase() });
+            
+            // Register
+            users.push({
+                name,
+                email,
+                password: pass,
+                securityQuestion: question,
+                securityAnswer: answer.toLowerCase()
+            });
             localStorage.setItem('registeredUsers', JSON.stringify(users));
             localStorage.setItem('userLoggedIn', 'true');
             localStorage.setItem('userName', name);
             localStorage.setItem('userEmail', email);
-
-            showNotification('✓ Account created! Logging you in...', 'success');
+            
+            showNotif('Account created! Logging in...', 'success');
             setTimeout(() => window.location.href = 'dashboard.html', 1500);
         });
     </script>
