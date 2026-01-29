@@ -25,10 +25,22 @@
             overflow: hidden;
             box-shadow: var(--shadow-xl);
             background: var(--white);
+            animation: cardIn 0.4s ease;
         }
 
         body.dark .auth-container {
             background: var(--card-bg);
+        }
+
+        @keyframes cardIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .auth-left {
@@ -113,14 +125,17 @@
         .tabs {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            gap: 6px;
             margin-bottom: 30px;
+            background: var(--gray-50);
+            padding: 6px;
+            border-radius: var(--border-radius);
         }
 
         .tab-button {
             padding: 12px;
-            background: var(--white);
-            border: 2px solid var(--gray-200);
+            background: transparent;
+            border: 1px solid transparent;
             border-radius: var(--border-radius);
             font-weight: 600;
             color: var(--gray-600);
@@ -130,20 +145,28 @@
         }
 
         body.dark .tab-button {
-            background: var(--bg);
-            border-color: var(--border);
             color: var(--text-muted);
         }
 
         .tab-button:hover {
-            border-color: var(--primary);
             color: var(--primary);
         }
 
         .tab-button.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
+            background: var(--white);
+            color: var(--primary);
+            border-color: var(--gray-200);
+            box-shadow: var(--shadow-sm);
+            transform: translateY(-1px);
+        }
+
+        body.dark .tabs {
+            background: var(--bg);
+        }
+
+        body.dark .tab-button.active {
+            background: var(--card-bg);
+            border-color: var(--border);
         }
 
         .form-container {
@@ -198,11 +221,34 @@
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
+        .form-input-group input.input-valid,
+        .form-input-group select.input-valid {
+            border-color: var(--secondary);
+        }
+
+        .form-input-group input.input-error,
+        .form-input-group select.input-error {
+            border-color: var(--danger);
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12);
+        }
+
         .error-text {
             color: var(--danger);
             font-size: 12px;
-            margin-top: 6px;
+            margin-top: 8px;
             display: none;
+            background: rgba(239, 68, 68, 0.08);
+            border: 1px solid rgba(239, 68, 68, 0.25);
+            border-left: 3px solid var(--danger);
+            padding: 8px 10px;
+            border-radius: 8px;
+            line-height: 1.4;
+        }
+
+        .error-text::before {
+            content: '⚠';
+            margin-right: 6px;
+            font-size: 12px;
         }
 
         .submit-button {
@@ -271,16 +317,20 @@
 
         .requirements-list {
             margin-top: 10px;
-            padding: 12px;
-            background: var(--gray-50);
-            border-radius: var(--border-radius);
-            border: 1px solid var(--gray-200);
+            padding: 0;
+            border: none;
+            background: transparent;
+            max-height: none;
+            opacity: 1;
+            overflow: visible;
+            transform: none;
+            transition: none;
             display: none;
         }
 
         body.dark .requirements-list {
-            background: var(--bg);
-            border-color: var(--border);
+            background: transparent;
+            border-color: transparent;
         }
 
         .requirements-list.show {
@@ -290,42 +340,63 @@
         .req-item {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             font-size: 12px;
             margin-bottom: 6px;
-            color: var(--gray-600);
+            color: var(--danger);
+            padding: 0;
+            border: none;
+            background: transparent;
+            transition: none;
+            position: static;
         }
 
         body.dark .req-item {
-            color: var(--text-muted);
+            color: #fca5a5;
+            background: transparent;
+            border-color: transparent;
         }
 
         .req-item:last-child {
             margin-bottom: 0;
         }
 
+        .req-item.met {
+            color: var(--secondary);
+        }
+
+        .req-item.unmet {
+            color: var(--danger);
+        }
+
         .req-check {
-            width: 16px;
-            height: 16px;
+            width: 14px;
+            height: 14px;
             border-radius: 50%;
-            border: 2px solid var(--gray-300);
-            display: flex;
+            border: 1px solid var(--danger);
+            display: inline-flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            font-size: 9px;
-            font-weight: bold;
-            transition: all 0.2s ease;
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--danger);
+            background: rgba(239, 68, 68, 0.12);
+            transition: none;
         }
 
         body.dark .req-check {
-            border-color: var(--border);
+            border-color: rgba(239, 68, 68, 0.5);
         }
 
         .req-check.met {
-            background: var(--secondary);
-            border-color: var(--secondary);
-            color: white;
+            background: transparent;
+            border-color: transparent;
+            color: transparent;
+        }
+
+        .req-check.unmet {
+            border-color: var(--danger);
         }
 
         .notification-popup {
@@ -584,6 +655,16 @@
             return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
         }
 
+        const focusState = {};
+
+        function setInputState(inputId, state) {
+            const input = document.getElementById(inputId);
+            if (!input) return;
+            input.classList.remove('input-valid', 'input-error');
+            if (state === 'valid') input.classList.add('input-valid');
+            if (state === 'error') input.classList.add('input-error');
+        }
+
         // Clear errors on input
         document.querySelectorAll('input, select').forEach(field => {
             field.addEventListener('input', () => {
@@ -592,6 +673,7 @@
                 if (errorEl) {
                     errorEl.style.display = 'none';
                 }
+                field.classList.remove('input-error');
             });
         });
 
@@ -603,8 +685,11 @@
             const emailValid = isValidEmail(email);
             const passValid = pass.length > 0;
 
-            updateReqDisplay('loginEmailReqs', 'loginEmailCheck', emailValid, email.length > 0);
-            updateReqDisplay('loginPassReqs', 'loginPassCheck', passValid, pass.length > 0);
+            updateReqDisplay('loginEmailReqs', 'loginEmailCheck', emailValid, focusState.loginEmail || email.length > 0);
+            updateReqDisplay('loginPassReqs', 'loginPassCheck', passValid, focusState.loginPass || pass.length > 0);
+
+            setInputState('loginEmail', email.length === 0 ? '' : (emailValid ? 'valid' : 'error'));
+            setInputState('loginPass', pass.length === 0 ? '' : 'valid');
         }
 
         // Update signup requirements
@@ -623,44 +708,81 @@
             const questionValid = question.length > 0;
             const answerValid = answer.length > 0;
 
-            updateReqDisplay('regNameReqs', 'regNameCheck', nameValid, name.length > 0);
-            updateReqDisplay('regEmailReqs', 'regEmailCheck', emailValid, email.length > 0);
-            updateReqDisplay('regPassReqs', 'regPassCheck', passValid, pass.length > 0);
-            updateReqDisplay('regPassConfirmReqs', 'regPassConfirmCheck', matchValid, pass.length > 0);
-            updateReqDisplay('regQuestionReqs', 'regQuestionCheck', questionValid, question.length > 0);
-            updateReqDisplay('regAnswerReqs', 'regAnswerCheck', answerValid, answer.length > 0);
+            updateReqDisplay('regNameReqs', 'regNameCheck', nameValid, focusState.regName || name.length > 0);
+            updateReqDisplay('regEmailReqs', 'regEmailCheck', emailValid, focusState.regEmail || email.length > 0);
+            updateReqDisplay('regPassReqs', 'regPassCheck', passValid, focusState.regPass || pass.length > 0);
+            updateReqDisplay('regPassConfirmReqs', 'regPassConfirmCheck', matchValid, focusState.regPassConfirm || confirm.length > 0);
+            updateReqDisplay('regQuestionReqs', 'regQuestionCheck', questionValid, focusState.regQuestion || question.length > 0);
+            updateReqDisplay('regAnswerReqs', 'regAnswerCheck', answerValid, focusState.regAnswer || answer.length > 0);
+
+            setInputState('regName', name.length === 0 ? '' : (nameValid ? 'valid' : 'error'));
+            setInputState('regEmail', email.length === 0 ? '' : (emailValid ? 'valid' : 'error'));
+            setInputState('regPass', pass.length === 0 ? '' : (passValid ? 'valid' : 'error'));
+            setInputState('regPassConfirm', confirm.length === 0 ? '' : (matchValid ? 'valid' : 'error'));
+            setInputState('regQuestion', question.length === 0 ? '' : (questionValid ? 'valid' : 'error'));
+            setInputState('regAnswer', answer.length === 0 ? '' : (answerValid ? 'valid' : 'error'));
         }
 
         // Helper to update requirement display
         function updateReqDisplay(containerId, checkId, isMet, show) {
             const container = document.getElementById(containerId);
             const check = document.getElementById(checkId);
-            
-            if (show) {
+            const item = check ? check.parentElement : null;
+
+            const shouldShow = show && !isMet;
+
+            if (shouldShow) {
                 container.classList.add('show');
-                if (isMet) {
-                    check.classList.add('met');
-                    check.textContent = '✓';
-                } else {
-                    check.classList.remove('met');
-                    check.textContent = '';
+                check.classList.remove('met');
+                check.classList.add('unmet');
+                check.textContent = '!';
+                if (item) {
+                    item.classList.remove('met');
+                    item.classList.add('unmet');
                 }
             } else {
                 container.classList.remove('show');
+                check.classList.remove('unmet');
+                if (item) item.classList.remove('unmet');
+                if (isMet) {
+                    check.classList.add('met');
+                    check.textContent = '✓';
+                    if (item) item.classList.add('met');
+                } else {
+                    check.classList.remove('met');
+                    check.textContent = '';
+                    if (item) item.classList.remove('met');
+                }
             }
         }
 
-        // Login input listeners
-        document.getElementById('loginEmail').addEventListener('input', updateLoginReqs);
-        document.getElementById('loginPass').addEventListener('input', updateLoginReqs);
+        function updateAllReqs() {
+            updateLoginReqs();
+            updateSignupReqs();
+        }
 
-        // Signup input listeners
-        document.getElementById('regName').addEventListener('input', updateSignupReqs);
-        document.getElementById('regEmail').addEventListener('input', updateSignupReqs);
-        document.getElementById('regPass').addEventListener('input', updateSignupReqs);
-        document.getElementById('regPassConfirm').addEventListener('input', updateSignupReqs);
-        document.getElementById('regQuestion').addEventListener('change', updateSignupReqs);
-        document.getElementById('regAnswer').addEventListener('input', updateSignupReqs);
+        // Focus and input listeners
+        const trackedFields = [
+            'loginEmail', 'loginPass',
+            'regName', 'regEmail', 'regPass', 'regPassConfirm', 'regQuestion', 'regAnswer'
+        ];
+
+        trackedFields.forEach(id => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.addEventListener('focus', () => {
+                focusState[id] = true;
+                updateAllReqs();
+            });
+            el.addEventListener('blur', () => {
+                focusState[id] = false;
+                updateAllReqs();
+            });
+            el.addEventListener('input', updateAllReqs);
+            if (el.tagName === 'SELECT') {
+                el.addEventListener('change', updateAllReqs);
+            }
+        });
 
         // Tab switching
         document.querySelectorAll('.tab-button').forEach(btn => {
@@ -675,6 +797,8 @@
                 
                 // Clear all errors
                 document.querySelectorAll('.error-text').forEach(e => e.style.display = 'none');
+                document.querySelectorAll('input, select').forEach(field => field.classList.remove('input-error'));
+                updateAllReqs();
             });
         });
 
@@ -696,16 +820,19 @@
             if (!email) {
                 emailErr.textContent = 'Email is required';
                 emailErr.style.display = 'block';
+                setInputState('loginEmail', 'error');
                 valid = false;
             } else if (!isValidEmail(email)) {
                 emailErr.textContent = 'Invalid email format';
                 emailErr.style.display = 'block';
+                setInputState('loginEmail', 'error');
                 valid = false;
             }
             
             if (!pass) {
                 passErr.textContent = 'Password is required';
                 passErr.style.display = 'block';
+                setInputState('loginPass', 'error');
                 valid = false;
             }
             
@@ -744,48 +871,57 @@
             if (!name) {
                 document.getElementById('regNameErr').textContent = 'Name is required';
                 document.getElementById('regNameErr').style.display = 'block';
+                setInputState('regName', 'error');
                 valid = false;
             }
             
             if (!email) {
                 document.getElementById('regEmailErr').textContent = 'Email is required';
                 document.getElementById('regEmailErr').style.display = 'block';
+                setInputState('regEmail', 'error');
                 valid = false;
             } else if (!isValidEmail(email)) {
                 document.getElementById('regEmailErr').textContent = 'Invalid email format';
                 document.getElementById('regEmailErr').style.display = 'block';
+                setInputState('regEmail', 'error');
                 valid = false;
             }
             
             if (!pass) {
                 document.getElementById('regPassErr').textContent = 'Password is required';
                 document.getElementById('regPassErr').style.display = 'block';
+                setInputState('regPass', 'error');
                 valid = false;
             } else if (pass.length < 6) {
                 document.getElementById('regPassErr').textContent = 'Password must be 6+ characters';
                 document.getElementById('regPassErr').style.display = 'block';
+                setInputState('regPass', 'error');
                 valid = false;
             }
             
             if (!passConfirm) {
                 document.getElementById('regPassConfirmErr').textContent = 'Confirm your password';
                 document.getElementById('regPassConfirmErr').style.display = 'block';
+                setInputState('regPassConfirm', 'error');
                 valid = false;
             } else if (pass !== passConfirm) {
                 document.getElementById('regPassConfirmErr').textContent = 'Passwords do not match';
                 document.getElementById('regPassConfirmErr').style.display = 'block';
+                setInputState('regPassConfirm', 'error');
                 valid = false;
             }
             
             if (!question) {
                 document.getElementById('regQuestionErr').textContent = 'Select a question';
                 document.getElementById('regQuestionErr').style.display = 'block';
+                setInputState('regQuestion', 'error');
                 valid = false;
             }
             
             if (!answer) {
                 document.getElementById('regAnswerErr').textContent = 'Answer is required';
                 document.getElementById('regAnswerErr').style.display = 'block';
+                setInputState('regAnswer', 'error');
                 valid = false;
             }
             
