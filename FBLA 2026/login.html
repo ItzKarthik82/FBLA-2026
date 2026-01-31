@@ -291,6 +291,147 @@
             text-decoration: underline;
         }
 
+        .reset-panel {
+            display: block;
+        }
+
+        body.dark .reset-panel {
+            border-top-color: var(--border);
+        }
+
+        .reset-panel.show {
+            display: block;
+        }
+
+        .reset-header h3 {
+            font-size: 16px;
+            margin: 0 0 4px 0;
+            color: var(--gray-900);
+        }
+
+        body.dark .reset-header h3 {
+            color: var(--text);
+        }
+
+        .reset-header p {
+            font-size: 12px;
+            color: var(--gray-500);
+            margin: 0 0 12px 0;
+        }
+
+        body.dark .reset-header p {
+            color: var(--text-muted);
+        }
+
+        .reset-step {
+            display: none;
+        }
+
+        .reset-step.active {
+            display: block;
+        }
+
+        .reset-question {
+            font-size: 13px;
+            color: var(--gray-700);
+            margin: 6px 0 10px 0;
+            padding: 10px 12px;
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--border-radius);
+        }
+
+        body.dark .reset-question {
+            color: var(--text);
+            background: var(--bg);
+            border-color: var(--border);
+        }
+
+        .reset-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .reset-button {
+            flex: 1;
+            padding: 10px 12px;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+        }
+
+        .reset-button.primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .reset-button.secondary {
+            background: transparent;
+            color: var(--gray-700);
+            border: 1px solid var(--gray-200);
+        }
+
+        body.dark .reset-button.secondary {
+            color: var(--text);
+            border-color: var(--border);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.6);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 2000;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-card {
+            width: 100%;
+            max-width: 520px;
+            background: var(--white);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-xl);
+            padding: 24px 24px 20px 24px;
+            position: relative;
+            animation: cardIn 0.25s ease;
+        }
+
+        body.dark .modal-card {
+            background: var(--card-bg);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: none;
+            background: var(--gray-100);
+            color: var(--gray-600);
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        body.dark .modal-close {
+            background: var(--bg);
+            color: var(--text-muted);
+        }
+
         .requirement-msg {
             color: var(--secondary);
             font-size: 12px;
@@ -512,7 +653,7 @@
 
                         <button type="submit" class="submit-button">Sign In</button>
                         <div class="form-link">
-                            <a href="#">Forgot password?</a>
+                            <a href="#" id="forgotLink">Forgot password?</a>
                         </div>
                     </form>
 
@@ -634,6 +775,54 @@
             </div>
         </div>
     </footer>
+
+    <div class="modal-overlay" id="resetModal" aria-hidden="true">
+        <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="resetTitle">
+            <button class="modal-close" id="resetClose" aria-label="Close">×</button>
+            <div class="reset-panel" id="resetPanel">
+                <div class="reset-header">
+                    <h3 id="resetTitle">Reset Password</h3>
+                    <p>Verify with your security question to set a new password.</p>
+                </div>
+
+                <form id="resetStepEmail" class="reset-step active">
+                    <div class="form-input-group">
+                        <label>Email Address</label>
+                        <input type="email" id="resetEmail" placeholder="you@example.com">
+                        <div class="error-text" id="resetEmailErr"></div>
+                    </div>
+                    <button type="submit" class="reset-button primary">Continue</button>
+                </form>
+
+                <form id="resetStepVerify" class="reset-step">
+                    <div class="reset-question" id="resetQuestionText"></div>
+
+                    <div class="form-input-group">
+                        <label>Answer</label>
+                        <input type="text" id="resetAnswer" placeholder="Your answer">
+                        <div class="error-text" id="resetAnswerErr"></div>
+                    </div>
+
+                    <div class="form-input-group">
+                        <label>New Password</label>
+                        <input type="password" id="resetNewPass" placeholder="••••••••">
+                        <div class="error-text" id="resetNewPassErr"></div>
+                    </div>
+
+                    <div class="form-input-group">
+                        <label>Confirm New Password</label>
+                        <input type="password" id="resetConfirmPass" placeholder="••••••••">
+                        <div class="error-text" id="resetConfirmPassErr"></div>
+                    </div>
+
+                    <div class="reset-actions">
+                        <button type="button" class="reset-button secondary" id="resetBack">Back</button>
+                        <button type="submit" class="reset-button primary">Reset Password</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <script>
         // Redirect if already logged in
@@ -800,6 +989,147 @@
                 document.querySelectorAll('input, select').forEach(field => field.classList.remove('input-error'));
                 updateAllReqs();
             });
+        });
+
+        // Reset password flow
+        const forgotLink = document.getElementById('forgotLink');
+        const resetModal = document.getElementById('resetModal');
+        const resetClose = document.getElementById('resetClose');
+        const resetPanel = document.getElementById('resetPanel');
+        const resetStepEmail = document.getElementById('resetStepEmail');
+        const resetStepVerify = document.getElementById('resetStepVerify');
+        const resetQuestionText = document.getElementById('resetQuestionText');
+        const resetBack = document.getElementById('resetBack');
+
+        const questionMap = {
+            pet: "What was your first pet's name?",
+            city: "What city were you born in?",
+            school: "What was your elementary school?",
+            teacher: "Favorite teacher's name?",
+            color: "What is your favorite color?"
+        };
+
+        let resetUserIndex = null;
+
+        function showResetPanel() {
+            resetModal.classList.add('show');
+            resetModal.setAttribute('aria-hidden', 'false');
+            resetStepEmail.classList.add('active');
+            resetStepVerify.classList.remove('active');
+            resetUserIndex = null;
+            document.getElementById('resetEmail').value = '';
+            document.getElementById('resetAnswer').value = '';
+            document.getElementById('resetNewPass').value = '';
+            document.getElementById('resetConfirmPass').value = '';
+            document.querySelectorAll('#resetPanel .error-text').forEach(e => e.style.display = 'none');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideResetPanel() {
+            resetModal.classList.remove('show');
+            resetModal.setAttribute('aria-hidden', 'true');
+            resetStepEmail.classList.add('active');
+            resetStepVerify.classList.remove('active');
+            resetUserIndex = null;
+            document.body.style.overflow = '';
+        }
+
+        if (forgotLink) {
+            forgotLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                showResetPanel();
+            });
+        }
+
+        resetClose.addEventListener('click', hideResetPanel);
+
+        resetModal.addEventListener('click', (e) => {
+            if (e.target === resetModal) hideResetPanel();
+        });
+
+        resetBack.addEventListener('click', () => {
+            hideResetPanel();
+        });
+
+        resetStepEmail.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('resetEmail').value.trim();
+            const emailErr = document.getElementById('resetEmailErr');
+            emailErr.style.display = 'none';
+
+            if (!email || !isValidEmail(email)) {
+                emailErr.textContent = email ? 'Enter a valid email address' : 'Email is required';
+                emailErr.style.display = 'block';
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+            const index = users.findIndex(u => u.email.toLowerCase() === email.toLowerCase());
+
+            if (index === -1) {
+                emailErr.textContent = 'No account found with that email';
+                emailErr.style.display = 'block';
+                return;
+            }
+
+            resetUserIndex = index;
+            const questionKey = users[index].securityQuestion;
+            resetQuestionText.textContent = questionMap[questionKey] || 'Security question';
+
+            resetStepEmail.classList.remove('active');
+            resetStepVerify.classList.add('active');
+        });
+
+        resetStepVerify.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const answer = document.getElementById('resetAnswer').value.trim();
+            const newPass = document.getElementById('resetNewPass').value;
+            const confirmPass = document.getElementById('resetConfirmPass').value;
+
+            const answerErr = document.getElementById('resetAnswerErr');
+            const newPassErr = document.getElementById('resetNewPassErr');
+            const confirmErr = document.getElementById('resetConfirmPassErr');
+
+            answerErr.style.display = 'none';
+            newPassErr.style.display = 'none';
+            confirmErr.style.display = 'none';
+
+            let valid = true;
+
+            if (!answer) {
+                answerErr.textContent = 'Answer is required';
+                answerErr.style.display = 'block';
+                valid = false;
+            }
+
+            if (!newPass || newPass.length < 6) {
+                newPassErr.textContent = newPass ? 'Password must be at least 6 characters' : 'New password is required';
+                newPassErr.style.display = 'block';
+                valid = false;
+            }
+
+            if (!confirmPass || confirmPass !== newPass) {
+                confirmErr.textContent = confirmPass ? 'Passwords must match' : 'Confirm your new password';
+                confirmErr.style.display = 'block';
+                valid = false;
+            }
+
+            if (!valid) return;
+
+            const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+            const user = users[resetUserIndex];
+
+            if (!user || user.securityAnswer?.toLowerCase() !== answer.toLowerCase()) {
+                answerErr.textContent = 'Incorrect answer';
+                answerErr.style.display = 'block';
+                return;
+            }
+
+            users[resetUserIndex].password = newPass;
+            localStorage.setItem('registeredUsers', JSON.stringify(users));
+            showNotif('Password reset successful. Please sign in.', 'success');
+            hideResetPanel();
         });
 
         // LOGIN FORM
