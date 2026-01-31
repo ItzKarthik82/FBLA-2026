@@ -434,16 +434,21 @@ function proposeSession() {
 
     // Use already declared variables for date/time formatting
     const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const dayAbbrev = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
                         'July', 'August', 'September', 'October', 'November', 'December'];
+    const monthAbbrev = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     
     const dayName = dayNames[sessionDate.getDay()];
+    const dayShort = dayAbbrev[sessionDate.getDay()];
     const monthName = monthNames[sessionDate.getMonth()];
+    const monthShort = monthAbbrev[sessionDate.getMonth()];
     const dayNum = sessionDate.getDate();
     const ampm = hours >= 12 ? 'PM' : 'AM';
     const displayHours = hours % 12 || 12;
     const displayMinutes = minutes.toString().padStart(2, '0');
     const timeStr = `${displayHours}:${displayMinutes} ${ampm}`;
+    const dateStr = `${dayShort}, ${monthShort} ${dayNum}`;
     const fullDateTimeStr = `${dayName}, ${monthName} ${dayNum}, ${timeStr}`;
     
     // Store the session data
@@ -472,12 +477,301 @@ function proposeSession() {
     
     localStorage.setItem('customSessions', JSON.stringify(sessions));
     
+    // Add the session to the sessions list on the current page
+    const sessionsList = document.querySelector('.sessions-list');
+    if (sessionsList) {
+        // Create or get the custom sessions group
+        let customGroup = document.querySelector('.session-day-group[data-custom="true"]');
+        if (!customGroup) {
+            customGroup = document.createElement('div');
+            customGroup.className = 'session-day-group';
+            customGroup.setAttribute('data-custom', 'true');
+            customGroup.innerHTML = '<div class="day-header-banner"><h3>Your Sessions</h3></div>';
+            sessionsList.appendChild(customGroup);
+        }
+        
+        // Create the session card
+        const sessionCard = document.createElement('div');
+        sessionCard.className = `session-card ${category}`;
+        sessionCard.setAttribute('data-category', category);
+        sessionCard.setAttribute('data-custom', 'true');
+        
+        sessionCard.innerHTML = `
+            <div class="session-time-badge">
+                <div class="time-icon"></div>
+                <div class="time-info">
+                    <span class="time-main">${dateStr}, ${timeStr}</span>
+                    <span class="time-duration">60 min</span>
+                </div>
+            </div>
+            <div class="session-content">
+                <div class="session-header">
+                    <h4>${title}</h4>
+                    <span class="session-badge ${category}-badge">${category.charAt(0).toUpperCase() + category.slice(1)}</span>
+                </div>
+                <div class="session-meta">
+                    <span class="meta-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        ${host}
+                    </span>
+                    <span class="meta-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                        </svg>
+                        ${level}
+                    </span>
+                    <span class="meta-item participants">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                        You're hosting
+                    </span>
+                </div>
+                <p class="session-description">Your custom study session</p>
+            </div>
+            <div class="session-actions">
+                <button class="session-join-btn" onclick="joinSession('${title}', '${meetingLink}', '${host}', '${level}', '${fullDateTimeStr}')">
+                    View Details →
+                </button>
+                <button class="session-edit-btn" onclick="editCustomSession('${title}', '${fullDateTimeStr}', '${host}', '${time}', '${category}', '${level}', '${meetingLink}')">
+                    ✏️ Edit
+                </button>
+                <button class="session-delete-btn" onclick="deleteCustomSession('${title}', '${fullDateTimeStr}')">
+                    🗑️ Delete
+                </button>
+            </div>
+        `;
+        
+        // Add the card to the custom group
+        customGroup.appendChild(sessionCard);
+    }
+    
     // Update month view to show the new session
     updateMonthDisplay();
 
     const actionText = isEditing ? 'updated' : 'added';
     showToast(`Session ${actionText} successfully!`);
     document.getElementById('hostForm').reset();
+}
+
+// Edit custom session
+function editCustomSession(title, fullDateTimeStr, host, timeInput, category, level, meetingLink) {
+    // Populate the modal form with existing values
+    document.getElementById('editSessionTitle').value = title;
+    document.getElementById('editSessionHost').value = host;
+    document.getElementById('editSessionTime').value = timeInput;
+    document.getElementById('editSessionCategory').value = category;
+    document.getElementById('editSessionLevel').value = level;
+    document.getElementById('editMeetingLink').value = meetingLink;
+    
+    // Store the original values for updating
+    editingSession = {
+        title: title,
+        dateTime: fullDateTimeStr,
+        timeInput: timeInput
+    };
+    
+    // Show the modal
+    document.getElementById('editSessionModal').style.display = 'flex';
+}
+
+// Close edit modal
+function closeEditModal() {
+    document.getElementById('editSessionModal').style.display = 'none';
+    editingSession = null;
+}
+
+// Save edited session from modal
+function saveEditedSession() {
+    const title = document.getElementById('editSessionTitle').value;
+    const host = document.getElementById('editSessionHost').value;
+    const time = document.getElementById('editSessionTime').value;
+    const category = document.getElementById('editSessionCategory').value;
+    const level = document.getElementById('editSessionLevel').value;
+    const meetingLink = document.getElementById('editMeetingLink').value || '';
+
+    if (!title || !host || !time) {
+        showToast('Please fill in all fields');
+        return;
+    }
+    
+    // Parse the date/time
+    const sessionDate = new Date(time);
+    const hours = sessionDate.getHours();
+    const minutes = sessionDate.getMinutes();
+    
+    // Use already declared variables for date/time formatting
+    const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const dayAbbrev = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
+                        'July', 'August', 'September', 'October', 'November', 'December'];
+    const monthAbbrev = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    
+    const dayName = dayNames[sessionDate.getDay()];
+    const dayShort = dayAbbrev[sessionDate.getDay()];
+    const monthName = monthNames[sessionDate.getMonth()];
+    const monthShort = monthAbbrev[sessionDate.getMonth()];
+    const dayNum = sessionDate.getDate();
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    const displayHours = hours % 12 || 12;
+    const displayMinutes = minutes.toString().padStart(2, '0');
+    const timeStr = `${displayHours}:${displayMinutes} ${ampm}`;
+    const dateStr = `${dayShort}, ${monthShort} ${dayNum}`;
+    const fullDateTimeStr = `${dayName}, ${monthName} ${dayNum}, ${timeStr}`;
+    
+    // Remove old session from localStorage
+    const sessions = JSON.parse(localStorage.getItem('customSessions') || '[]');
+    const filteredSessions = sessions.filter(s => !(s.title === editingSession.title && s.dateTime === editingSession.dateTime));
+    
+    // Add new session
+    filteredSessions.push({
+        title: title,
+        host: host,
+        dateTime: fullDateTimeStr,
+        category: category,
+        level: level,
+        meetingLink: meetingLink,
+        date: sessionDate.toISOString()
+    });
+    
+    localStorage.setItem('customSessions', JSON.stringify(filteredSessions));
+    
+    // Remove old session card from DOM
+    const sessionsList = document.querySelector('.sessions-list');
+    if (sessionsList) {
+        const cards = sessionsList.querySelectorAll('.session-card[data-custom="true"]');
+        cards.forEach(card => {
+            const h4 = card.querySelector('h4');
+            if (h4 && h4.textContent === editingSession.title) {
+                card.remove();
+            }
+        });
+    }
+    
+    // Close modal and reset
+    closeEditModal();
+    
+    // Re-add the session with updated details (triggers proposeSession logic)
+    editingSession = null;
+    
+    // Create new session card with updated info
+    if (sessionsList) {
+        let customGroup = document.querySelector('.session-day-group[data-custom="true"]');
+        if (!customGroup) {
+            customGroup = document.createElement('div');
+            customGroup.className = 'session-day-group';
+            customGroup.setAttribute('data-custom', 'true');
+            customGroup.innerHTML = '<div class="day-header-banner"><h3>Your Sessions</h3></div>';
+            sessionsList.appendChild(customGroup);
+        }
+        
+        // Create the session card
+        const sessionCard = document.createElement('div');
+        sessionCard.className = `session-card ${category}`;
+        sessionCard.setAttribute('data-category', category);
+        sessionCard.setAttribute('data-custom', 'true');
+        
+        sessionCard.innerHTML = `
+            <div class="session-time-badge">
+                <div class="time-icon"></div>
+                <div class="time-info">
+                    <span class="time-main">${dateStr}, ${timeStr}</span>
+                    <span class="time-duration">60 min</span>
+                </div>
+            </div>
+            <div class="session-content">
+                <div class="session-header">
+                    <h4>${title}</h4>
+                    <span class="session-badge ${category}-badge">${category.charAt(0).toUpperCase() + category.slice(1)}</span>
+                </div>
+                <div class="session-meta">
+                    <span class="meta-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        ${host}
+                    </span>
+                    <span class="meta-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                        </svg>
+                        ${level}
+                    </span>
+                    <span class="meta-item participants">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                        You're hosting
+                    </span>
+                </div>
+                <p class="session-description">Your custom study session</p>
+            </div>
+            <div class="session-actions">
+                <button class="session-join-btn" onclick="joinSession('${title}', '${meetingLink}', '${host}', '${level}', '${fullDateTimeStr}')">
+                    View Details →
+                </button>
+                <button class="session-edit-btn" onclick="editCustomSession('${title}', '${fullDateTimeStr}', '${host}', '${time}', '${category}', '${level}', '${meetingLink}')">
+                    ✏️ Edit
+                </button>
+                <button class="session-delete-btn" onclick="deleteCustomSession('${title}', '${fullDateTimeStr}')">
+                    🗑️ Delete
+                </button>
+            </div>
+        `;
+        
+        // Add the card to the custom group
+        customGroup.appendChild(sessionCard);
+    }
+    
+    // Update month view
+    updateMonthDisplay();
+    
+    showToast('Session updated successfully!');
+}
+
+// Delete custom session
+function deleteCustomSession(title, fullDateTimeStr) {
+    if (!confirm('Are you sure you want to delete this session?')) {
+        return;
+    }
+    
+    // Remove from localStorage
+    const sessions = JSON.parse(localStorage.getItem('customSessions') || '[]');
+    const updatedSessions = sessions.filter(s => !(s.title === title && s.dateTime === fullDateTimeStr));
+    localStorage.setItem('customSessions', JSON.stringify(updatedSessions));
+    
+    // Remove from DOM
+    const sessionsList = document.querySelector('.sessions-list');
+    if (sessionsList) {
+        const cards = sessionsList.querySelectorAll('.session-card[data-custom="true"]');
+        cards.forEach(card => {
+            const h4 = card.querySelector('h4');
+            if (h4 && h4.textContent === title) {
+                card.remove();
+            }
+        });
+        
+        // If no more custom sessions, remove the custom group
+        const customGroup = document.querySelector('.session-day-group[data-custom="true"]');
+        if (customGroup && customGroup.querySelectorAll('.session-card').length === 0) {
+            customGroup.remove();
+        }
+    }
+    
+    // Update month view
+    updateMonthDisplay();
+    
+    showToast('Session deleted successfully!');
 }
 
 // Session reminder system
@@ -2230,6 +2524,12 @@ function initializeSchedulePage() {
             filterSessionCards(filter, this);
         });
     });
+    
+    // Apply initial filter (all sessions)
+    const allBtn = document.querySelector('.pill-btn[data-filter="all"]');
+    if (allBtn && allBtn.classList.contains('active')) {
+        filterSessionCards('all', allBtn);
+    }
 
     // Initialize view toggle buttons
     document.querySelectorAll('.view-btn').forEach(btn => {
@@ -2246,48 +2546,182 @@ function initializeSchedulePage() {
             sortSessionCards(this.value);
         });
     }
+    
+    // Initialize edit modal close on outside click
+    const editModal = document.getElementById('editSessionModal');
+    if (editModal) {
+        window.addEventListener('click', function(event) {
+            if (event.target === editModal) {
+                closeEditModal();
+            }
+        });
+    }
 }
 
 function filterSessionCards(category, button) {
     const sessionCards = document.querySelectorAll('.session-card');
+    const customGroup = document.querySelector('.session-day-group[data-custom="true"]');
     
     // Update button styles
     document.querySelectorAll('.pill-btn').forEach(btn => btn.classList.remove('active'));
     if (button) button.classList.add('active');
     
     // Filter cards
+    let hasVisibleCustomCards = false;
+    
     sessionCards.forEach(card => {
-        if (category === 'all' || card.dataset.category === category) {
+        const cardCategory = card.dataset.category;
+        const isCustom = card.getAttribute('data-custom') === 'true';
+        
+        // Show card if category matches or "all" is selected
+        if (category === 'all' || cardCategory === category) {
             card.style.display = 'grid';
             setTimeout(() => card.classList.add('fade-in'), 10);
+            if (isCustom) {
+                hasVisibleCustomCards = true;
+            }
         } else {
+            // Hide card if it doesn't match the filter
             card.style.display = 'none';
             card.classList.remove('fade-in');
         }
     });
+    
+    // Handle custom group visibility
+    if (customGroup) {
+        // Show custom group only if there are visible custom cards
+        customGroup.style.display = hasVisibleCustomCards ? 'flex' : 'none';
+    }
 }
 
 function switchSessionView(view, button) {
     const sessionsList = document.querySelector('.sessions-list');
     const dayGroups = document.querySelectorAll('.session-day-group');
+    const customGroup = document.querySelector('.session-day-group[data-custom="true"]');
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
     
     // Update button styles
     document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
     if (button) button.classList.add('active');
     
     // Filter day groups based on view
+    let hasVisibleCustomSessions = false;
+    
     dayGroups.forEach((group, index) => {
+        // Handle custom sessions group separately
+        if (group.getAttribute('data-custom') === 'true') {
+            // Filter custom session cards based on view
+            const customCards = group.querySelectorAll('.session-card[data-custom="true"]');
+            customCards.forEach(card => {
+                // Get the date string from the card
+                const timeMain = card.querySelector('.time-main');
+                if (timeMain) {
+                    const dateStr = timeMain.textContent;
+                    const sessionDate = parseSessionDateString(dateStr);
+                    
+                    // Check if session should be visible based on view
+                    let shouldShow = false;
+                    
+                    if (view === 'today') {
+                        shouldShow = sessionDate.toDateString() === today.toDateString();
+                    } else if (view === 'week') {
+                        // Check if session is within this week
+                        const weekEnd = new Date(today);
+                        weekEnd.setDate(weekEnd.getDate() + 6);
+                        shouldShow = sessionDate >= today && sessionDate <= weekEnd;
+                    } else if (view === 'month') {
+                        // Check if session is within this month
+                        shouldShow = sessionDate.getMonth() === today.getMonth() && 
+                                   sessionDate.getFullYear() === today.getFullYear();
+                    } else {
+                        // Upcoming - show all future sessions
+                        shouldShow = sessionDate >= today;
+                    }
+                    
+                    if (shouldShow) {
+                        card.style.display = 'grid';
+                        hasVisibleCustomSessions = true;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                }
+            });
+            
+            // Show or hide custom group based on visible cards
+            group.style.display = hasVisibleCustomSessions ? 'flex' : 'none';
+            return;
+        }
+        
         if (view === 'today') {
             // Show only first group (Today)
             group.style.display = index === 0 ? 'flex' : 'none';
         } else if (view === 'week') {
-            // Show only second group (This Week)
-            group.style.display = index === 1 ? 'flex' : 'none';
+            // Show only third group (This Week)
+            group.style.display = index === 2 ? 'flex' : 'none';
+        } else if (view === 'month') {
+            // For month view, check the group header to determine which month the sessions are in
+            const headerBanner = group.querySelector('.day-header-banner h3');
+            if (headerBanner) {
+                const headerText = headerBanner.textContent;
+                // Parse the month from header (e.g., "Tomorrow - Saturday, February 1" or "Today - Friday, January 31")
+                let groupMonth = null;
+                
+                if (headerText.includes('January')) {
+                    groupMonth = 0;
+                } else if (headerText.includes('February')) {
+                    groupMonth = 1;
+                } else if (headerText.includes('March')) {
+                    groupMonth = 2;
+                } else if (headerText.includes('April')) {
+                    groupMonth = 3;
+                } else if (headerText.includes('May')) {
+                    groupMonth = 4;
+                } else if (headerText.includes('June')) {
+                    groupMonth = 5;
+                } else if (headerText.includes('July')) {
+                    groupMonth = 6;
+                } else if (headerText.includes('August')) {
+                    groupMonth = 7;
+                } else if (headerText.includes('September')) {
+                    groupMonth = 8;
+                } else if (headerText.includes('October')) {
+                    groupMonth = 9;
+                } else if (headerText.includes('November')) {
+                    groupMonth = 10;
+                } else if (headerText.includes('December')) {
+                    groupMonth = 11;
+                }
+                
+                // Show group only if it matches the current month
+                const isCurrentMonth = groupMonth === today.getMonth();
+                group.style.display = isCurrentMonth ? 'flex' : 'none';
+            }
         } else {
             // Show all (Upcoming)
             group.style.display = 'flex';
         }
     });
+}
+
+// Helper function to parse session date string
+function parseSessionDateString(dateStr) {
+    // Expected format: "Mon, Jan 27, 3:00 PM"
+    const monthMap = {
+        'Jan': 0, 'Feb': 1, 'Mar': 2, 'Apr': 3, 'May': 4, 'Jun': 5,
+        'Jul': 6, 'Aug': 7, 'Sep': 8, 'Oct': 9, 'Nov': 10, 'Dec': 11
+    };
+    
+    const parts = dateStr.split(',');
+    if (parts.length >= 3) {
+        const monthDay = parts[1].trim().split(' ');
+        const month = monthMap[monthDay[0]];
+        const day = parseInt(monthDay[1]);
+        const year = new Date().getFullYear();
+        
+        return new Date(year, month, day);
+    }
+    return new Date();
 }
 
 function sortSessionCards(sortType) {

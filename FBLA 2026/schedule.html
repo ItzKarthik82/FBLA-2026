@@ -53,6 +53,7 @@
                     <button class="view-btn active" data-view="upcoming">Upcoming</button>
                     <button class="view-btn" data-view="today">Today</button>
                     <button class="view-btn" data-view="week">This Week</button>
+                    <button class="view-btn" data-view="month">This Month</button>
                 </div>
             </div>
 
@@ -359,6 +360,56 @@
                         </button>
                     </div>
                 </div>
+
+                <!-- Later in February -->
+                <div class="session-day-group">
+                    <div class="day-header-banner">
+                        <h3>February 3-7</h3>
+                    </div>
+                    <div class="session-card math" data-category="math">
+                        <div class="session-time-badge">
+                            <div class="time-icon"></div>
+                            <div class="time-info">
+                                <span class="time-main">Mon, 3:00 PM</span>
+                                <span class="time-duration">60 min</span>
+                            </div>
+                        </div>
+                        <div class="session-content">
+                            <div class="session-header">
+                                <h4>Advanced Calculus</h4>
+                                <span class="session-badge math-badge">Mathematics</span>
+                            </div>
+                            <div class="session-meta">
+                                <span class="meta-item">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="12" cy="7" r="4"></circle>
+                                    </svg>
+                                    Morgan
+                                </span>
+                                <span class="meta-item">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                                    </svg>
+                                    Advanced
+                                </span>
+                                <span class="meta-item participants">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="9" cy="7" r="4"></circle>
+                                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                    </svg>
+                                    7 joined
+                                </span>
+                            </div>
+                            <p class="session-description">Derivatives, integrals, and limits. For students ready to advance their math skills.</p>
+                        </div>
+                        <button class="session-join-btn" onclick="joinSession('Advanced Calculus', 'https://meet.google.com/calc-adv', 'Morgan', 'Advanced', 'Monday, February 3, 3:00 PM')">
+                            Join Session →
+                        </button>
+                    </div>
+                </div>
             </div>
 
             <div class="propose-session">
@@ -385,6 +436,59 @@
             </div>
         </div>
     </main>
+
+    <!-- Edit Session Modal -->
+    <div id="editSessionModal" class="modal" style="display: none;">
+        <div class="modal-content edit-session-modal-content">
+            <div class="modal-header">
+                <h3>Edit Session</h3>
+                <button class="close" onclick="closeEditModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="editSessionForm" onsubmit="saveEditedSession(); return false;">
+                    <div class="form-group">
+                        <label for="editSessionTitle">Session Title</label>
+                        <input type="text" id="editSessionTitle" placeholder="Session Title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editSessionHost">Your Name</label>
+                        <input type="text" id="editSessionHost" placeholder="Your Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editSessionTime">Date & Time</label>
+                        <input type="datetime-local" id="editSessionTime" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editSessionCategory">Category</label>
+                            <select id="editSessionCategory">
+                                <option value="math">Mathematics</option>
+                                <option value="science">Science</option>
+                                <option value="english">English</option>
+                                <option value="history">History</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="editSessionLevel">Level</label>
+                            <select id="editSessionLevel">
+                                <option value="Beginner">Beginner</option>
+                                <option value="Intermediate">Intermediate</option>
+                                <option value="Advanced">Advanced</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="editMeetingLink">Google Meet Link (optional)</label>
+                        <input type="url" id="editMeetingLink" placeholder="Google Meet Link (optional)" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn secondary" onclick="closeEditModal()">Cancel</button>
+                        <button type="submit" class="btn primary">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <footer class="site-footer">
         <div class="container">
