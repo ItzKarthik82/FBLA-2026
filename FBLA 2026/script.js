@@ -554,6 +554,19 @@ function proposeSession() {
     
     // Update month view to show the new session
     updateMonthDisplay();
+    
+    // Reapply current filters to show/hide the new session
+    const activeSubjectBtn = document.querySelector('.pill-btn.active');
+    if (activeSubjectBtn) {
+        const activeCategory = activeSubjectBtn.dataset.filter;
+        filterSessionCards(activeCategory, activeSubjectBtn);
+    }
+    
+    const activeViewBtn = document.querySelector('.view-btn.active');
+    if (activeViewBtn) {
+        const activeView = activeViewBtn.dataset.view;
+        switchSessionView(activeView, activeViewBtn);
+    }
 
     const actionText = isEditing ? 'updated' : 'added';
     showToast(`Session ${actionText} successfully!`);
@@ -736,6 +749,19 @@ function saveEditedSession() {
     // Update month view
     updateMonthDisplay();
     
+    // Reapply current filters to show/hide the updated session
+    const activeSubjectBtn = document.querySelector('.pill-btn.active');
+    if (activeSubjectBtn) {
+        const activeCategory = activeSubjectBtn.dataset.filter;
+        filterSessionCards(activeCategory, activeSubjectBtn);
+    }
+    
+    const activeViewBtn = document.querySelector('.view-btn.active');
+    if (activeViewBtn) {
+        const activeView = activeViewBtn.dataset.view;
+        switchSessionView(activeView, activeViewBtn);
+    }
+    
     showToast('Session updated successfully!');
 }
 
@@ -756,7 +782,8 @@ function deleteCustomSession(title, fullDateTimeStr) {
         const cards = sessionsList.querySelectorAll('.session-card[data-custom="true"]');
         cards.forEach(card => {
             const h4 = card.querySelector('h4');
-            if (h4 && h4.textContent === title) {
+            const timeMain = card.querySelector('.time-main');
+            if (h4 && timeMain && h4.textContent === title && timeMain.textContent.includes(fullDateTimeStr.split(',')[1])) {
                 card.remove();
             }
         });
@@ -770,6 +797,19 @@ function deleteCustomSession(title, fullDateTimeStr) {
     
     // Update month view
     updateMonthDisplay();
+    
+    // Reapply current filters
+    const activeSubjectBtn = document.querySelector('.pill-btn.active');
+    if (activeSubjectBtn) {
+        const activeCategory = activeSubjectBtn.dataset.filter;
+        filterSessionCards(activeCategory, activeSubjectBtn);
+    }
+    
+    const activeViewBtn = document.querySelector('.view-btn.active');
+    if (activeViewBtn) {
+        const activeView = activeViewBtn.dataset.view;
+        switchSessionView(activeView, activeViewBtn);
+    }
     
     showToast('Session deleted successfully!');
 }
@@ -2547,6 +2587,9 @@ function initializeSchedulePage() {
         });
     }
     
+    // Load custom sessions from localStorage on page load
+    loadCustomSessions();
+    
     // Initialize edit modal close on outside click
     const editModal = document.getElementById('editSessionModal');
     if (editModal) {
@@ -2556,6 +2599,101 @@ function initializeSchedulePage() {
             }
         });
     }
+}
+
+// Load and display custom sessions from localStorage
+function loadCustomSessions() {
+    const sessions = JSON.parse(localStorage.getItem('customSessions') || '[]');
+    const sessionsList = document.querySelector('.sessions-list');
+    
+    if (!sessionsList || sessions.length === 0) return;
+    
+    // Create or get the custom sessions group
+    let customGroup = document.querySelector('.session-day-group[data-custom="true"]');
+    if (!customGroup) {
+        customGroup = document.createElement('div');
+        customGroup.className = 'session-day-group';
+        customGroup.setAttribute('data-custom', 'true');
+        customGroup.innerHTML = '<div class="day-header-banner"><h3>Your Sessions</h3></div>';
+        sessionsList.appendChild(customGroup);
+    }
+    
+    // Add each stored session as a card
+    sessions.forEach(session => {
+        const sessionCard = document.createElement('div');
+        sessionCard.className = `session-card ${session.category}`;
+        sessionCard.setAttribute('data-category', session.category);
+        sessionCard.setAttribute('data-custom', 'true');
+        
+        // Parse time from dateTime string
+        const timeMatch = session.dateTime.match(/(\d{1,2}):(\d{2})\s(AM|PM)/);
+        const timeStr = timeMatch ? `${timeMatch[1]}:${timeMatch[2]} ${timeMatch[3]}` : '';
+        
+        // Extract date for display (e.g., "Mon, Jan 27")
+        const dateMatch = session.dateTime.match(/(\w+),\s+(\w+)\s+(\d+)/);
+        let dateStr = '';
+        if (dateMatch) {
+            const dayMap = { 'Sunday': 'Sun', 'Monday': 'Mon', 'Tuesday': 'Tue', 'Wednesday': 'Wed', 'Thursday': 'Thu', 'Friday': 'Fri', 'Saturday': 'Sat' };
+            const monthMap = { 'January': 'Jan', 'February': 'Feb', 'March': 'Mar', 'April': 'Apr', 'May': 'May', 'June': 'Jun', 'July': 'Jul', 'August': 'Aug', 'September': 'Sep', 'October': 'Oct', 'November': 'Nov', 'December': 'Dec' };
+            const dayAbbrev = dayMap[dateMatch[1]] || dateMatch[1];
+            const monthAbbrev = monthMap[dateMatch[2]] || dateMatch[2];
+            dateStr = `${dayAbbrev}, ${monthAbbrev} ${dateMatch[3]}`;
+        }
+        
+        sessionCard.innerHTML = `
+            <div class="session-time-badge">
+                <div class="time-icon"></div>
+                <div class="time-info">
+                    <span class="time-main">${dateStr}, ${timeStr}</span>
+                    <span class="time-duration">60 min</span>
+                </div>
+            </div>
+            <div class="session-content">
+                <div class="session-header">
+                    <h4>${session.title}</h4>
+                    <span class="session-badge ${session.category}-badge">${session.category.charAt(0).toUpperCase() + session.category.slice(1)}</span>
+                </div>
+                <div class="session-meta">
+                    <span class="meta-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        ${session.host}
+                    </span>
+                    <span class="meta-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                        </svg>
+                        ${session.level}
+                    </span>
+                    <span class="meta-item participants">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                        You're hosting
+                    </span>
+                </div>
+                <p class="session-description">Your custom study session</p>
+            </div>
+            <div class="session-actions">
+                <button class="session-join-btn" onclick="joinSession('${session.title}', '${session.meetingLink}', '${session.host}', '${session.level}', '${session.dateTime}')">
+                    View Details →
+                </button>
+                <button class="session-edit-btn" onclick="editCustomSession('${session.title}', '${session.dateTime}', '${session.host}', '${session.date}', '${session.category}', '${session.level}', '${session.meetingLink}')">
+                    ✏️ Edit
+                </button>
+                <button class="session-delete-btn" onclick="deleteCustomSession('${session.title}', '${session.dateTime}')">
+                    🗑️ Delete
+                </button>
+            </div>
+        `;
+        
+        customGroup.appendChild(sessionCard);
+    });
 }
 
 function filterSessionCards(category, button) {
