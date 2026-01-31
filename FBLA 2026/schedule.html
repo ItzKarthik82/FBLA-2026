@@ -43,10 +43,6 @@
                     <p>Join interactive study sessions, group discussions, and peer tutoring</p>
                 </div>
                 <div class="schedule-actions">
-                    <select id="viewToggle" class="view-selector">
-                        <option value="week">Week View</option>
-                        <option value="month">Month View</option>
-                    </select>
                     <button class="btn primary" onclick="document.getElementById('hostForm').scrollIntoView({behavior: 'smooth'})">+ Create Session</button>
                 </div>
             </div>
@@ -60,7 +56,7 @@
                 </button>
                 <div class="week-info">
                     <h3 id="weekDisplay">January 25 - 31, 2026</h3>
-                    <span id="currentWeekBadge" class="current-week-badge" style="display: none;">Current Week</span>
+                    <span id="currentWeekBadge" class="current-week-badge">Current Month</span>
                     <button class="today-btn" onclick="goToToday()">Today</button>
                 </div>
                 <button class="nav-btn" onclick="nextWeek()">
@@ -328,6 +324,9 @@
                     <input type="text" id="sessionTitle" placeholder="Session Title" required>
                     <input type="text" id="sessionHost" placeholder="Your Name" required>
                     <input type="datetime-local" id="sessionTime" required>
+                    <div style="color: #f59e0b; font-size: 13px; margin-top: -8px; margin-bottom: 12px; display: flex; align-items: center; gap: 4px;">
+                        ⚠️ Sessions can only be scheduled between 8:00 AM and 9:00 PM
+                    </div>
                     <select id="sessionCategory">
                         <option value="math">Mathematics</option>
                         <option value="science">Science</option>

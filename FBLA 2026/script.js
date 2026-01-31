@@ -400,6 +400,17 @@ function proposeSession() {
         return;
     }
     
+    // Parse the date/time to check time restrictions
+    const sessionDate = new Date(time);
+    const hours = sessionDate.getHours();
+    const minutes = sessionDate.getMinutes();
+    
+    // Check if time is between 8:00 AM and 9:00 PM
+    if (hours < 8 || hours >= 21) {
+        showToast('Sessions can only be hosted between 8:00 AM and 9:00 PM');
+        return;
+    }
+    
     // Track if we're editing
     const isEditing = editingSession !== null;
     
@@ -427,8 +438,7 @@ function proposeSession() {
         editingSession = null; // Clear the editing state
     }
 
-    // Parse the date/time
-    const sessionDate = new Date(time);
+    // Use already declared variables for date/time formatting
     const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
                         'July', 'August', 'September', 'October', 'November', 'December'];
@@ -436,8 +446,6 @@ function proposeSession() {
     const dayName = dayNames[sessionDate.getDay()];
     const monthName = monthNames[sessionDate.getMonth()];
     const dayNum = sessionDate.getDate();
-    const hours = sessionDate.getHours();
-    const minutes = sessionDate.getMinutes();
     const ampm = hours >= 12 ? 'PM' : 'AM';
     const displayHours = hours % 12 || 12;
     const displayMinutes = minutes.toString().padStart(2, '0');
@@ -813,56 +821,42 @@ let currentMonthOffset = 0;
 let currentView = 'week';
 
 function switchView(view) {
-    currentView = view;
+    // Only month view is supported now
+    currentView = 'month';
     const calendarWrapper = document.querySelector('.calendar-wrapper');
-    const monthWrapper = document.querySelector('.month-calendar-wrapper');
-    const currentWeekBadge = document.getElementById('currentWeekBadge');
+    let monthWrapper = document.querySelector('.month-calendar-wrapper');
     
-    if (view === 'month') {
-        if (calendarWrapper) calendarWrapper.style.display = 'none';
-        if (currentWeekBadge) currentWeekBadge.style.display = 'none';
-        if (monthWrapper) {
-            monthWrapper.style.display = 'block';
-            updateMonthDisplay();
-        } else {
-            // Create month view if it doesn't exist
-            createMonthView();
-        }
-    } else {
-        if (calendarWrapper) calendarWrapper.style.display = 'block';
-        if (monthWrapper) monthWrapper.style.display = 'none';
-        updateWeekDisplay();
+    // Hide week view
+    if (calendarWrapper) calendarWrapper.style.display = 'none';
+    
+    // Create or show month view
+    if (!monthWrapper) {
+        createMonthView();
+        monthWrapper = document.querySelector('.month-calendar-wrapper');
+    }
+    
+    if (monthWrapper) {
+        monthWrapper.style.display = 'block';
+        updateMonthDisplay();
     }
 }
 
 function previousWeek() {
-    if (currentView === 'week') {
-        currentWeekOffset--;
-        updateWeekDisplay();
-    } else {
-        currentMonthOffset--;
-        updateMonthDisplay();
-    }
+    // Navigate to previous month
+    currentMonthOffset--;
+    updateMonthDisplay();
 }
 
 function nextWeek() {
-    if (currentView === 'week') {
-        currentWeekOffset++;
-        updateWeekDisplay();
-    } else {
-        currentMonthOffset++;
-        updateMonthDisplay();
-    }
+    // Navigate to next month
+    currentMonthOffset++;
+    updateMonthDisplay();
 }
 
 function goToToday() {
-    if (currentView === 'week') {
-        currentWeekOffset = 0;
-        updateWeekDisplay();
-    } else {
-        currentMonthOffset = 0;
-        updateMonthDisplay();
-    }
+    // Go to current month
+    currentMonthOffset = 0;
+    updateMonthDisplay();
 }
 
 function createMonthView() {
@@ -893,6 +887,7 @@ function createMonthView() {
 
 function updateMonthDisplay() {
     const weekDisplay = document.getElementById('weekDisplay');
+    const currentWeekBadge = document.getElementById('currentWeekBadge');
     const today = new Date();
     const displayDate = new Date(today.getFullYear(), today.getMonth() + currentMonthOffset, 1);
     
@@ -901,6 +896,15 @@ function updateMonthDisplay() {
     
     if (weekDisplay) {
         weekDisplay.textContent = `${monthNames[displayDate.getMonth()]} ${displayDate.getFullYear()}`;
+    }
+    
+    // Show "Current Month" badge only when viewing the current month
+    if (currentWeekBadge) {
+        if (currentMonthOffset === 0) {
+            currentWeekBadge.style.display = 'inline-flex';
+        } else {
+            currentWeekBadge.style.display = 'none';
+        }
     }
     
     const monthGridBody = document.getElementById('monthGridBody');
@@ -2099,13 +2103,8 @@ document.addEventListener('DOMContentLoaded', function() {
         todayBtn.onclick = goToToday;
     }
 
-    // View toggle event listener
-    const viewToggle = document.getElementById('viewToggle');
-    if (viewToggle) {
-        viewToggle.addEventListener('change', function() {
-            switchView(this.value);
-        });
-    }
+    // Initialize month view by default
+    switchView('month');
 
     // Request notification permission
     requestNotificationPermission();
