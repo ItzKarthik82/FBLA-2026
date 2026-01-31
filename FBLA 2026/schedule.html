@@ -47,23 +47,20 @@
                 </div>
             </div>
 
-            <!-- Calendar Navigation -->
-            <div class="calendar-nav">
-                <button class="nav-btn" onclick="previousWeek()">
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"/>
-                    </svg>
-                </button>
-                <div class="week-info">
-                    <h3 id="weekDisplay">January 25 - 31, 2026</h3>
-                    <span id="currentWeekBadge" class="current-week-badge">Current Month</span>
-                    <button class="today-btn" onclick="goToToday()">Today</button>
+            <!-- View Toggle & Sort Options -->
+            <div class="schedule-controls">
+                <div class="view-options">
+                    <button class="view-btn active" data-view="upcoming">📅 Upcoming</button>
+                    <button class="view-btn" data-view="today">⭐ Today</button>
+                    <button class="view-btn" data-view="week">📆 This Week</button>
                 </div>
-                <button class="nav-btn" onclick="nextWeek()">
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"/>
-                    </svg>
-                </button>
+                <div class="sort-options">
+                    <select id="sortSelect" class="sort-select">
+                        <option value="time">Sort by Time</option>
+                        <option value="subject">Sort by Subject</option>
+                        <option value="level">Sort by Level</option>
+                    </select>
+                </div>
             </div>
 
             <!-- Subject Filter Pills -->
@@ -85,234 +82,288 @@
                 </button>
             </div>
 
-            <!-- Calendar View -->
-            <div class="calendar-wrapper">
-                <div class="calendar-header">
-                    <div class="time-column-header">Time</div>
-                    <div class="day-header">
-                        <div class="day-name">Sunday</div>
-                        <div class="day-number">25</div>
+            <!-- Sessions List View -->
+            <div class="sessions-list">
+                <!-- Today's Sessions -->
+                <div class="session-day-group">
+                    <div class="day-header-banner today">
+                        <h3>🔥 Today - Friday, January 31</h3>
                     </div>
-                    <div class="day-header">
-                        <div class="day-name">Monday</div>
-                        <div class="day-number">26</div>
-                    </div>
-                    <div class="day-header">
-                        <div class="day-name">Tuesday</div>
-                        <div class="day-number">27</div>
-                    </div>
-                    <div class="day-header">
-                        <div class="day-name">Wednesday</div>
-                        <div class="day-number">28</div>
-                    </div>
-                    <div class="day-header">
-                        <div class="day-name">Thursday</div>
-                        <div class="day-number">29</div>
-                    </div>
-                    <div class="day-header">
-                        <div class="day-name">Friday</div>
-                        <div class="day-number">30</div>
-                    </div>
-                    <div class="day-header">
-                        <div class="day-name">Saturday</div>
-                        <div class="day-number">31</div>
+                    <div class="session-card math" data-category="math">
+                        <div class="session-time-badge">
+                            <div class="time-icon">🕐</div>
+                            <div class="time-info">
+                                <span class="time-main">12:00 PM</span>
+                                <span class="time-duration">60 min</span>
+                            </div>
+                        </div>
+                        <div class="session-content">
+                            <div class="session-header">
+                                <h4>Geometry Concepts</h4>
+                                <span class="session-badge math-badge">Mathematics</span>
+                            </div>
+                            <div class="session-meta">
+                                <span class="meta-item">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="12" cy="7" r="4"></circle>
+                                    </svg>
+                                    Casey
+                                </span>
+                                <span class="meta-item">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                                    </svg>
+                                    Intermediate
+                                </span>
+                                <span class="meta-item participants">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="9" cy="7" r="4"></circle>
+                                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                    </svg>
+                                    12 joined
+                                </span>
+                            </div>
+                            <p class="session-description">Master geometric shapes, angles, and theorems. Perfect for visual learners!</p>
+                        </div>
+                        <button class="session-join-btn" onclick="joinSession('Geometry Concepts', 'https://meet.google.com/geo-metri', 'Casey', 'Intermediate', 'Saturday, January 31, 12:00 PM')">
+                            Join Session →
+                        </button>
                     </div>
                 </div>
-                
-                <div class="calendar-body">
-                    <!-- Time Slots Column -->
-                    <div class="time-column">
-                        <div class="time-slot">8 AM</div>
-                        <div class="time-slot">9 AM</div>
-                        <div class="time-slot">10 AM</div>
-                        <div class="time-slot">11 AM</div>
-                        <div class="time-slot">12 PM</div>
-                        <div class="time-slot">1 PM</div>
-                        <div class="time-slot">2 PM</div>
-                        <div class="time-slot">3 PM</div>
-                        <div class="time-slot">4 PM</div>
-                        <div class="time-slot">5 PM</div>
-                        <div class="time-slot">6 PM</div>
-                        <div class="time-slot">7 PM</div>
-                        <div class="time-slot">8 PM</div>
-                        <div class="time-slot">9 PM</div>
+
+                <!-- Tomorrow's Sessions -->
+                <div class="session-day-group">
+                    <div class="day-header-banner">
+                        <h3>📅 Tomorrow - Saturday, February 1</h3>
+                    </div>
+                    <div class="session-card science" data-category="science">
+                        <div class="session-time-badge">
+                            <div class="time-icon">🕐</div>
+                            <div class="time-info">
+                                <span class="time-main">6:00 PM</span>
+                                <span class="time-duration">90 min</span>
+                            </div>
+                        </div>
+                        <div class="session-content">
+                            <div class="session-header">
+                                <h4>Chemistry Lab Basics</h4>
+                                <span class="session-badge science-badge">Science</span>
+                            </div>
+                            <div class="session-meta">
+                                <span class="meta-item">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="12" cy="7" r="4"></circle>
+                                    </svg>
+                                    Riley
+                                </span>
+                                <span class="meta-item">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                                    </svg>
+                                    Intermediate
+                                </span>
+                                <span class="meta-item participants">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="9" cy="7" r="4"></circle>
+                                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                    </svg>
+                                    8 joined
+                                </span>
+                            </div>
+                            <p class="session-description">Learn essential lab safety and basic chemical reactions. Hands-on virtual demonstrations included.</p>
+                        </div>
+                        <button class="session-join-btn" onclick="joinSession('Chemistry Lab Basics', 'https://meet.google.com/chem-lab', 'Riley', 'Intermediate', 'Sunday, January 25, 6:00 PM')">
+                            Join Session →
+                        </button>
+                    </div>
+                </div>
+
+                <!-- This Week -->
+                <div class="session-day-group">
+                    <div class="day-header-banner">
+                        <h3>📆 This Week</h3>
                     </div>
                     
-                    <!-- Calendar Grid -->
-                    <div class="calendar-grid-body">
-                        <!-- Sunday (Jan 25) -->
-                        <div class="day-column" data-day="sunday">
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block session-slot">
-                                <div class="calendar-event science" data-category="science" onclick="joinSession('Chemistry Lab Basics', 'https://meet.google.com/chem-lab', 'Riley', 'Intermediate', 'Sunday, January 25, 6:00 PM')">
-                                    <div class="event-time">6:00 PM</div>
-                                    <div class="event-title">Chemistry Lab Basics</div>
-                                    <div class="event-meta">
-                                        <span>👤 Riley</span>
-                                        <span>📊 Intermediate</span>
-                                    </div>
-                                </div>
+                    <div class="session-card math" data-category="math">
+                        <div class="session-time-badge">
+                            <div class="time-icon">🕐</div>
+                            <div class="time-info">
+                                <span class="time-main">Tue, 4:00 PM</span>
+                                <span class="time-duration">60 min</span>
                             </div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
                         </div>
-                        <!-- Monday (Jan 26) -->
-                        <div class="day-column" data-day="monday">
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                        </div>
-                        <!-- Tuesday (Jan 27) -->
-                        <div class="day-column" data-day="tuesday">
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block session-slot">
-                                <div class="calendar-event math" data-category="math" onclick="joinSession('Algebra Fundamentals', 'https://meet.google.com/abc-defg-hij', 'Alex', 'Beginner', 'Tuesday, January 27, 4:00 PM')">
-                                    <div class="event-time">4:00 PM</div>
-                                    <div class="event-title">Algebra Fundamentals</div>
-                                    <div class="event-meta">
-                                        <span>👤 Alex</span>
-                                        <span>📊 Beginner</span>
-                                    </div>
-                                </div>
+                        <div class="session-content">
+                            <div class="session-header">
+                                <h4>Algebra Fundamentals</h4>
+                                <span class="session-badge math-badge">Mathematics</span>
                             </div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                        </div>
-                        <!-- Wednesday (Jan 28) -->
-                        <div class="day-column" data-day="wednesday">
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block session-slot">
-                                <div class="calendar-event science" data-category="science" onclick="joinSession('Biology Basics', 'https://meet.google.com/bio-logy-101', 'Jordan', 'Beginner', 'Wednesday, January 28, 6:00 PM')">
-                                    <div class="event-time">6:00 PM</div>
-                                    <div class="event-title">Biology Basics</div>
-                                    <div class="event-meta">
-                                        <span>👤 Jordan</span>
-                                        <span>📊 Beginner</span>
-                                    </div>
-                                </div>
+                            <div class="session-meta">
+                                <span class="meta-item">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="12" cy="7" r="4"></circle>
+                                    </svg>
+                                    Alex
+                                </span>
+                                <span class="meta-item">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                                    </svg>
+                                    Beginner
+                                </span>
+                                <span class="meta-item participants">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="9" cy="7" r="4"></circle>
+                                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                    </svg>
+                                    15 joined
+                                </span>
                             </div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
+                            <p class="session-description">Start your algebra journey! Variables, equations, and problem-solving basics.</p>
                         </div>
-                        <!-- Thursday (Jan 29) -->
-                        <div class="day-column" data-day="thursday">
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block session-slot">
-                                <div class="calendar-event english" data-category="english" onclick="joinSession('Essay Writing', 'https://meet.google.com/essay-write', 'Sam', 'Intermediate', 'Thursday, January 29, 5:30 PM')">
-                                    <div class="event-time">5:30 PM</div>
-                                    <div class="event-title">Essay Writing</div>
-                                    <div class="event-meta">
-                                        <span>👤 Sam</span>
-                                        <span>📊 Intermediate</span>
-                                    </div>
-                                </div>
+                        <button class="session-join-btn" onclick="joinSession('Algebra Fundamentals', 'https://meet.google.com/abc-defg-hij', 'Alex', 'Beginner', 'Tuesday, January 27, 4:00 PM')">
+                            Join Session →
+                        </button>
+                    </div>
+
+                    <div class="session-card science" data-category="science">
+                        <div class="session-time-badge">
+                            <div class="time-icon">🕐</div>
+                            <div class="time-info">
+                                <span class="time-main">Wed, 6:00 PM</span>
+                                <span class="time-duration">75 min</span>
                             </div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
                         </div>
-                        <!-- Friday (Jan 30) -->
-                        <div class="day-column" data-day="friday">
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block session-slot">
-                                <div class="calendar-event history" data-category="history" onclick="joinSession('World History Overview', 'https://meet.google.com/world-hist', 'Taylor', 'Beginner', 'Friday, January 30, 7:00 PM')">
-                                    <div class="event-time">7:00 PM</div>
-                                    <div class="event-title">World History Overview</div>
-                                    <div class="event-meta">
-                                        <span>👤 Taylor</span>
-                                        <span>📊 Beginner</span>
-                                    </div>
-                                </div>
+                        <div class="session-content">
+                            <div class="session-header">
+                                <h4>Biology Basics</h4>
+                                <span class="session-badge science-badge">Science</span>
                             </div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                        </div>
-                        <!-- Saturday (Jan 31) -->
-                        <div class="day-column" data-day="saturday">
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block session-slot">
-                                <div class="calendar-event math" data-category="math" onclick="joinSession('Geometry Concepts', 'https://meet.google.com/geo-metri', 'Casey', 'Intermediate', 'Saturday, January 31, 12:00 PM')">
-                                    <div class="event-time">12:00 PM</div>
-                                    <div class="event-title">Geometry Concepts</div>
-                                    <div class="event-meta">
-                                        <span>👤 Casey</span>
-                                        <span>📊 Intermediate</span>
-                                    </div>
-                                </div>
+                            <div class="session-meta">
+                                <span class="meta-item">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="12" cy="7" r="4"></circle>
+                                    </svg>
+                                    Jordan
+                                </span>
+                                <span class="meta-item">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                                    </svg>
+                                    Beginner
+                                </span>
+                                <span class="meta-item participants">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="9" cy="7" r="4"></circle>
+                                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                    </svg>
+                                    10 joined
+                                </span>
                             </div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
-                            <div class="time-block"></div>
+                            <p class="session-description">Introduction to cells, organisms, and life processes. Great for beginners!</p>
                         </div>
+                        <button class="session-join-btn" onclick="joinSession('Biology Basics', 'https://meet.google.com/bio-logy-101', 'Jordan', 'Beginner', 'Wednesday, January 28, 6:00 PM')">
+                            Join Session →
+                        </button>
+                    </div>
+
+                    <div class="session-card english" data-category="english">
+                        <div class="session-time-badge">
+                            <div class="time-icon">🕐</div>
+                            <div class="time-info">
+                                <span class="time-main">Thu, 5:30 PM</span>
+                                <span class="time-duration">90 min</span>
+                            </div>
+                        </div>
+                        <div class="session-content">
+                            <div class="session-header">
+                                <h4>Essay Writing</h4>
+                                <span class="session-badge english-badge">English</span>
+                            </div>
+                            <div class="session-meta">
+                                <span class="meta-item">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="12" cy="7" r="4"></circle>
+                                    </svg>
+                                    Sam
+                                </span>
+                                <span class="meta-item">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                                    </svg>
+                                    Intermediate
+                                </span>
+                                <span class="meta-item participants">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="9" cy="7" r="4"></circle>
+                                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                    </svg>
+                                    18 joined
+                                </span>
+                            </div>
+                            <p class="session-description">Master essay structure, thesis statements, and persuasive arguments. Peer review included.</p>
+                        </div>
+                        <button class="session-join-btn" onclick="joinSession('Essay Writing', 'https://meet.google.com/essay-write', 'Sam', 'Intermediate', 'Thursday, January 29, 5:30 PM')">
+                            Join Session →
+                        </button>
+                    </div>
+
+                    <div class="session-card history" data-category="history">
+                        <div class="session-time-badge">
+                            <div class="time-icon">🕐</div>
+                            <div class="time-info">
+                                <span class="time-main">Fri, 7:00 PM</span>
+                                <span class="time-duration">60 min</span>
+                            </div>
+                        </div>
+                        <div class="session-content">
+                            <div class="session-header">
+                                <h4>World History Overview</h4>
+                                <span class="session-badge history-badge">History</span>
+                            </div>
+                            <div class="session-meta">
+                                <span class="meta-item">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="12" cy="7" r="4"></circle>
+                                    </svg>
+                                    Taylor
+                                </span>
+                                <span class="meta-item">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                                    </svg>
+                                    Beginner
+                                </span>
+                                <span class="meta-item participants">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="9" cy="7" r="4"></circle>
+                                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                    </svg>
+                                    9 joined
+                                </span>
+                            </div>
+                            <p class="session-description">Journey through major world events and civilizations. Interactive timeline discussions.</p>
+                        </div>
+                        <button class="session-join-btn" onclick="joinSession('World History Overview', 'https://meet.google.com/world-hist', 'Taylor', 'Beginner', 'Friday, January 30, 7:00 PM')">
+                            Join Session →
+                        </button>
                     </div>
                 </div>
             </div>

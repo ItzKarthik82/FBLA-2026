@@ -2147,6 +2147,11 @@ document.addEventListener('DOMContentLoaded', function() {
         card.style.animationDelay = `${index * 0.1}s`;
         card.classList.add('fade-in');
     });
+
+    // Schedule page specific functionality
+    if (window.location.pathname.includes('schedule.html')) {
+        initializeSchedulePage();
+    }
 });
 
 // Ensure lesson progress is updated when page becomes visible (e.g., from cache)
@@ -2214,4 +2219,103 @@ function saveStudyTime() {
             hoursElement.textContent = hours;
         }
     }
+}
+
+// New Schedule Page Functions
+function initializeSchedulePage() {
+    // Initialize filter pills
+    document.querySelectorAll('.pill-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const filter = this.dataset.filter;
+            filterSessionCards(filter, this);
+        });
+    });
+
+    // Initialize view toggle buttons
+    document.querySelectorAll('.view-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const view = this.dataset.view;
+            switchSessionView(view, this);
+        });
+    });
+
+    // Initialize sort dropdown
+    const sortSelect = document.getElementById('sortSelect');
+    if (sortSelect) {
+        sortSelect.addEventListener('change', function() {
+            sortSessionCards(this.value);
+        });
+    }
+}
+
+function filterSessionCards(category, button) {
+    const sessionCards = document.querySelectorAll('.session-card');
+    
+    // Update button styles
+    document.querySelectorAll('.pill-btn').forEach(btn => btn.classList.remove('active'));
+    if (button) button.classList.add('active');
+    
+    // Filter cards
+    sessionCards.forEach(card => {
+        if (category === 'all' || card.dataset.category === category) {
+            card.style.display = 'grid';
+            setTimeout(() => card.classList.add('fade-in'), 10);
+        } else {
+            card.style.display = 'none';
+            card.classList.remove('fade-in');
+        }
+    });
+}
+
+function switchSessionView(view, button) {
+    const sessionsList = document.querySelector('.sessions-list');
+    const dayGroups = document.querySelectorAll('.session-day-group');
+    
+    // Update button styles
+    document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
+    if (button) button.classList.add('active');
+    
+    // Filter day groups based on view
+    dayGroups.forEach((group, index) => {
+        if (view === 'today') {
+            // Show only first group (Today)
+            group.style.display = index === 0 ? 'flex' : 'none';
+        } else if (view === 'week') {
+            // Show only second group (This Week)
+            group.style.display = index === 1 ? 'flex' : 'none';
+        } else {
+            // Show all (Upcoming)
+            group.style.display = 'flex';
+        }
+    });
+}
+
+function sortSessionCards(sortType) {
+    const sessionsList = document.querySelector('.sessions-list');
+    const allCards = Array.from(document.querySelectorAll('.session-card'));
+    
+    allCards.sort((a, b) => {
+        if (sortType === 'time') {
+            const timeA = a.querySelector('.time-main').textContent;
+            const timeB = b.querySelector('.time-main').textContent;
+            return timeA.localeCompare(timeB);
+        } else if (sortType === 'subject') {
+            const categoryA = a.dataset.category || '';
+            const categoryB = b.dataset.category || '';
+            return categoryA.localeCompare(categoryB);
+        } else if (sortType === 'level') {
+            const levelA = a.querySelector('.meta-item:nth-of-type(2)')?.textContent || '';
+            const levelB = b.querySelector('.meta-item:nth-of-type(2)')?.textContent || '';
+            return levelA.localeCompare(levelB);
+        }
+        return 0;
+    });
+    
+    // Re-insert sorted cards back into their groups
+    allCards.forEach(card => {
+        const parentGroup = card.parentElement;
+        if (parentGroup) {
+            parentGroup.appendChild(card);
+        }
+    });
 }
