@@ -400,16 +400,10 @@ function proposeSession() {
         return;
     }
     
-    // Parse the date/time to check time restrictions
+    // Parse the date/time
     const sessionDate = new Date(time);
     const hours = sessionDate.getHours();
     const minutes = sessionDate.getMinutes();
-    
-    // Check if time is between 8:00 AM and 9:00 PM
-    if (hours < 8 || hours >= 21) {
-        showToast('Sessions can only be hosted between 8:00 AM and 9:00 PM');
-        return;
-    }
     
     // Track if we're editing
     const isEditing = editingSession !== null;
@@ -452,51 +446,34 @@ function proposeSession() {
     const timeStr = `${displayHours}:${displayMinutes} ${ampm}`;
     const fullDateTimeStr = `${dayName}, ${monthName} ${dayNum}, ${timeStr}`;
     
-    // Calculate which time slot (8 AM = 0, 9 AM = 1, ..., 9 PM = 13)
-    const slotIndex = hours - 8; // 8 AM to 9 PM slots (0-13)
+    // Store the session data
+    const sessions = JSON.parse(localStorage.getItem('customSessions') || '[]');
     
-    // Find the correct day column
-    const dayColumns = document.querySelectorAll('.day-column');
-    let targetColumn = null;
-    
-    dayColumns.forEach(col => {
-        if (col.getAttribute('data-day') === dayName.toLowerCase()) {
-            targetColumn = col;
+    // If editing, remove the old session first
+    if (isEditing) {
+        const editIndex = sessions.findIndex(s => 
+            s.title === editingSession.title && s.dateTime === editingSession.dateTime
+        );
+        if (editIndex > -1) {
+            sessions.splice(editIndex, 1);
         }
+    }
+    
+    // Add the new session
+    sessions.push({
+        title: title,
+        host: host,
+        dateTime: fullDateTimeStr,
+        category: category,
+        level: level,
+        meetingLink: meetingLink,
+        date: sessionDate.toISOString()
     });
     
-    if (targetColumn && slotIndex >= 0 && slotIndex < 14) {
-        // Find the time block at the correct slot
-        const timeBlocks = targetColumn.querySelectorAll('.time-block');
-        const targetBlock = timeBlocks[slotIndex];
-        
-        if (targetBlock) {
-            // Create new event element
-            const eventDiv = document.createElement('div');
-            eventDiv.className = `calendar-event ${category}`;
-            eventDiv.setAttribute('data-category', category);
-            eventDiv.setAttribute('data-custom', 'true');
-            eventDiv.setAttribute('onclick', `joinSession('${title}', '${meetingLink}', '${host}', '${level}', '${fullDateTimeStr}', true)`);
-            eventDiv.innerHTML = `
-                <div class="event-time">${timeStr}</div>
-                <div class="event-title">${title}</div>
-                <div class="event-meta">
-                    <span>👤 ${host}</span>
-                    <span>📊 ${level}</span>
-                </div>
-            `;
-            
-            // Clear any existing content and add the event
-            targetBlock.innerHTML = '';
-            targetBlock.appendChild(eventDiv);
-            targetBlock.classList.add('session-slot');
-        }
-    }
+    localStorage.setItem('customSessions', JSON.stringify(sessions));
     
-    // Update month view if it exists
-    if (currentView === 'month') {
-        updateMonthDisplay();
-    }
+    // Update month view to show the new session
+    updateMonthDisplay();
 
     const actionText = isEditing ? 'updated' : 'added';
     showToast(`Session ${actionText} successfully!`);
@@ -950,6 +927,34 @@ function updateMonthDisplay() {
                     }
                 }
             }
+        }
+    });
+    
+    // Load custom sessions from localStorage
+    const customSessions = JSON.parse(localStorage.getItem('customSessions') || '[]');
+    customSessions.forEach(session => {
+        const sessionDate = new Date(session.date);
+        if (sessionDate.getMonth() === displayDate.getMonth() && 
+            sessionDate.getFullYear() === displayDate.getFullYear()) {
+            const dayNum = sessionDate.getDate();
+            
+            if (!eventsMap.has(dayNum)) {
+                eventsMap.set(dayNum, []);
+            }
+            
+            const hours = sessionDate.getHours();
+            const minutes = sessionDate.getMinutes();
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            const displayHours = hours % 12 || 12;
+            const displayMinutes = minutes.toString().padStart(2, '0');
+            const timeStr = `${displayHours}:${displayMinutes} ${ampm}`;
+            
+            eventsMap.get(dayNum).push({
+                title: session.title,
+                time: timeStr,
+                category: session.category,
+                onclick: `joinSession('${session.title}', '${session.meetingLink}', '${session.host}', '${session.level}', '${session.dateTime}', true)`
+            });
         }
     });
     
