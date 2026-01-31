@@ -2778,7 +2778,7 @@ body.dark .achievements-section h3 {
 }
 
 .achievement:hover {
-    transform: translateY(-4px) scale(1.02);
+    transform: translateY(-4px);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
 }
 
@@ -2790,12 +2790,6 @@ body.dark .achievement {
 .achievement.unlocked {
     border: 2px solid var(--success);
     background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(5, 150, 105, 0.05));
-    animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-    0%, 100% { box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); }
-    50% { box-shadow: 0 8px 30px rgba(16, 185, 129, 0.5); }
 }
 
 .achievement.locked {
@@ -2811,11 +2805,6 @@ body.dark .achievement {
     font-size: 48px;
     margin-bottom: 12px;
     display: inline-block;
-    transition: transform 0.3s ease;
-}
-
-.achievement:hover .achievement-icon {
-    transform: scale(1.2) rotate(10deg);
 }
 
 .achievement h4 {
