@@ -126,15 +126,17 @@ function showToast(message) {
     toast.textContent = message;
     toast.style.cssText = `
         position: fixed;
-        top: 20px;
+        bottom: 20px;
         right: 20px;
         background: var(--primary);
         color: white;
-        padding: 12px 24px;
-        border-radius: 8px;
+        padding: 10px 16px;
+        border-radius: 6px;
         box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         z-index: 1000;
         animation: slideIn 0.3s ease-out;
+        font-size: 13px;
+        max-width: 250px;
     `;
 
     document.body.appendChild(toast);
@@ -142,7 +144,7 @@ function showToast(message) {
     setTimeout(() => {
         toast.style.animation = 'slideOut 0.3s ease-in';
         setTimeout(() => document.body.removeChild(toast), 300);
-    }, 3000);
+    }, 5000);
 }
 
 function resetAll() {

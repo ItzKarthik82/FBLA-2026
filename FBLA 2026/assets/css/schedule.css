@@ -392,6 +392,93 @@ body.dark .session-description {
     transform: translateY(-1px);
 }
 
+/* Propose/Create Session Form */
+.propose-session {
+    background: var(--white);
+    padding: 40px;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+    margin-top: 60px;
+    margin-bottom: 40px;
+}
+
+body.dark .propose-session {
+    background: var(--card-bg);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.propose-session h3 {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+    color: var(--gray-900);
+}
+
+body.dark .propose-session h3 {
+    color: var(--text);
+}
+
+.propose-session > p {
+    margin: 0 0 28px 0;
+    color: var(--gray-600);
+    font-size: 14px;
+}
+
+body.dark .propose-session > p {
+    color: var(--text-muted);
+}
+
+.propose-session form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 16px;
+}
+
+.propose-session input,
+.propose-session select,
+.propose-session textarea {
+    padding: 12px 14px;
+    border: 1px solid var(--gray-300);
+    border-radius: var(--border-radius);
+    font-size: 14px;
+    font-family: inherit;
+    transition: var(--transition);
+    background: var(--white);
+    color: var(--gray-900);
+}
+
+body.dark .propose-session input,
+body.dark .propose-session select,
+body.dark .propose-session textarea {
+    background: var(--gray-800);
+    border-color: var(--gray-700);
+    color: var(--text);
+}
+
+.propose-session input:focus,
+.propose-session select:focus,
+.propose-session textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.propose-session input::placeholder {
+    color: var(--gray-500);
+}
+
+body.dark .propose-session input::placeholder {
+    color: var(--gray-400);
+}
+
+.propose-session button[type="submit"] {
+    grid-column: 1 / -1;
+    padding: 12px 32px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
 /* Responsive Design */
 @media (max-width: 900px) {
     .session-card {
