@@ -2364,26 +2364,48 @@ body.dark .calculator button {
 /* Dashboard */
 .dashboard-header {
     margin-bottom: 40px;
+    padding: 32px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: var(--border-radius-lg);
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.dashboard-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 400px;
+    height: 400px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    pointer-events: none;
 }
 
 .dashboard-header h2 {
-    font-size: 32px;
+    font-size: 36px;
     font-weight: 700;
     margin-bottom: 8px;
-    color: var(--gray-900);
+    color: var(--white);
+    position: relative;
+    z-index: 1;
 }
 
 body.dark .dashboard-header h2 {
-    color: var(--text);
+    color: var(--white);
 }
 
 .dashboard-header p {
-    color: var(--gray-600);
+    color: rgba(255, 255, 255, 0.9);
     font-size: 18px;
+    position: relative;
+    z-index: 1;
 }
 
 body.dark .dashboard-header p {
-    color: var(--text-muted);
+    color: rgba(255, 255, 255, 0.9);
 }
 
 .dashboard-grid {
@@ -2402,14 +2424,27 @@ body.dark .dashboard-header p {
     background: var(--white);
     padding: 24px;
     border-radius: var(--border-radius-lg);
-    box-shadow: var(--shadow);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     display: flex;
     align-items: center;
     gap: 16px;
+    transition: var(--transition);
+    border: 1px solid transparent;
+}
+
+.profile-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    border-color: rgba(102, 126, 234, 0.3);
 }
 
 body.dark .profile-card {
     background: var(--card-bg);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+body.dark .profile-card:hover {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
 }
 
 .avatar {
@@ -2462,11 +2497,24 @@ body.dark .profile-info p {
     background: var(--white);
     padding: 24px;
     border-radius: var(--border-radius-lg);
-    box-shadow: var(--shadow);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: var(--transition);
+    border: 1px solid transparent;
+}
+
+.stats-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    border-color: rgba(16, 185, 129, 0.3);
 }
 
 body.dark .stats-card {
     background: var(--card-bg);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+body.dark .stats-card:hover {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
 }
 
 .stats-card h4 {
@@ -2484,8 +2532,13 @@ body.dark .stats-card h4 {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px 0;
-    border-bottom: 1px solid var(--gray-200);
+    padding: 16px 0;
+    border-bottom: 1px solid var(--gray-100);
+    transition: var(--transition);
+}
+
+.stat:hover {
+    padding-left: 8px;
 }
 
 body.dark .stat {
@@ -2498,6 +2551,8 @@ body.dark .stat {
 
 .stat-label {
     color: var(--gray-600);
+    font-size: 14px;
+    font-weight: 500;
 }
 
 body.dark .stat-label {
@@ -2505,13 +2560,19 @@ body.dark .stat-label {
 }
 
 .stat-value {
-    font-size: 18px;
-    font-weight: 600;
-    color: var(--gray-900);
+    font-size: 24px;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 body.dark .stat-value {
-    color: var(--text);
+    background: linear-gradient(135deg, #60a5fa, #34d399);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .quick-actions h4 {
@@ -2550,13 +2611,26 @@ body.dark .progress-section h3 {
 
 .progress-card {
     background: var(--white);
-    padding: 24px;
+    padding: 28px;
     border-radius: var(--border-radius-lg);
-    box-shadow: var(--shadow);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
 }
 
 body.dark .progress-card {
     background: var(--card-bg);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+body.dark .progress-card:hover {
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
 }
 
 .progress-card h4 {
@@ -2572,10 +2646,12 @@ body.dark .progress-card h4 {
 
 .progress-bar {
     background: var(--gray-200);
-    height: 12px;
-    border-radius: 6px;
+    height: 14px;
+    border-radius: 8px;
     overflow: hidden;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
+    position: relative;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 body.dark .progress-bar {
@@ -2584,9 +2660,19 @@ body.dark .progress-bar {
 
 .progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, var(--primary), var(--secondary));
-    border-radius: 6px;
-    transition: width 0.3s ease;
+    background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+    background-size: 200% 100%;
+    border-radius: 8px;
+    transition: width 0.6s ease;
+    animation: shimmer 2s infinite;
+    position: relative;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+}
+
+@keyframes shimmer {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
 .progress-text {
@@ -2620,13 +2706,24 @@ body.dark .recent-activity h3 {
     align-items: center;
     gap: 16px;
     background: var(--white);
-    padding: 16px;
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow-sm);
+    padding: 18px;
+    border-radius: var(--border-radius-lg);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    transition: var(--transition);
+}
+
+.activity-item:hover {
+    transform: translateX(4px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 body.dark .activity-item {
     background: var(--card-bg);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+}
+
+body.dark .activity-item:hover {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 }
 
 .activity-icon {
@@ -2671,29 +2768,54 @@ body.dark .achievements-section h3 {
 
 .achievement {
     background: var(--white);
-    padding: 20px;
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow);
+    padding: 24px;
+    border-radius: var(--border-radius-lg);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
     text-align: center;
-    transition: var(--transition);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+
+.achievement:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
 }
 
 body.dark .achievement {
     background: var(--card-bg);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
 .achievement.unlocked {
     border: 2px solid var(--success);
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(5, 150, 105, 0.05));
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); }
+    50% { box-shadow: 0 8px 30px rgba(16, 185, 129, 0.5); }
 }
 
 .achievement.locked {
-    opacity: 0.6;
+    opacity: 0.5;
     filter: grayscale(100%);
 }
 
+.achievement.locked:hover {
+    opacity: 0.7;
+}
+
 .achievement-icon {
-    font-size: 32px;
+    font-size: 48px;
     margin-bottom: 12px;
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+.achievement:hover .achievement-icon {
+    transform: scale(1.2) rotate(10deg);
 }
 
 .achievement h4 {
