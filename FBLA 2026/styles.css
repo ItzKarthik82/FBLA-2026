@@ -693,33 +693,60 @@ body.dark .propose-session p {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 32px;
+    padding: 32px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: var(--border-radius-lg);
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 16px;
+    position: relative;
+    overflow: hidden;
+}
+
+.schedule-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 400px;
+    height: 400px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    pointer-events: none;
 }
 
 .schedule-header h2 {
-    margin: 0 0 8px 0;
-    color: var(--gray-900);
+    margin: 0 0 4px 0;
+    color: var(--white);
+    font-size: 28px;
+    position: relative;
+    z-index: 1;
 }
 
 body.dark .schedule-header h2 {
-    color: var(--text);
+    color: var(--white);
 }
 
 .schedule-header p {
     margin: 0;
-    color: var(--gray-600);
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 14px;
+    position: relative;
+    z-index: 1;
 }
 
 body.dark .schedule-header p {
-    color: var(--text-muted);
+    color: rgba(255, 255, 255, 0.9);
 }
 
 .schedule-actions {
     display: flex;
     gap: 12px;
     align-items: center;
+    margin-left: auto;
+    position: relative;
+    z-index: 1;
 }
 
 .view-selector {
@@ -755,11 +782,11 @@ body.dark .view-selector {
 .pill-btn {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 7px;
     padding: 8px 16px;
     border: 1px solid var(--gray-200);
     background: var(--white);
-    border-radius: 20px;
+    border-radius: var(--border-radius-lg);
     font-size: 14px;
     font-weight: 500;
     color: var(--gray-700);
@@ -777,38 +804,41 @@ body.dark .pill-btn {
 .pill-btn.active {
     border-color: var(--primary);
     color: var(--primary);
-    background: var(--gray-50);
+    background: var(--white);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
 }
 
 body.dark .pill-btn:hover,
 body.dark .pill-btn.active {
-    background: var(--gray-800);
+    background: var(--card-bg);
+    border-color: var(--primary);
 }
 
 .pill-indicator {
-    width: 12px;
-    height: 12px;
+    display: none;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
 }
 
 .pill-indicator.all {
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    background: var(--gray-400);
 }
 
 .pill-indicator.math {
-    background: #8b5cf6;
+    background: var(--gray-400);
 }
 
 .pill-indicator.science {
-    background: #10b981;
+    background: var(--gray-400);
 }
 
 .pill-indicator.english {
-    background: #f59e0b;
+    background: var(--gray-400);
 }
 
 .pill-indicator.history {
-    background: #ef4444;
+    background: var(--gray-400);
 }
 
 /* Schedule Controls - View Toggle & Sort */
@@ -816,17 +846,17 @@ body.dark .pill-btn.active {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 24px;
-    padding: 16px 20px;
-    background: var(--white);
-    border-radius: var(--border-radius-lg);
-    box-shadow: var(--shadow-sm);
+    margin-bottom: 28px;
+    padding: 0;
+    background: transparent;
+    border-radius: 0;
+    box-shadow: none;
     gap: 16px;
     flex-wrap: wrap;
 }
 
 body.dark .schedule-controls {
-    background: var(--card-bg);
+    background: transparent;
 }
 
 .view-options {
@@ -835,13 +865,13 @@ body.dark .schedule-controls {
 }
 
 .view-btn {
-    padding: 10px 20px;
-    border: 2px solid var(--gray-200);
-    background: transparent;
+    padding: 10px 18px;
+    border: 1px solid var(--gray-300);
+    background: var(--white);
     color: var(--gray-700);
-    border-radius: var(--border-radius);
+    border-radius: var(--border-radius-lg);
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 500;
     cursor: pointer;
     transition: var(--transition);
 }
@@ -849,18 +879,26 @@ body.dark .schedule-controls {
 body.dark .view-btn {
     border-color: var(--gray-700);
     color: var(--text-muted);
+    background: var(--card-bg);
 }
 
 .view-btn:hover {
     border-color: var(--primary);
     color: var(--primary);
-    background: rgba(59, 130, 246, 0.05);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+    transform: translateY(-1px);
 }
 
 .view-btn.active {
     background: var(--primary);
     color: white;
     border-color: var(--primary);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+}
+
+body.dark .view-btn.active {
+    background: var(--primary);
+    color: white;
 }
 
 .sort-options {
@@ -870,11 +908,11 @@ body.dark .view-btn {
 }
 
 .sort-select {
-    padding: 10px 16px;
-    border: 2px solid var(--gray-200);
+    padding: 10px 14px;
+    border: 1px solid var(--gray-300);
     background: var(--white);
     color: var(--gray-700);
-    border-radius: var(--border-radius);
+    border-radius: var(--border-radius-lg);
     font-size: 14px;
     font-weight: 500;
     cursor: pointer;
@@ -889,12 +927,13 @@ body.dark .sort-select {
 
 .sort-select:hover {
     border-color: var(--primary);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
 }
 
 .sort-select:focus {
     outline: none;
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 /* Sessions List View */
@@ -912,29 +951,32 @@ body.dark .sort-select {
 }
 
 .day-header-banner {
-    padding: 16px 24px;
-    background: linear-gradient(135deg, var(--gray-100) 0%, var(--gray-50) 100%);
-    border-radius: var(--border-radius-lg);
-    border-left: 4px solid var(--primary);
+    padding: 16px 0;
+    background: transparent;
+    border-radius: 0;
+    border-left: none;
+    border-bottom: 2px solid var(--gray-200);
+    margin-bottom: 12px;
 }
 
 body.dark .day-header-banner {
-    background: linear-gradient(135deg, var(--gray-800) 0%, var(--gray-900) 100%);
+    background: transparent;
+    border-bottom-color: var(--gray-700);
 }
 
 .day-header-banner.today {
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(99, 102, 241, 0.05) 100%);
-    border-left-color: var(--primary);
+    background: transparent;
+    border-left-color: transparent;
 }
 
 body.dark .day-header-banner.today {
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(99, 102, 241, 0.1) 100%);
+    background: transparent;
 }
 
 .day-header-banner h3 {
     margin: 0;
-    font-size: 18px;
-    font-weight: 700;
+    font-size: 16px;
+    font-weight: 600;
     color: var(--gray-900);
 }
 
@@ -946,50 +988,58 @@ body.dark .day-header-banner h3 {
 .session-card {
     background: var(--white);
     border-radius: var(--border-radius-lg);
-    box-shadow: var(--shadow);
-    padding: 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 22px;
     display: grid;
     grid-template-columns: auto 1fr auto;
-    gap: 20px;
+    gap: 18px;
     align-items: center;
     transition: var(--transition);
-    border-left: 4px solid transparent;
+    border-left: none;
+    border-bottom: none;
 }
 
 body.dark .session-card {
     background: var(--card-bg);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 .session-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+    background: var(--white);
+}
+
+body.dark .session-card:hover {
+    background: var(--card-bg);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
 }
 
 .session-card.math {
-    border-left-color: #8b5cf6;
+    border-left-color: transparent;
 }
 
 .session-card.science {
-    border-left-color: #10b981;
+    border-left-color: transparent;
 }
 
 .session-card.english {
-    border-left-color: #f59e0b;
+    border-left-color: transparent;
 }
 
 .session-card.history {
-    border-left-color: #ef4444;
+    border-left-color: transparent;
 }
 
 /* Session Time Badge */
 .session-time-badge {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 16px;
+    gap: 10px;
+    padding: 14px;
     background: var(--gray-50);
     border-radius: var(--border-radius);
-    min-width: 140px;
+    min-width: auto;
 }
 
 body.dark .session-time-badge {
@@ -997,7 +1047,7 @@ body.dark .session-time-badge {
 }
 
 .time-icon {
-    font-size: 28px;
+    font-size: 24px;
 }
 
 .time-info {
@@ -1006,8 +1056,8 @@ body.dark .session-time-badge {
 }
 
 .time-main {
-    font-size: 16px;
-    font-weight: 700;
+    font-size: 15px;
+    font-weight: 600;
     color: var(--gray-900);
 }
 
@@ -1042,8 +1092,8 @@ body.dark .time-duration {
 
 .session-header h4 {
     margin: 0;
-    font-size: 20px;
-    font-weight: 700;
+    font-size: 17px;
+    font-weight: 600;
     color: var(--gray-900);
 }
 
@@ -1053,47 +1103,58 @@ body.dark .session-header h4 {
 
 .session-badge {
     padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 12px;
+    border-radius: var(--border-radius);
+    font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    background: var(--gray-100);
+    color: var(--gray-700);
+}
+
+body.dark .session-badge {
+    background: var(--gray-800);
+    color: var(--text-muted);
 }
 
 .math-badge {
-    background: rgba(139, 92, 246, 0.15);
-    color: #7c3aed;
+    background: var(--gray-100);
+    color: var(--gray-700);
 }
 
 body.dark .math-badge {
-    background: rgba(139, 92, 246, 0.25);
+    background: var(--gray-800);
+    color: var(--text-muted);
 }
 
 .science-badge {
-    background: rgba(16, 185, 129, 0.15);
-    color: #059669;
+    background: var(--gray-100);
+    color: var(--gray-700);
 }
 
 body.dark .science-badge {
-    background: rgba(16, 185, 129, 0.25);
+    background: var(--gray-800);
+    color: var(--text-muted);
 }
 
 .english-badge {
-    background: rgba(245, 158, 11, 0.15);
-    color: #d97706;
+    background: var(--gray-100);
+    color: var(--gray-700);
 }
 
 body.dark .english-badge {
-    background: rgba(245, 158, 11, 0.25);
+    background: var(--gray-800);
+    color: var(--text-muted);
 }
 
 .history-badge {
-    background: rgba(239, 68, 68, 0.15);
-    color: #dc2626;
+    background: var(--gray-100);
+    color: var(--gray-700);
 }
 
 body.dark .history-badge {
-    background: rgba(239, 68, 68, 0.25);
+    background: var(--gray-800);
+    color: var(--text-muted);
 }
 
 .session-meta {
@@ -1105,7 +1166,7 @@ body.dark .history-badge {
 .meta-item {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 5px;
     font-size: 14px;
     color: var(--gray-600);
 }
@@ -1119,8 +1180,12 @@ body.dark .meta-item {
 }
 
 .meta-item.participants {
-    color: var(--primary);
-    font-weight: 600;
+    color: var(--gray-600);
+    font-weight: 500;
+}
+
+body.dark .meta-item.participants {
+    color: var(--text-muted);
 }
 
 .session-description {
@@ -1136,21 +1201,26 @@ body.dark .session-description {
 
 /* Session Join Button */
 .session-join-btn {
-    padding: 12px 24px;
-    background: var(--primary);
+    padding: 11px 22px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     border: none;
-    border-radius: var(--border-radius);
+    border-radius: var(--border-radius-lg);
     font-size: 14px;
-    font-weight: 700;
+    font-weight: 600;
     cursor: pointer;
     transition: var(--transition);
     white-space: nowrap;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+body.dark .session-join-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
 .session-join-btn:hover {
-    background: var(--primary-dark);
-    transform: translateX(4px);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
 }
 
 /* Responsive Design */
