@@ -60,88 +60,14 @@ function proposeSession() {
 
     localStorage.setItem('customSessions', JSON.stringify(sessions));
 
-    const sessionsList = document.querySelector('.sessions-list');
-    if (sessionsList) {
-        let customGroup = document.querySelector('.session-day-group[data-custom="true"]');
-        if (!customGroup) {
-            customGroup = document.createElement('div');
-            customGroup.className = 'session-day-group';
-            customGroup.setAttribute('data-custom', 'true');
-            customGroup.innerHTML = '<div class="day-header-banner"><h3>Your Sessions</h3></div>';
-            sessionsList.appendChild(customGroup);
-        }
-
-        const sessionCard = document.createElement('div');
-        sessionCard.className = `session-card ${category}`;
-        sessionCard.setAttribute('data-category', category);
-        sessionCard.setAttribute('data-custom', 'true');
-
-        sessionCard.innerHTML = `
-            <div class="session-time-badge">
-                <div class="time-icon"></div>
-                <div class="time-info">
-                    <span class="time-main">${dateStr}, ${timeStr}</span>
-                    <span class="time-duration">60 min</span>
-                </div>
-            </div>
-            <div class="session-content">
-                <div class="session-header">
-                    <h4>${title}</h4>
-                    <span class="session-badge ${category}-badge">${category.charAt(0).toUpperCase() + category.slice(1)}</span>
-                </div>
-                <div class="session-meta">
-                    <span class="meta-item">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="12" cy="7" r="4"></circle>
-                        </svg>
-                        ${host}
-                    </span>
-                    <span class="meta-item">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
-                        </svg>
-                        ${level}
-                    </span>
-                    <span class="meta-item participants">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="9" cy="7" r="4"></circle>
-                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                        </svg>
-                        You're hosting
-                    </span>
-                </div>
-                <p class="session-description">Your custom study session</p>
-            </div>
-            <div class="session-actions">
-                <button class="session-join-btn" onclick="joinSession('${title}', '${meetingLink}', '${host}', '${level}', '${fullDateTimeStr}')">
-                    View Details →
-                </button>
-                <button class="session-edit-btn" onclick="editCustomSession('${title}', '${fullDateTimeStr}', '${host}', '${time}', '${category}', '${level}', '${meetingLink}')">
-                    ✏️ Edit
-                </button>
-                <button class="session-delete-btn" onclick="deleteCustomSession('${title}', '${fullDateTimeStr}')">
-                    🗑️ Delete
-                </button>
-            </div>
-        `;
-
-        customGroup.appendChild(sessionCard);
+    // Remove old custom sessions group to avoid duplicates
+    const oldCustomGroup = document.querySelector('.session-day-group[data-custom="true"]');
+    if (oldCustomGroup) {
+        oldCustomGroup.remove();
     }
 
-    const activeSubjectBtn = document.querySelector('.pill-btn.active');
-    if (activeSubjectBtn) {
-        const activeCategory = activeSubjectBtn.dataset.filter;
-        filterSessionCards(activeCategory, activeSubjectBtn);
-    }
-
-    const activeViewBtn = document.querySelector('.view-btn.active');
-    if (activeViewBtn) {
-        const activeView = activeViewBtn.dataset.view;
-        switchSessionView(activeView, activeViewBtn);
-    }
+    // Reload all custom sessions from localStorage
+    loadCustomSessions();
 
     const actionText = isEditing ? 'updated' : 'added';
     showToast(`Session ${actionText} successfully!`);
@@ -234,87 +160,14 @@ function saveEditedSession() {
     closeEditModal();
     editingSession = null;
 
-    if (sessionsList) {
-        let customGroup = document.querySelector('.session-day-group[data-custom="true"]');
-        if (!customGroup) {
-            customGroup = document.createElement('div');
-            customGroup.className = 'session-day-group';
-            customGroup.setAttribute('data-custom', 'true');
-            customGroup.innerHTML = '<div class="day-header-banner"><h3>Your Sessions</h3></div>';
-            sessionsList.appendChild(customGroup);
-        }
-
-        const sessionCard = document.createElement('div');
-        sessionCard.className = `session-card ${category}`;
-        sessionCard.setAttribute('data-category', category);
-        sessionCard.setAttribute('data-custom', 'true');
-
-        sessionCard.innerHTML = `
-            <div class="session-time-badge">
-                <div class="time-icon"></div>
-                <div class="time-info">
-                    <span class="time-main">${dateStr}, ${timeStr}</span>
-                    <span class="time-duration">60 min</span>
-                </div>
-            </div>
-            <div class="session-content">
-                <div class="session-header">
-                    <h4>${title}</h4>
-                    <span class="session-badge ${category}-badge">${category.charAt(0).toUpperCase() + category.slice(1)}</span>
-                </div>
-                <div class="session-meta">
-                    <span class="meta-item">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="12" cy="7" r="4"></circle>
-                        </svg>
-                        ${host}
-                    </span>
-                    <span class="meta-item">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
-                        </svg>
-                        ${level}
-                    </span>
-                    <span class="meta-item participants">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="9" cy="7" r="4"></circle>
-                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                        </svg>
-                        You're hosting
-                    </span>
-                </div>
-                <p class="session-description">Your custom study session</p>
-            </div>
-            <div class="session-actions">
-                <button class="session-join-btn" onclick="joinSession('${title}', '${meetingLink}', '${host}', '${level}', '${fullDateTimeStr}')">
-                    View Details →
-                </button>
-                <button class="session-edit-btn" onclick="editCustomSession('${title}', '${fullDateTimeStr}', '${host}', '${time}', '${category}', '${level}', '${meetingLink}')">
-                    ✏️ Edit
-                </button>
-                <button class="session-delete-btn" onclick="deleteCustomSession('${title}', '${fullDateTimeStr}')">
-                    🗑️ Delete
-                </button>
-            </div>
-        `;
-
-        customGroup.appendChild(sessionCard);
+    // Remove old custom sessions group to avoid duplicates
+    const oldCustomGroup = document.querySelector('.session-day-group[data-custom="true"]');
+    if (oldCustomGroup) {
+        oldCustomGroup.remove();
     }
 
-    const activeSubjectBtn = document.querySelector('.pill-btn.active');
-    if (activeSubjectBtn) {
-        const activeCategory = activeSubjectBtn.dataset.filter;
-        filterSessionCards(activeCategory, activeSubjectBtn);
-    }
-
-    const activeViewBtn = document.querySelector('.view-btn.active');
-    if (activeViewBtn) {
-        const activeView = activeViewBtn.dataset.view;
-        switchSessionView(activeView, activeViewBtn);
-    }
+    // Reload all custom sessions from localStorage
+    loadCustomSessions();
 
     showToast('Session updated successfully!');
 }
@@ -328,34 +181,14 @@ function deleteCustomSession(title, fullDateTimeStr) {
     const updatedSessions = sessions.filter(s => !(s.title === title && s.dateTime === fullDateTimeStr));
     localStorage.setItem('customSessions', JSON.stringify(updatedSessions));
 
-    const sessionsList = document.querySelector('.sessions-list');
-    if (sessionsList) {
-        const cards = sessionsList.querySelectorAll('.session-card[data-custom="true"]');
-        cards.forEach(card => {
-            const h4 = card.querySelector('h4');
-            const timeMain = card.querySelector('.time-main');
-            if (h4 && timeMain && h4.textContent === title && timeMain.textContent.includes(fullDateTimeStr.split(',')[1])) {
-                card.remove();
-            }
-        });
-
-        const customGroup = document.querySelector('.session-day-group[data-custom="true"]');
-        if (customGroup && customGroup.querySelectorAll('.session-card').length === 0) {
-            customGroup.remove();
-        }
+    // Remove old custom sessions group
+    const oldCustomGroup = document.querySelector('.session-day-group[data-custom="true"]');
+    if (oldCustomGroup) {
+        oldCustomGroup.remove();
     }
 
-    const activeSubjectBtn = document.querySelector('.pill-btn.active');
-    if (activeSubjectBtn) {
-        const activeCategory = activeSubjectBtn.dataset.filter;
-        filterSessionCards(activeCategory, activeSubjectBtn);
-    }
-
-    const activeViewBtn = document.querySelector('.view-btn.active');
-    if (activeViewBtn) {
-        const activeView = activeViewBtn.dataset.view;
-        switchSessionView(activeView, activeViewBtn);
-    }
+    // Reload all custom sessions from localStorage
+    loadCustomSessions();
 
     showToast('Session deleted successfully!');
 }

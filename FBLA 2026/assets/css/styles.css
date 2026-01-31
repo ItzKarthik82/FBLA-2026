@@ -2464,11 +2464,6 @@ body.dark .edit-session-modal-content .modal-footer {
         grid-template-columns: 1fr;
     }
 }
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    margin: 20px 0;
-}
 
 .code-input textarea {
     width: 100%;
