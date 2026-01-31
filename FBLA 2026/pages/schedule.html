@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Schedule - PeerLearn</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="script.js"></script>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <script src="../assets/js/core.js" defer></script>
+    <script src="../assets/js/pages/schedule.js" defer></script>
 </head>
 <body>
     <header class="site-header">
@@ -569,12 +570,5 @@
     <!-- Floating Calculator Toggle Button -->
     <button id="calcToggle" class="calc-toggle-btn" onclick="toggleFloatingCalc()" title="Open Calculator">÷</button>
     
-    <script>
-        // Require authentication for schedule
-        window.addEventListener('DOMContentLoaded', () => {
-            requireAuth();
-            updateAuthUI();
-        });
-    </script>
 </body>
 </html>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PeerLearn - Login & Sign Up</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="stylesheet" href="../assets/css/login.css">
+    <script src="../assets/js/core.js" defer></script>
+    <script src="../assets/js/pages/login.js" defer></script>
+</head>
+<body>
+    <header class="site-header">
+        <div class="container">
+            <h1 class="brand">PeerLearn</h1>
+            <p class="tag">Academic Learning Hub</p>
+            <nav>
+                <ul class="nav">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="schedule.html">Schedule</a></li>
+                    <li><a href="resources.html">Resources</a></li>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <div class="auth-menu">
+                    <button id="authMenuBtn" class="auth-trigger" aria-haspopup="true" aria-expanded="false">👤</button>
+                    <div class="auth-dropdown" id="authDropdown">
+                        <div class="auth-dropdown-header" id="authDropdownHeader">Not signed in</div>
+                        <button class="auth-item" data-action="login">Log In</button>
+                        <button class="auth-item" data-action="signup">Sign Up</button>
+                    </div>
+                </div>
+                <button id="themeToggle" class="btn outline">🌙</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="content">
+        <div class="login-page">
+            <div class="auth-container">
+                <div class="auth-left">
+                    <h1>PeerLearn</h1>
+                    <p>Join thousands of students achieving their academic goals through collaborative learning and expert guidance.</p>
+                    <ul class="features-list">
+                        <li>Track your study progress</li>
+                        <li>Access learning materials</li>
+                        <li>Manage your schedule</li>
+                        <li>Connect with peers</li>
+                    </ul>
+                </div>
+
+                <div class="auth-right">
+                    <div class="auth-header">
+                        <h2>Welcome</h2>
+                        <p>Sign in to your account</p>
+                    </div>
+
+                    <div class="tabs">
+                        <button class="tab-button active" data-form="login">Login</button>
+                        <button class="tab-button" data-form="signup">Sign Up</button>
+                    </div>
+
+                    <!-- LOGIN FORM -->
+                    <form id="login" class="form-container active">
+                        <div class="form-input-group">
+                            <label>Email Address</label>
+                            <input type="email" id="loginEmail" placeholder="you@example.com">
+                            <div class="error-text" id="loginEmailErr"></div>
+                            <div class="requirements-list" id="loginEmailReqs">
+                                <div class="req-item">
+                                    <div class="req-check" id="loginEmailCheck"></div>
+                                    <span>Enter a valid email address</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-input-group">
+                            <label>Password</label>
+                            <input type="password" id="loginPass" placeholder="••••••••">
+                            <div class="error-text" id="loginPassErr"></div>
+                            <div class="requirements-list" id="loginPassReqs">
+                                <div class="req-item">
+                                    <div class="req-check" id="loginPassCheck"></div>
+                                    <span>Enter your password</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="submit-button">Sign In</button>
+                        <div class="form-link">
+                            <a href="#" id="forgotLink">Forgot password?</a>
+                        </div>
+                    </form>
+
+                    <!-- SIGNUP FORM -->
+                    <form id="signup" class="form-container">
+                        <div class="form-input-group">
+                            <label>Full Name</label>
+                            <input type="text" id="regName" placeholder="John Doe">
+                            <div class="error-text" id="regNameErr"></div>
+                            <div class="requirements-list" id="regNameReqs">
+                                <div class="req-item">
+                                    <div class="req-check" id="regNameCheck"></div>
+                                    <span>Enter your full name</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-input-group">
+                            <label>Email Address</label>
+                            <input type="email" id="regEmail" placeholder="you@example.com">
+                            <div class="error-text" id="regEmailErr"></div>
+                            <div class="requirements-list" id="regEmailReqs">
+                                <div class="req-item">
+                                    <div class="req-check" id="regEmailCheck"></div>
+                                    <span>Enter a valid email address</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-input-group">
+                            <label>Password</label>
+                            <input type="password" id="regPass" placeholder="••••••••">
+                            <div class="error-text" id="regPassErr"></div>
+                            <div class="requirements-list" id="regPassReqs">
+                                <div class="req-item">
+                                    <div class="req-check" id="regPassCheck"></div>
+                                    <span>Password must be at least 6 characters</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-input-group">
+                            <label>Confirm Password</label>
+                            <input type="password" id="regPassConfirm" placeholder="••••••••">
+                            <div class="error-text" id="regPassConfirmErr"></div>
+                            <div class="requirements-list" id="regPassConfirmReqs">
+                                <div class="req-item">
+                                    <div class="req-check" id="regPassConfirmCheck"></div>
+                                    <span>Passwords must match</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-input-group">
+                            <label>Security Question</label>
+                            <select id="regQuestion">
+                                <option value="">Choose a question...</option>
+                                <option value="pet">What was your first pet's name?</option>
+                                <option value="city">What city were you born in?</option>
+                                <option value="school">What was your elementary school?</option>
+                                <option value="teacher">Favorite teacher's name?</option>
+                                <option value="color">What is your favorite color?</option>
+                            </select>
+                            <div class="error-text" id="regQuestionErr"></div>
+                            <div class="requirements-list" id="regQuestionReqs">
+                                <div class="req-item">
+                                    <div class="req-check" id="regQuestionCheck"></div>
+                                    <span>Select a security question</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-input-group">
+                            <label>Your Answer</label>
+                            <input type="text" id="regAnswer" placeholder="Your answer">
+                            <div class="error-text" id="regAnswerErr"></div>
+                            <div class="requirements-list" id="regAnswerReqs">
+                                <div class="req-item">
+                                    <div class="req-check" id="regAnswerCheck"></div>
+                                    <span>Provide your answer</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="submit-button">Create Account</button>
+                        <div class="form-link">
+                            By signing up, you agree to our <a href="#">Terms of Service</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>PeerLearn</h4>
+                    <p>Student-built, student-powered learning platform.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="schedule.html">Schedule</a></li>
+                        <li><a href="resources.html">Resources</a></li>
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect</h4>
+                    <p>Built for FBLA 2026</p>
+                    <p>Created by students, for students</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 PeerLearn. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <div class="modal-overlay" id="resetModal" aria-hidden="true">
+        <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="resetTitle">
+            <button class="modal-close" id="resetClose" aria-label="Close">×</button>
+            <div class="reset-panel" id="resetPanel">
+                <div class="reset-header">
+                    <h3 id="resetTitle">Reset Password</h3>
+                    <p>Verify with your security question to set a new password.</p>
+                </div>
+
+                <form id="resetStepEmail" class="reset-step active">
+                    <div class="form-input-group">
+                        <label>Email Address</label>
+                        <input type="email" id="resetEmail" placeholder="you@example.com">
+                        <div class="error-text" id="resetEmailErr"></div>
+                    </div>
+                    <button type="submit" class="reset-button primary">Continue</button>
+                </form>
+
+                <form id="resetStepVerify" class="reset-step">
+                    <div class="reset-question" id="resetQuestionText"></div>
+
+                    <div class="form-input-group">
+                        <label>Answer</label>
+                        <input type="text" id="resetAnswer" placeholder="Your answer">
+                        <div class="error-text" id="resetAnswerErr"></div>
+                    </div>
+
+                    <div class="form-input-group">
+                        <label>New Password</label>
+                        <input type="password" id="resetNewPass" placeholder="••••••••">
+                        <div class="error-text" id="resetNewPassErr"></div>
+                    </div>
+
+                    <div class="form-input-group">
+                        <label>Confirm New Password</label>
+                        <input type="password" id="resetConfirmPass" placeholder="••••••••">
+                        <div class="error-text" id="resetConfirmPassErr"></div>
+                    </div>
+
+                    <div class="reset-actions">
+                        <button type="button" class="reset-button secondary" id="resetBack">Back</button>
+                        <button type="submit" class="reset-button primary">Reset Password</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

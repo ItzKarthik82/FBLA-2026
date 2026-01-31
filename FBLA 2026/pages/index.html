@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PeerLearn - Academic Learning Hub</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="script.js"></script>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <script src="../assets/js/core.js" defer></script>
+    <script src="../assets/js/pages/index.js" defer></script>
 </head>
 <body>
     <header class="site-header">
@@ -195,20 +196,5 @@
     <!-- Floating Calculator Toggle Button -->
     <button id="calcToggle" class="calc-toggle-btn" onclick="toggleFloatingCalc()" title="Open Calculator">÷</button>
 
-    <script>
-        function checkLoginAndRedirect() {
-            const isLoggedIn = localStorage.getItem('userLoggedIn');
-            if (isLoggedIn) {
-                window.location.href = 'dashboard.html';
-            } else {
-                window.location.href = 'login.html';
-            }
-        }
-        
-        // Initialize auth UI when page loads
-        window.addEventListener('DOMContentLoaded', () => {
-            updateAuthUI();
-        });
-    </script>
 </body>
 </html>
