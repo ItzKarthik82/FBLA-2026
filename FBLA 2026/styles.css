@@ -2319,6 +2319,10 @@ body.dark .profile-info h3 {
 .profile-info p {
     color: var(--gray-600);
     margin-bottom: 8px;
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 body.dark .profile-info p {
