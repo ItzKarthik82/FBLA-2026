@@ -50,16 +50,9 @@
             <!-- View Toggle & Sort Options -->
             <div class="schedule-controls">
                 <div class="view-options">
-                    <button class="view-btn active" data-view="upcoming">📅 Upcoming</button>
-                    <button class="view-btn" data-view="today">⭐ Today</button>
-                    <button class="view-btn" data-view="week">📆 This Week</button>
-                </div>
-                <div class="sort-options">
-                    <select id="sortSelect" class="sort-select">
-                        <option value="time">Sort by Time</option>
-                        <option value="subject">Sort by Subject</option>
-                        <option value="level">Sort by Level</option>
-                    </select>
+                    <button class="view-btn active" data-view="upcoming">Upcoming</button>
+                    <button class="view-btn" data-view="today">Today</button>
+                    <button class="view-btn" data-view="week">This Week</button>
                 </div>
             </div>
 
@@ -87,11 +80,11 @@
                 <!-- Today's Sessions -->
                 <div class="session-day-group">
                     <div class="day-header-banner today">
-                        <h3>🔥 Today - Friday, January 31</h3>
+                        <h3>Today - Friday, January 31</h3>
                     </div>
                     <div class="session-card math" data-category="math">
                         <div class="session-time-badge">
-                            <div class="time-icon">🕐</div>
+                            <div class="time-icon"></div>
                             <div class="time-info">
                                 <span class="time-main">12:00 PM</span>
                                 <span class="time-duration">60 min</span>
@@ -137,11 +130,11 @@
                 <!-- Tomorrow's Sessions -->
                 <div class="session-day-group">
                     <div class="day-header-banner">
-                        <h3>📅 Tomorrow - Saturday, February 1</h3>
+                        <h3>Tomorrow - Saturday, February 1</h3>
                     </div>
                     <div class="session-card science" data-category="science">
                         <div class="session-time-badge">
-                            <div class="time-icon">🕐</div>
+                            <div class="time-icon"></div>
                             <div class="time-info">
                                 <span class="time-main">6:00 PM</span>
                                 <span class="time-duration">90 min</span>
@@ -187,12 +180,12 @@
                 <!-- This Week -->
                 <div class="session-day-group">
                     <div class="day-header-banner">
-                        <h3>📆 This Week</h3>
+                        <h3>This Week</h3>
                     </div>
                     
                     <div class="session-card math" data-category="math">
                         <div class="session-time-badge">
-                            <div class="time-icon">🕐</div>
+                            <div class="time-icon"></div>
                             <div class="time-info">
                                 <span class="time-main">Tue, 4:00 PM</span>
                                 <span class="time-duration">60 min</span>
@@ -236,7 +229,7 @@
 
                     <div class="session-card science" data-category="science">
                         <div class="session-time-badge">
-                            <div class="time-icon">🕐</div>
+                            <div class="time-icon"></div>
                             <div class="time-info">
                                 <span class="time-main">Wed, 6:00 PM</span>
                                 <span class="time-duration">75 min</span>
@@ -280,7 +273,7 @@
 
                     <div class="session-card english" data-category="english">
                         <div class="session-time-badge">
-                            <div class="time-icon">🕐</div>
+                            <div class="time-icon"></div>
                             <div class="time-info">
                                 <span class="time-main">Thu, 5:30 PM</span>
                                 <span class="time-duration">90 min</span>
@@ -324,7 +317,7 @@
 
                     <div class="session-card history" data-category="history">
                         <div class="session-time-badge">
-                            <div class="time-icon">🕐</div>
+                            <div class="time-icon"></div>
                             <div class="time-info">
                                 <span class="time-main">Fri, 7:00 PM</span>
                                 <span class="time-duration">60 min</span>
@@ -369,7 +362,7 @@
             </div>
 
             <div class="propose-session">
-                <h3>📅 Host Your Own Session</h3>
+                <h3>Host Your Own Session</h3>
                 <p>Share your knowledge with fellow students</p>
                 <form id="hostForm" onsubmit="proposeSession(); return false;">
                     <input type="text" id="sessionTitle" placeholder="Session Title" required>
