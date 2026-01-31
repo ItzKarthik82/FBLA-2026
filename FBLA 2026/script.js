@@ -637,8 +637,8 @@ function joinSession(sessionTitle, meetingLink, host, level, dateTime, isCustom 
     `;
     
     const customActionsHTML = isCustom ? `
-        <button class="btn small" onclick="editSession('${sessionTitle}', '${meetingLink}', '${host}', '${level}', '${dateTime}', '${sessionTitle.replace(/'/g, "\\'")}', this.closest('.session-modal'))">Edit Session</button>
-        <button class="btn small danger" onclick="deleteSession('${sessionTitle}', '${dateTime}', this.closest('.session-modal'))">Delete Session</button>
+        <button class="btn small delete-session-btn" data-title="${sessionTitle}" data-link="${meetingLink}" data-host="${host}" data-level="${level}" data-datetime="${dateTime}">Edit Session</button>
+        <button class="btn small danger delete-session-btn" data-title="${sessionTitle}" data-datetime="${dateTime}">Delete Session</button>
     ` : '';
     
     const modal = document.createElement('div');
@@ -677,31 +677,52 @@ function joinSession(sessionTitle, meetingLink, host, level, dateTime, isCustom 
     `;
     
     document.body.appendChild(modal);
+    
+    // Add event listeners for custom session buttons
+    if (isCustom) {
+        const deleteBtn = modal.querySelector('.btn.small.danger.delete-session-btn');
+        const editBtn = modal.querySelector('.btn.small.delete-session-btn:not(.danger)');
+        
+        if (deleteBtn) {
+            deleteBtn.addEventListener('click', function() {
+                const title = this.getAttribute('data-title');
+                const datetime = this.getAttribute('data-datetime');
+                deleteSession(title, datetime, modal);
+            });
+        }
+        
+        if (editBtn) {
+            editBtn.addEventListener('click', function() {
+                const title = this.getAttribute('data-title');
+                const link = this.getAttribute('data-link');
+                const hostName = this.getAttribute('data-host');
+                const lvl = this.getAttribute('data-level');
+                const dt = this.getAttribute('data-datetime');
+                editSession(title, link, hostName, lvl, dt, title, modal);
+            });
+        }
+    }
 }
 
 function deleteSession(sessionTitle, dateTime, modal) {
     if (confirm(`Are you sure you want to delete "${sessionTitle}"?`)) {
-        // Find and remove the event from the calendar
-        const allEvents = document.querySelectorAll('.calendar-event[data-custom="true"]');
-        allEvents.forEach(event => {
-            const onclick = event.getAttribute('onclick');
-            if (onclick && onclick.includes(sessionTitle) && onclick.includes(dateTime)) {
-                const timeBlock = event.closest('.time-block');
-                if (timeBlock) {
-                    timeBlock.innerHTML = '';
-                    timeBlock.classList.remove('session-slot');
-                }
-            }
-        });
+        // Remove from localStorage
+        const sessions = JSON.parse(localStorage.getItem('customSessions') || '[]');
+        const updatedSessions = sessions.filter(s => 
+            !(s.title === sessionTitle && s.dateTime === dateTime)
+        );
+        localStorage.setItem('customSessions', JSON.stringify(updatedSessions));
         
         // Close the modal
-        modal.remove();
+        if (modal) {
+            modal.remove();
+        }
         showToast('Session deleted successfully');
         
-        // Update month view if needed
-        if (currentView === 'month') {
+        // Update month view immediately
+        setTimeout(() => {
             updateMonthDisplay();
-        }
+        }, 100);
     }
 }
 
