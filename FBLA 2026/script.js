@@ -106,7 +106,7 @@ function toggleTheme() {
 
     const themeBtn = document.getElementById('themeToggle');
     if (themeBtn) {
-        themeBtn.textContent = newTheme === 'dark' ? '☀️ Light' : '🌙 Dark';
+        themeBtn.textContent = newTheme === 'dark' ? '☀️' : '🌙';
     }
 }
 
@@ -117,7 +117,7 @@ function loadTheme() {
     }
     const themeBtn = document.getElementById('themeToggle');
     if (themeBtn) {
-        themeBtn.textContent = savedTheme === 'dark' ? '☀️ Light' : '🌙 Dark';
+        themeBtn.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
     }
 }
 
