@@ -595,6 +595,14 @@
                 </ul>
             </nav>
             <div class="header-actions">
+                <div class="auth-menu">
+                    <button id="authMenuBtn" class="auth-trigger" aria-haspopup="true" aria-expanded="false">👤</button>
+                    <div class="auth-dropdown" id="authDropdown">
+                        <div class="auth-dropdown-header" id="authDropdownHeader">Not signed in</div>
+                        <button class="auth-item" data-action="login">Log In</button>
+                        <button class="auth-item" data-action="signup">Sign Up</button>
+                    </div>
+                </div>
                 <button id="themeToggle" class="btn outline">🌙 Dark</button>
             </div>
         </div>
@@ -990,6 +998,12 @@
                 updateAllReqs();
             });
         });
+
+        // Open signup tab if URL hash is #signup
+        if (window.location.hash === '#signup') {
+            const signupBtn = document.querySelector('.tab-button[data-form="signup"]');
+            if (signupBtn) signupBtn.click();
+        }
 
         // Reset password flow
         const forgotLink = document.getElementById('forgotLink');

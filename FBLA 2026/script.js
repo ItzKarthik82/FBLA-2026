@@ -20,12 +20,60 @@ function logout() {
 
 function updateAuthUI() {
     const authBtn = document.getElementById('authBtn');
-    if (!authBtn) return;
+    const authMenuBtn = document.getElementById('authMenuBtn');
+    const authDropdown = document.getElementById('authDropdown');
 
     const isLoggedIn = checkAuth();
+    const userInfo = getUserInfo();
+    const displayName = userInfo.name || (userInfo.email ? userInfo.email.split('@')[0] : 'Student');
+
+    if (authMenuBtn && authDropdown) {
+        const headerText = isLoggedIn ? `Signed in as ${displayName}` : 'Not signed in';
+        const itemsMarkup = isLoggedIn
+            ? `<div class="auth-dropdown-header" id="authDropdownHeader">${headerText}</div>
+               <button class="auth-item" data-action="dashboard">Dashboard</button>
+               <button class="auth-item" data-action="logout">Log out</button>`
+            : `<div class="auth-dropdown-header" id="authDropdownHeader">${headerText}</div>
+               <button class="auth-item" data-action="login">Log In</button>
+               <button class="auth-item" data-action="signup">Sign Up</button>`;
+
+        authDropdown.innerHTML = itemsMarkup;
+        authMenuBtn.textContent = '👤';
+
+        authDropdown.querySelectorAll('.auth-item').forEach(item => {
+            item.onclick = () => {
+                const action = item.getAttribute('data-action');
+                authDropdown.classList.remove('show');
+                authMenuBtn.setAttribute('aria-expanded', 'false');
+
+                if (action === 'login') window.location.href = 'login.html';
+                if (action === 'signup') window.location.href = 'login.html#signup';
+                if (action === 'dashboard') window.location.href = 'dashboard.html';
+                if (action === 'logout') logout();
+            };
+        });
+
+        if (!authMenuBtn.dataset.bound) {
+            authMenuBtn.dataset.bound = 'true';
+            authMenuBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isOpen = authDropdown.classList.toggle('show');
+                authMenuBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!authMenuBtn.contains(e.target) && !authDropdown.contains(e.target)) {
+                    authDropdown.classList.remove('show');
+                    authMenuBtn.setAttribute('aria-expanded', 'false');
+                }
+            });
+        }
+        return;
+    }
+
+    if (!authBtn) return;
+
     if (isLoggedIn) {
-        const userInfo = getUserInfo();
-        const displayName = userInfo.name || userInfo.email.split('@')[0];
         authBtn.textContent = `👤 ${displayName}`;
         authBtn.onclick = () => {
             if (confirm('Do you want to log out?')) {

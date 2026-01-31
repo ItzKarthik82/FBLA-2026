@@ -21,7 +21,14 @@
                 </ul>
             </nav>
             <div class="header-actions">
-                <button id="authBtn" class="btn outline">🔐 Login</button>
+                <div class="auth-menu">
+                    <button id="authMenuBtn" class="auth-trigger" aria-haspopup="true" aria-expanded="false">👤</button>
+                    <div class="auth-dropdown" id="authDropdown">
+                        <div class="auth-dropdown-header" id="authDropdownHeader">Not signed in</div>
+                        <button class="auth-item" data-action="login">Log In</button>
+                        <button class="auth-item" data-action="signup">Sign Up</button>
+                    </div>
+                </div>
                 <button id="themeToggle" class="btn outline">🌙 Dark</button>
                 <button id="resetBtn" class="btn outline">🔄 Reset</button>
             </div>
