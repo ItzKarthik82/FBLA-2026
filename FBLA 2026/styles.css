@@ -857,16 +857,6 @@ body.dark .calendar-nav h3 {
     letter-spacing: 0.5px;
     margin-left: 12px;
     box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
-    animation: pulseGlow 2s ease-in-out infinite;
-}
-
-@keyframes pulseGlow {
-    0%, 100% {
-        box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
-    }
-    50% {
-        box-shadow: 0 2px 12px rgba(79, 70, 229, 0.5);
-    }
 }
 
 .today-btn {
@@ -2505,7 +2495,6 @@ body.dark .profile-info p {
 .stats-card:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-    border-color: rgba(16, 185, 129, 0.3);
 }
 
 body.dark .stats-card {
@@ -2534,11 +2523,6 @@ body.dark .stats-card h4 {
     align-items: center;
     padding: 16px 0;
     border-bottom: 1px solid var(--gray-100);
-    transition: var(--transition);
-}
-
-.stat:hover {
-    padding-left: 8px;
 }
 
 body.dark .stat {
@@ -2561,18 +2545,12 @@ body.dark .stat-label {
 
 .stat-value {
     font-size: 24px;
-    font-weight: 700;
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    font-weight: 600;
+    color: var(--gray-900);
 }
 
 body.dark .stat-value {
-    background: linear-gradient(135deg, #60a5fa, #34d399);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--text);
 }
 
 .quick-actions h4 {
@@ -2661,18 +2639,10 @@ body.dark .progress-bar {
 .progress-fill {
     height: 100%;
     background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
-    background-size: 200% 100%;
     border-radius: 8px;
     transition: width 0.6s ease;
-    animation: shimmer 2s infinite;
     position: relative;
     box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
-}
-
-@keyframes shimmer {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
 }
 
 .progress-text {
