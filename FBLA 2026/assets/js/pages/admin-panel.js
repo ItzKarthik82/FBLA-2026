@@ -495,16 +495,23 @@ function setupVideoForm() {
     const form = document.getElementById('videoForm');
     if (!form) return;
 
+    function normalizeYouTubeId(input) {
+        const trimmed = input.trim();
+        const match = trimmed.match(/(?:v=|youtu\.be\/|embed\/)([A-Za-z0-9_-]{11})/);
+        return match ? match[1] : trimmed;
+    }
+
     form.addEventListener('submit', (e) => {
         e.preventDefault();
         
         const category = document.getElementById('videoCategory').value;
         const unit = document.getElementById('videoUnit').value;
         const videoNumber = document.getElementById('videoNumber').value.trim();
-        const title = document.getElementById('videoTitle').value;
-        const id = document.getElementById('videoId').value;
-        const desc = document.getElementById('videoDesc').value;
-        const youtubeId = document.getElementById('youtubeVideoId').value;
+        const title = document.getElementById('videoTitle').value.trim();
+        const id = document.getElementById('videoId').value.trim();
+        const desc = document.getElementById('videoDesc').value.trim();
+        const youtubeIdInput = document.getElementById('youtubeVideoId').value.trim();
+        const youtubeId = normalizeYouTubeId(youtubeIdInput);
 
         if (!category || !unit || !videoNumber || !title || !id || !desc || !youtubeId) {
             showNotification('Please fill in all fields!', 'error');
@@ -515,6 +522,12 @@ function setupVideoForm() {
         const videoNumValue = parseFloat(videoNumber);
         if (isNaN(videoNumValue) || videoNumValue <= 0) {
             showNotification('Please enter a valid video number', 'error');
+            return;
+        }
+
+        // Validate YouTube ID format (11 characters)
+        if (!/^[A-Za-z0-9_-]{11}$/.test(youtubeId)) {
+            showNotification('Please enter a valid YouTube ID or URL', 'error');
             return;
         }
 

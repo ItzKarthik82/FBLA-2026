@@ -746,8 +746,6 @@ function loadCustomVideos() {
     const customVideos = JSON.parse(localStorage.getItem('customVideos') || '[]');
     if (customVideos.length === 0) return;
 
-    // Videos are organized differently - we'll add them to a unit-based structure if needed
-    // For now, keep them in a flat grid but with unit organization
     const videosGrid = document.querySelector('#videos .videos-grid');
     if (!videosGrid) return;
 
@@ -755,19 +753,14 @@ function loadCustomVideos() {
         // Check if video already exists (avoid duplicates)
         if (document.getElementById(`${video.id}-video`)) return;
 
-        const videoNum = video.videoNumber || '1';
-        const displayNumber = `${video.unit || 1}.${videoNum}`;
-
         const videoDiv = document.createElement('div');
         videoDiv.className = 'video-card';
         videoDiv.id = `${video.id}-video`;
         videoDiv.innerHTML = `
-            <iframe width="100%" height="200" src="https://www.youtube.com/embed/${video.youtubeId}" frameborder="0" allowfullscreen></iframe>
-            <div style="padding: 12px;">
-                <span style="display: inline-block; background: rgba(102, 126, 234, 0.1); color: #667eea; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; margin-bottom: 6px;">${displayNumber}</span>
-                <h4>${video.title}</h4>
-                <p>${video.description}</p>
-            </div>
+            <iframe width="100%" height="200" src="https://www.youtube-nocookie.com/embed/${video.youtubeId}?rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <h4>${video.title}</h4>
+            <p>${video.description}</p>
+            <a class="btn small" href="https://www.youtube.com/watch?v=${video.youtubeId}" target="_blank" rel="noopener noreferrer">Watch on YouTube</a>
         `;
         videosGrid.appendChild(videoDiv);
     });
