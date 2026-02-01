@@ -82,13 +82,22 @@ function initAdminPanel() {
             e.preventDefault();
 
             const category = document.getElementById('lessonCategory').value;
+            const unit = document.getElementById('lessonUnit').value;
+            const lessonNumber = document.getElementById('lessonNumber').value.trim();
             const title = document.getElementById('lessonTitle').value.trim();
             const id = document.getElementById('lessonId').value.trim();
             const desc = document.getElementById('lessonDesc').value.trim();
             const content = document.getElementById('lessonContent').value.trim();
 
-            if (!category || !title || !id || !desc || !content) {
+            if (!category || !unit || !lessonNumber || !title || !id || !desc || !content) {
                 showNotification('Please fill in all fields', 'error');
+                return;
+            }
+
+            // Validate lesson number format
+            const lessonNumValue = parseFloat(lessonNumber);
+            if (isNaN(lessonNumValue) || lessonNumValue <= 0) {
+                showNotification('Please enter a valid lesson number', 'error');
                 return;
             }
 
@@ -103,6 +112,8 @@ function initAdminPanel() {
                 id,
                 title,
                 category,
+                unit: parseInt(unit),
+                lessonNumber: lessonNumber,
                 description: desc,
                 content,
                 createdAt: new Date().toISOString(),

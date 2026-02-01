@@ -638,6 +638,20 @@
                                         </select>
                                     </div>
                                     <div class="form-input-group">
+                                        <label>Unit</label>
+                                        <select id="lessonUnit" required>
+                                            <option value="">Select a unit...</option>
+                                            <option value="1">Unit 1</option>
+                                            <option value="2">Unit 2</option>
+                                            <option value="3">Unit 3</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-input-group">
+                                        <label>Lesson Number (e.g., 1 for Lesson 1.1, 2 for Lesson 1.2)</label>
+                                        <input type="text" id="lessonNumber" placeholder="1" pattern="[0-9]+(\.[0-9]+)?" required>
+                                        <small style="color: var(--gray-600); font-size: 12px; margin-top: 4px; display: block;">Enter a whole number (e.g., 1, 2, 3) or decimal (e.g., 1.1, 2.5)</small>
+                                    </div>
+                                    <div class="form-input-group">
                                         <label>Lesson Title</label>
                                         <input type="text" id="lessonTitle" placeholder="e.g., Algebra Essentials" required>
                                     </div>

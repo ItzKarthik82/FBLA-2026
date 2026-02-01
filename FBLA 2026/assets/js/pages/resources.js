@@ -546,7 +546,6 @@ function loadCustomLessons() {
     if (customLessons.length === 0) return;
 
     // Map categories to existing course containers
-    // Handle both "mathematics"/"math" and "history"/"history & social studies" variations
     const categoryToCourseId = {
         'mathematics': 'math-course',
         'math': 'math-course',
@@ -557,23 +556,27 @@ function loadCustomLessons() {
         'history & social studies': 'history-course'
     };
 
-    // Group custom lessons by category
-    const categories = {};
+    // Group custom lessons by category and unit
+    const categoryUnits = {};
     customLessons.forEach(lesson => {
-        // Normalize category to lowercase for grouping
         const normalizedCategory = lesson.category ? lesson.category.toLowerCase() : '';
-        if (!categories[normalizedCategory]) {
-            categories[normalizedCategory] = [];
+        const unit = lesson.unit || 1; // Default to unit 1 if not specified
+        
+        if (!categoryUnits[normalizedCategory]) {
+            categoryUnits[normalizedCategory] = {};
         }
-        categories[normalizedCategory].push(lesson);
+        if (!categoryUnits[normalizedCategory][unit]) {
+            categoryUnits[normalizedCategory][unit] = [];
+        }
+        categoryUnits[normalizedCategory][unit].push(lesson);
     });
 
     const completedLessons = JSON.parse(localStorage.getItem('completedLessons') || '[]');
 
-    // Add custom lessons to existing course cards
-    Object.keys(categories).forEach(category => {
+    // Add custom lessons to their respective units
+    Object.keys(categoryUnits).forEach(category => {
         const courseId = categoryToCourseId[category];
-        if (!courseId) return; // Skip if category doesn't map to a course
+        if (!courseId) return;
 
         const courseCard = document.getElementById(courseId);
         if (!courseCard) return;
@@ -581,29 +584,60 @@ function loadCustomLessons() {
         const subLessonsDiv = courseCard.querySelector('.sub-lessons');
         if (!subLessonsDiv) return;
 
-        const lessons = categories[category];
+        // Process each unit
+        Object.keys(categoryUnits[category]).forEach(unit => {
+            const lessons = categoryUnits[category][unit];
+            
+            // Find the unit header or the sub-lessons container for this unit
+            const unitHeaders = subLessonsDiv.querySelectorAll('.unit-header');
+            let insertPoint = null;
+            
+            // Find where to insert based on unit number
+            unitHeaders.forEach((header, index) => {
+                if (header.textContent.includes(`Unit ${unit}`)) {
+                    // Find the next unit header or end of sub-lessons
+                    const nextUnitHeader = unitHeaders[index + 1];
+                    if (nextUnitHeader) {
+                        insertPoint = nextUnitHeader;
+                    } else {
+                        // Last unit, append at the end
+                        insertPoint = null;
+                    }
+                }
+            });
 
-        // Add custom lessons to the existing sub-lessons div
-        lessons.forEach(lesson => {
-            // Check if lesson already exists (avoid duplicates)
-            if (document.getElementById(`${lesson.id}-btn`)) return;
+            // Add custom lessons to this unit
+            lessons.forEach(lesson => {
+                // Check if lesson already exists (avoid duplicates)
+                if (document.getElementById(`${lesson.id}-btn`)) return;
 
-            const subLesson = document.createElement('div');
-            subLesson.className = 'sub-lesson';
-            subLesson.innerHTML = `
-                <span class="lesson-title">${lesson.title}</span>
-                <span class="completion-status" id="${lesson.id}-status" data-lesson-id="${lesson.id}" data-role="status"></span>
-                <button class="btn small" id="${lesson.id}-btn" data-lesson-id="${lesson.id}" data-role="button" onclick="startLesson('${lesson.id}')">Start Lesson</button>
-            `;
-            subLessonsDiv.appendChild(subLesson);
+                const lessonNum = lesson.lessonNumber || '1';
+                const displayNumber = `${lesson.unit}.${lessonNum}`;
+                
+                const subLesson = document.createElement('div');
+                subLesson.className = 'sub-lesson';
+                subLesson.innerHTML = `
+                    <span class="lesson-number">${displayNumber}</span>
+                    <span class="lesson-title">${lesson.title}</span>
+                    <span class="completion-status" id="${lesson.id}-status" data-lesson-id="${lesson.id}" data-role="status"></span>
+                    <button class="btn small" id="${lesson.id}-btn" data-lesson-id="${lesson.id}" data-role="button" onclick="startLesson('${lesson.id}')">Start Lesson</button>
+                `;
+                
+                // Insert before the next unit header, or append at the end
+                if (insertPoint) {
+                    subLessonsDiv.insertBefore(subLesson, insertPoint);
+                } else {
+                    subLessonsDiv.appendChild(subLesson);
+                }
 
-            // Set initial completion status
-            const statusEl = document.getElementById(`${lesson.id}-status`);
-            const btnEl = document.getElementById(`${lesson.id}-btn`);
-            if (completedLessons.includes(lesson.id)) {
-                if (statusEl) statusEl.textContent = '✓ Completed';
-                if (btnEl) btnEl.classList.add('completed');
-            }
+                // Set initial completion status
+                const statusEl = document.getElementById(`${lesson.id}-status`);
+                const btnEl = document.getElementById(`${lesson.id}-btn`);
+                if (completedLessons.includes(lesson.id)) {
+                    if (statusEl) statusEl.textContent = '✓ Completed';
+                    if (btnEl) btnEl.classList.add('completed');
+                }
+            });
         });
 
         // Update course progress to include custom lessons
