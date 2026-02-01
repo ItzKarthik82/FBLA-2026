@@ -43,7 +43,7 @@ function startLesson(lessonId) {
         // Custom lesson
         if (lessonTitle) lessonTitle.textContent = customLesson.title;
         if (lessonContent) lessonContent.innerHTML = `<pre>${customLesson.content}</pre>`;
-        if (lessonModal) lessonModal.style.display = 'block';
+        if (lessonModal) lessonModal.classList.add('open');
     } else {
         // Default lesson
         const data = defaultLessonData[lessonId];
@@ -58,11 +58,11 @@ function startLesson(lessonId) {
             .then(response => response.text())
             .then(content => {
                 if (lessonContent) lessonContent.innerHTML = `<pre>${content}</pre>`;
-                if (lessonModal) lessonModal.style.display = 'block';
+                if (lessonModal) lessonModal.classList.add('open');
             })
             .catch(() => {
                 if (lessonContent) lessonContent.innerHTML = '<p>Error loading lesson content.</p>';
-                if (lessonModal) lessonModal.style.display = 'block';
+                if (lessonModal) lessonModal.classList.add('open');
             });
     }
 }
@@ -91,7 +91,7 @@ function completeLesson() {
 
 function closeModal() {
     const lessonModal = document.getElementById('lessonModal');
-    if (lessonModal) lessonModal.style.display = 'none';
+    if (lessonModal) lessonModal.classList.remove('open');
     currentLessonId = null;
 }
 
@@ -518,20 +518,26 @@ function loadCustomLessons() {
     if (customLessons.length === 0) return;
 
     // Map categories to existing course containers
+    // Handle both "mathematics"/"math" and "history"/"history & social studies" variations
     const categoryToCourseId = {
+        'mathematics': 'math-course',
         'math': 'math-course',
         'science': 'science-course',
         'english': 'english-course',
-        'history': 'history-course'
+        'english & writing': 'english-course',
+        'history': 'history-course',
+        'history & social studies': 'history-course'
     };
 
     // Group custom lessons by category
     const categories = {};
     customLessons.forEach(lesson => {
-        if (!categories[lesson.category]) {
-            categories[lesson.category] = [];
+        // Normalize category to lowercase for grouping
+        const normalizedCategory = lesson.category ? lesson.category.toLowerCase() : '';
+        if (!categories[normalizedCategory]) {
+            categories[normalizedCategory] = [];
         }
-        categories[lesson.category].push(lesson);
+        categories[normalizedCategory].push(lesson);
     });
 
     const completedLessons = JSON.parse(localStorage.getItem('completedLessons') || '[]');
