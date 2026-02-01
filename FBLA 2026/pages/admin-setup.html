@@ -162,22 +162,8 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Check if admin already exists
+            // Admin key allows creating multiple admin accounts
             const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
-            const adminExists = users.some(u => u.isAdmin);
-
-            if (adminExists) {
-                document.getElementById('adminSetup').style.display = 'none';
-                const msg = document.getElementById('successMessage');
-                msg.style.display = 'block';
-                msg.innerHTML = `
-                    <div style="font-size: 3em; margin: 20px 0;">⚠️</div>
-                    <h3>Admin Account Already Exists</h3>
-                    <p>An administrator account has already been created for this system.</p>
-                    <a href="login.html" class="submit-button" style="display: inline-block; text-decoration: none; margin-top: 20px;">Go to Login</a>
-                `;
-                return;
-            }
 
             const focusState = {};
 

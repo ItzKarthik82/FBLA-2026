@@ -1,3 +1,36 @@
+// Show notification toast
+function showNotification(msg, type) {
+    try {
+        const notif = document.createElement('div');
+        notif.className = `notification-popup ${type}`;
+        notif.innerHTML = `
+            <div class="notification-content">
+                <span class="notification-icon">${type === 'success' ? '✓' : '!'}</span>
+                <span class="notification-text">${msg}</span>
+                <button type="button" class="notification-close">×</button>
+            </div>
+        `;
+        
+        document.body.appendChild(notif);
+        
+        const closeBtn = notif.querySelector('.notification-close');
+        if (closeBtn) {
+            closeBtn.onclick = function() {
+                notif.remove();
+            };
+        }
+        
+        setTimeout(() => {
+            if (document.body.contains(notif)) {
+                notif.remove();
+            }
+        }, 4000);
+    } catch (e) {
+        console.error('Notification error:', e);
+        alert(msg);
+    }
+}
+
 function initAdminPanel() {
     // Load dashboard stats and setup
     loadDashboardStats();
@@ -319,16 +352,4 @@ function loadUsers() {
     if (users.length === 0) {
         usersList.innerHTML = '<p style="color: var(--text-muted);">No users registered yet.</p>';
     }
-}
-
-function showNotification(msg, type) {
-    const notif = document.createElement('div');
-    notif.className = `notification-popup ${type}`;
-    notif.textContent = msg;
-    notif.style.position = 'fixed';
-    notif.style.top = '20px';
-    notif.style.right = '20px';
-    notif.style.zIndex = '10000';
-    document.body.appendChild(notif);
-    setTimeout(() => notif.remove(), 3500);
 }
