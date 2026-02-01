@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - PeerLearn</title>
+    <link rel="stylesheet" href="../assets/css/base.css">
+    <link rel="stylesheet" href="../assets/css/components.css">
+    <link rel="stylesheet" href="../assets/css/dashboard.css">
+    <style>
+        .admin-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 20px;
+            min-height: 80vh;
+        }
+
+        .admin-sidebar {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+
+        .admin-sidebar h3 {
+            margin-top: 0;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .admin-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .admin-nav button {
+            background: none;
+            border: none;
+            padding: 12px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: left;
+            color: var(--text-color);
+            font-size: 0.95em;
+            transition: all 0.3s;
+        }
+
+        .admin-nav button:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .admin-nav button.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .admin-content {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 30px;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .section h2 {
+            margin-top: 0;
+            color: var(--primary-color);
+            margin-bottom: 25px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .lesson-form {
+            background: var(--bg-color);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .lesson-form h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .form-input-group {
+            margin-bottom: 15px;
+        }
+
+        .form-input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+
+        .form-input-group input,
+        .form-input-group select,
+        .form-input-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--input-bg);
+            color: var(--text-color);
+            font-family: inherit;
+        }
+
+        .form-input-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .lessons-list {
+            display: grid;
+            gap: 15px;
+        }
+
+        .lesson-item {
+            background: var(--bg-color);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .lesson-info h4 {
+            margin: 0 0 5px 0;
+        }
+
+        .lesson-info p {
+            margin: 0;
+            font-size: 0.9em;
+            color: var(--text-muted);
+        }
+
+        .lesson-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn.small {
+            padding: 8px 12px;
+            font-size: 0.9em;
+        }
+
+        .btn.danger {
+            background: #ef4444;
+            color: white;
+            border: none;
+        }
+
+        .btn.danger:hover {
+            background: #dc2626;
+        }
+
+        .users-list {
+            display: grid;
+            gap: 15px;
+        }
+
+        .user-item {
+            background: var(--bg-color);
+            padding: 15px;
+            border-radius: 8px;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr auto;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .user-info h4 {
+            margin: 0;
+        }
+
+        .user-info p {
+            margin: 5px 0 0 0;
+            font-size: 0.9em;
+            color: var(--text-muted);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .badge.admin {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .badge.student {
+            background: var(--border-color);
+            color: var(--text-color);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--bg-color);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin: 10px 0;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            color: var(--text-muted);
+        }
+
+        .settings-form {
+            max-width: 500px;
+        }
+
+        .settings-form .form-input-group {
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .admin-container {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-sidebar {
+                position: static;
+            }
+
+            .user-item {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-nav {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+
+            .admin-nav button {
+                flex: 1;
+                min-width: 100px;
+            }
+        }
+    </style>
+    <script src="../assets/js/core.js" defer></script>
+    <script src="../assets/js/pages/admin-panel.js" defer></script>
+</head>
+<body>
+    <header class="site-header">
+        <div class="container">
+            <h1 class="brand">PeerLearn</h1>
+            <p class="tag">Admin Control Panel</p>
+            <nav>
+                <ul class="nav">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="resources.html">Resources</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <div class="auth-menu">
+                    <button id="authMenuBtn" class="auth-trigger" aria-haspopup="true" aria-expanded="false">👤</button>
+                    <div class="auth-dropdown" id="authDropdown">
+                        <div class="auth-dropdown-header" id="authDropdownHeader">Not signed in</div>
+                        <button class="auth-item" data-action="login">Log In</button>
+                        <button class="auth-item" data-action="signup">Sign Up</button>
+                    </div>
+                </div>
+                <button id="themeToggle" class="btn outline">🌙</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="content">
+        <div class="container">
+            <div class="admin-container">
+                <!-- Sidebar -->
+                <div class="admin-sidebar">
+                    <h3>⚙️ Admin Menu</h3>
+                    <div class="admin-nav">
+                        <button class="nav-btn active" data-section="overview">Dashboard</button>
+                        <button class="nav-btn" data-section="lessons">Manage Lessons</button>
+                        <button class="nav-btn" data-section="users">Manage Users</button>
+                        <button class="nav-btn" data-section="settings">Settings</button>
+                    </div>
+                </div>
+
+                <!-- Content Area -->
+                <div class="admin-content">
+                    <!-- Overview Section -->
+                    <section id="overview" class="section active">
+                        <h2>Admin Dashboard</h2>
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-label">Total Users</div>
+                                <div class="stat-value" id="totalUsers">0</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Total Lessons</div>
+                                <div class="stat-value" id="totalLessons">0</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Active Sessions</div>
+                                <div class="stat-value" id="activeSessions">0</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Admin Accounts</div>
+                                <div class="stat-value" id="adminCount">0</div>
+                            </div>
+                        </div>
+                        <div style="background: var(--bg-color); padding: 20px; border-radius: 8px; margin-top: 20px;">
+                            <h3>Welcome to the Admin Panel</h3>
+                            <p>Use the menu on the left to manage lessons, users, and system settings. You have full control over the PeerLearn platform.</p>
+                        </div>
+                    </section>
+
+                    <!-- Lessons Management Section -->
+                    <section id="lessons" class="section">
+                        <h2>Manage Lessons</h2>
+                        
+                        <div class="lesson-form">
+                            <h3>Add New Lesson</h3>
+                            <form id="lessonForm">
+                                <div class="form-input-group">
+                                    <label>Subject Category</label>
+                                    <select id="lessonCategory" required>
+                                        <option value="">Select a category...</option>
+                                        <option value="mathematics">Mathematics</option>
+                                        <option value="science">Science</option>
+                                        <option value="english">English & Writing</option>
+                                        <option value="history">History & Social Studies</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="form-input-group">
+                                    <label>Lesson Title</label>
+                                    <input type="text" id="lessonTitle" placeholder="e.g., Algebra Essentials" required>
+                                </div>
+                                <div class="form-input-group">
+                                    <label>Lesson ID (unique identifier)</label>
+                                    <input type="text" id="lessonId" placeholder="e.g., algebra-101" required>
+                                </div>
+                                <div class="form-input-group">
+                                    <label>Description</label>
+                                    <textarea id="lessonDesc" placeholder="Brief description of the lesson" required></textarea>
+                                </div>
+                                <div class="form-input-group">
+                                    <label>Content</label>
+                                    <textarea id="lessonContent" placeholder="Enter the full lesson content here..." required></textarea>
+                                </div>
+                                <div class="button-group">
+                                    <button type="submit" class="btn primary">Add Lesson</button>
+                                    <button type="reset" class="btn outline">Clear</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <h3 style="margin-top: 30px;">Current Lessons</h3>
+                        <div class="lessons-list" id="lessonsList"></div>
+                    </section>
+
+                    <!-- Users Management Section -->
+                    <section id="users" class="section">
+                        <h2>Manage Users</h2>
+                        <div class="users-list" id="usersList"></div>
+                    </section>
+
+                    <!-- Settings Section -->
+                    <section id="settings" class="section">
+                        <h2>System Settings</h2>
+                        <div class="settings-form">
+                            <div class="form-input-group">
+                                <label>Platform Name</label>
+                                <input type="text" id="platformName" value="PeerLearn">
+                            </div>
+                            <div class="form-input-group">
+                                <label>Platform Tagline</label>
+                                <input type="text" id="platformTagline" value="Academic Learning Hub">
+                            </div>
+                            <div class="form-input-group">
+                                <label>Max Students per Session</label>
+                                <input type="number" id="maxStudents" value="6" min="1">
+                            </div>
+                            <div class="form-input-group">
+                                <label>Enable Registrations</label>
+                                <select id="enableReg">
+                                    <option value="true">Yes</option>
+                                    <option value="false">No</option>
+                                </select>
+                            </div>
+                            <button class="btn primary" onclick="saveSettings()">Save Settings</button>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>PeerLearn Admin</h4>
+                    <p>Administrative Control Panel</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 PeerLearn. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

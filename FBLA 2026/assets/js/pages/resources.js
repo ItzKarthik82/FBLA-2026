@@ -20,7 +20,7 @@ function switchTab(tabId, button) {
 function startLesson(lessonId) {
     currentLessonId = lessonId;
 
-    const lessonData = {
+    const defaultLessonData = {
         'algebra': { file: 'algebra-guide.txt', title: 'Algebra Essentials' },
         'geometry': { file: 'geometry-guide.txt', title: 'Geometry Fundamentals' },
         'biology': { file: 'biology-guide.txt', title: 'Biology Basics' },
@@ -31,29 +31,40 @@ function startLesson(lessonId) {
         'us-history': { file: 'us-history-guide.txt', title: 'US History' }
     };
 
-    const data = lessonData[lessonId];
-    if (!data) {
-        showToast('Lesson not available yet.');
-        return;
-    }
+    // Check for custom lessons first
+    const customLessons = JSON.parse(localStorage.getItem('customLessons') || '[]');
+    const customLesson = customLessons.find(l => l.id === lessonId);
 
     const lessonTitle = document.getElementById('lessonTitle');
-    if (lessonTitle) lessonTitle.textContent = data.title;
+    const lessonContent = document.getElementById('lessonContent');
+    const lessonModal = document.getElementById('lessonModal');
 
-    fetch(`../assets/materials/${data.file}`)
-        .then(response => response.text())
-        .then(content => {
-            const lessonContent = document.getElementById('lessonContent');
-            if (lessonContent) lessonContent.innerHTML = `<pre>${content}</pre>`;
-            const lessonModal = document.getElementById('lessonModal');
-            if (lessonModal) lessonModal.style.display = 'block';
-        })
-        .catch(() => {
-            const lessonContent = document.getElementById('lessonContent');
-            if (lessonContent) lessonContent.innerHTML = '<p>Error loading lesson content.</p>';
-            const lessonModal = document.getElementById('lessonModal');
-            if (lessonModal) lessonModal.style.display = 'block';
-        });
+    if (customLesson) {
+        // Custom lesson
+        if (lessonTitle) lessonTitle.textContent = customLesson.title;
+        if (lessonContent) lessonContent.innerHTML = `<pre>${customLesson.content}</pre>`;
+        if (lessonModal) lessonModal.style.display = 'block';
+    } else {
+        // Default lesson
+        const data = defaultLessonData[lessonId];
+        if (!data) {
+            showToast('Lesson not available yet.');
+            return;
+        }
+
+        if (lessonTitle) lessonTitle.textContent = data.title;
+
+        fetch(`../assets/materials/${data.file}`)
+            .then(response => response.text())
+            .then(content => {
+                if (lessonContent) lessonContent.innerHTML = `<pre>${content}</pre>`;
+                if (lessonModal) lessonModal.style.display = 'block';
+            })
+            .catch(() => {
+                if (lessonContent) lessonContent.innerHTML = '<p>Error loading lesson content.</p>';
+                if (lessonModal) lessonModal.style.display = 'block';
+            });
+    }
 }
 
 function completeLesson() {
@@ -98,6 +109,16 @@ function updateLessonProgress() {
         { id: 'us-history', statusId: 'us-history-status', btnId: 'us-history-btn' }
     ];
 
+    // Add custom lessons to the list
+    const customLessons = JSON.parse(localStorage.getItem('customLessons') || '[]');
+    customLessons.forEach(lesson => {
+        lessons.push({
+            id: lesson.id,
+            statusId: `${lesson.id}-status`,
+            btnId: `${lesson.id}-btn`
+        });
+    });
+
     lessons.forEach(lesson => {
         const statusEl = document.getElementById(lesson.statusId);
         const btnEl = document.getElementById(lesson.btnId);
@@ -105,13 +126,11 @@ function updateLessonProgress() {
         if (completedLessons.includes(lesson.id)) {
             if (statusEl) statusEl.textContent = '✓ Completed';
             if (btnEl) {
-                btnEl.textContent = 'Review Lesson';
                 btnEl.classList.add('completed');
             }
         } else {
             if (statusEl) statusEl.textContent = '';
             if (btnEl) {
-                btnEl.textContent = 'Start Lesson';
                 btnEl.classList.remove('completed');
             }
         }
@@ -136,7 +155,7 @@ function updateLessonProgress() {
 
         const courseEl = document.getElementById(course.courseId);
         if (courseEl) {
-            if (completed === total) {
+            if (completed === total && total > 0) {
                 courseEl.classList.add('completed');
             } else {
                 courseEl.classList.remove('completed');
@@ -472,6 +491,10 @@ function updateQuizProgress() {
 document.addEventListener('DOMContentLoaded', () => {
     initBaseUI();
     updateAuthUI();
+    
+    // Load custom lessons first, before updating progress
+    loadCustomLessons();
+    
     updateLessonProgress();
     updateQuizProgress();
     startStudyTimeTracking();
@@ -482,9 +505,104 @@ document.addEventListener('DOMContentLoaded', () => {
             switchTab(tabId, btn);
         });
     });
+
+    // Refresh lessons on visible to catch any changes
+    setTimeout(() => {
+        loadCustomLessons();
+        updateLessonProgress();
+    }, 500);
 });
+
+function loadCustomLessons() {
+    const customLessons = JSON.parse(localStorage.getItem('customLessons') || '[]');
+    if (customLessons.length === 0) return;
+
+    const coursesGrid = document.querySelector('.courses-grid');
+    if (!coursesGrid) return;
+
+    // Group custom lessons by category
+    const categories = {};
+    customLessons.forEach(lesson => {
+        if (!categories[lesson.category]) {
+            categories[lesson.category] = [];
+        }
+        categories[lesson.category].push(lesson);
+    });
+
+    // Create course cards for custom lessons
+    Object.keys(categories).forEach(category => {
+        const lessons = categories[category];
+        
+        // Check if a course card for this category already exists
+        let courseCard = document.getElementById(`${category}-custom-course`);
+        
+        if (!courseCard) {
+            // Create new course card
+            courseCard = document.createElement('div');
+            courseCard.className = 'course-card';
+            courseCard.id = `${category}-custom-course`;
+            
+            const categoryTitle = category.charAt(0).toUpperCase() + category.slice(1).replace('-', ' ');
+            courseCard.innerHTML = `
+                <h3>${categoryTitle} (Custom)</h3>
+                <p>Custom lessons created by instructors.</p>
+                <div class="course-progress" id="${category}-custom-progress">0 / ${lessons.length} completed</div>
+                <div class="sub-lessons" id="${category}-custom-lessons"></div>
+            `;
+            
+            coursesGrid.appendChild(courseCard);
+        }
+
+        // Add lessons to the course card
+        const subLessonsDiv = document.getElementById(`${category}-custom-lessons`);
+        if (subLessonsDiv) {
+            subLessonsDiv.innerHTML = '';
+
+            lessons.forEach(lesson => {
+                const subLesson = document.createElement('div');
+                subLesson.className = 'sub-lesson';
+                subLesson.innerHTML = `
+                    <span class="lesson-title">${lesson.title}</span>
+                    <span class="completion-status" id="${lesson.id}-status"></span>
+                    <button class="btn small" id="${lesson.id}-btn" onclick="startLesson('${lesson.id}')">Start Lesson</button>
+                `;
+                subLessonsDiv.appendChild(subLesson);
+            });
+
+            // Update progress for this category
+            const completedLessons = JSON.parse(localStorage.getItem('completedLessons') || '[]');
+            const completed = lessons.filter(l => completedLessons.includes(l.id)).length;
+            const progressEl = document.getElementById(`${category}-custom-progress`);
+            if (progressEl) {
+                progressEl.textContent = `${completed} / ${lessons.length} completed`;
+            }
+        }
+    });
+
+    // Update all lesson statuses
+    const completedLessons = JSON.parse(localStorage.getItem('completedLessons') || '[]');
+    customLessons.forEach(lesson => {
+        const statusEl = document.getElementById(`${lesson.id}-status`);
+        const btnEl = document.getElementById(`${lesson.id}-btn`);
+
+        if (completedLessons.includes(lesson.id)) {
+            if (statusEl) statusEl.textContent = '✓ Completed';
+            if (btnEl) btnEl.classList.add('completed');
+        } else {
+            if (statusEl) statusEl.textContent = '';
+            if (btnEl) btnEl.classList.remove('completed');
+        }
+    });
+}
 
 window.addEventListener('pageshow', () => {
     updateLessonProgress();
     updateQuizProgress();
+    loadCustomLessons();
+});
+
+// Listen for lesson updates from admin panel
+window.addEventListener('lessonsUpdated', () => {
+    loadCustomLessons();
+    updateLessonProgress();
 });

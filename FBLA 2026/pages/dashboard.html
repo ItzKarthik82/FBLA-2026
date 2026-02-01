@@ -7,6 +7,413 @@
     <link rel="stylesheet" href="../assets/css/base.css">
     <link rel="stylesheet" href="../assets/css/components.css">
     <link rel="stylesheet" href="../assets/css/dashboard.css">
+    <style>
+        .admin-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 40px;
+        }
+
+        .admin-sidebar {
+            background: var(--white);
+            border-radius: var(--border-radius-lg);
+            padding: 24px;
+            height: fit-content;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid transparent;
+        }
+
+        body.dark .admin-sidebar {
+            background: var(--card-bg);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .admin-sidebar h3 {
+            margin-top: 0;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        .admin-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .admin-nav button {
+            background: transparent;
+            border: none;
+            padding: 12px 15px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            text-align: left;
+            color: var(--gray-700);
+            font-size: 14px;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        body.dark .admin-nav button {
+            color: var(--text-muted);
+        }
+
+        .admin-nav button:hover {
+            background: var(--gray-100);
+            color: var(--primary);
+        }
+
+        body.dark .admin-nav button:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+        }
+
+        .admin-nav button.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--white);
+        }
+
+        .admin-content {
+            background: var(--white);
+            border-radius: var(--border-radius-lg);
+            padding: 32px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid transparent;
+        }
+
+        body.dark .admin-content {
+            background: var(--card-bg);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .section h2 {
+            margin-top: 0;
+            color: var(--gray-900);
+            margin-bottom: 28px;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        body.dark .section h2 {
+            color: var(--white);
+        }
+
+        .lesson-form {
+            background: var(--gray-50);
+            padding: 24px;
+            border-radius: var(--border-radius-lg);
+            border: 1px solid var(--gray-200);
+            margin-bottom: 32px;
+        }
+
+        body.dark .lesson-form {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--border);
+        }
+
+        .lesson-form h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        body.dark .lesson-form h3 {
+            color: var(--white);
+        }
+
+        .form-input-group {
+            margin-bottom: 18px;
+        }
+
+        .form-input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--gray-700);
+        }
+
+        body.dark .form-input-group label {
+            color: var(--text);
+        }
+
+        .form-input-group input,
+        .form-input-group select,
+        .form-input-group textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--gray-300);
+            border-radius: var(--border-radius);
+            background: var(--white);
+            color: var(--gray-900);
+            font-family: inherit;
+            font-size: 14px;
+            box-sizing: border-box;
+            transition: var(--transition);
+        }
+
+        body.dark .form-input-group input,
+        body.dark .form-input-group select,
+        body.dark .form-input-group textarea {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--border);
+            color: var(--text);
+        }
+
+        .form-input-group input:focus,
+        .form-input-group select:focus,
+        .form-input-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-input-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .lessons-list {
+            display: grid;
+            gap: 16px;
+        }
+
+        .lesson-item {
+            background: var(--gray-50);
+            padding: 18px;
+            border-radius: var(--border-radius-lg);
+            border-left: 4px solid var(--primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition);
+        }
+
+        body.dark .lesson-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-left-color: #667eea;
+        }
+
+        .lesson-item:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transform: translateY(-2px);
+        }
+
+        body.dark .lesson-item:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .lesson-info h4 {
+            margin: 0 0 6px 0;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        body.dark .lesson-info h4 {
+            color: var(--white);
+        }
+
+        .lesson-info p {
+            margin: 0;
+            font-size: 13px;
+            color: var(--gray-600);
+        }
+
+        body.dark .lesson-info p {
+            color: var(--text-muted);
+        }
+
+        .lesson-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .users-list {
+            display: grid;
+            gap: 16px;
+        }
+
+        .user-item {
+            background: var(--gray-50);
+            padding: 18px;
+            border-radius: var(--border-radius-lg);
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr auto;
+            gap: 18px;
+            align-items: center;
+            transition: var(--transition);
+        }
+
+        body.dark .user-item {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .user-item:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        body.dark .user-item:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .user-info h4 {
+            margin: 0;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        body.dark .user-info h4 {
+            color: var(--white);
+        }
+
+        .user-info p {
+            margin: 5px 0 0 0;
+            font-size: 13px;
+            color: var(--gray-600);
+        }
+
+        body.dark .user-info p {
+            color: var(--text-muted);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge.admin {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--white);
+        }
+
+        .badge.student {
+            background: var(--gray-200);
+            color: var(--gray-700);
+        }
+
+        body.dark .badge.student {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-muted);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: var(--gray-50);
+            padding: 24px;
+            border-radius: var(--border-radius-lg);
+            text-align: center;
+            border: 1px solid var(--gray-200);
+            transition: var(--transition);
+        }
+
+        body.dark .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--border);
+        }
+
+        .stat-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transform: translateY(-2px);
+        }
+
+        body.dark .stat-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 12px 0;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: var(--gray-600);
+            font-weight: 500;
+        }
+
+        body.dark .stat-label {
+            color: var(--text-muted);
+        }
+
+        .settings-form {
+            max-width: 500px;
+        }
+
+        .settings-form .form-input-group {
+            margin-bottom: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .admin-container {
+                grid-template-columns: 1fr;
+            }
+
+            .user-item {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-nav {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+
+            .admin-nav button {
+                flex: 1;
+                min-width: 100px;
+            }
+
+            .lesson-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .lesson-actions {
+                width: 100%;
+                margin-top: 12px;
+            }
+        }
+
+        .student-dashboard {
+            display: none;
+        }
+
+        .admin-dashboard {
+            display: none;
+        }
+    </style>
     <script src="../assets/js/core.js" defer></script>
     <script src="../assets/js/progress.js" defer></script>
     <script>
@@ -16,6 +423,7 @@
         }
     </script>
     <script src="../assets/js/pages/dashboard.js" defer></script>
+    <script src="../assets/js/pages/admin-panel.js" defer></script>
 </head>
 <body>
     <header class="site-header">
@@ -47,105 +455,237 @@
 
     <main class="content">
         <div class="container">
-            <div class="dashboard-header">
-                <h2 id="welcomeMessage">Welcome back, Student!</h2>
-                <p>Track your progress and continue learning.</p>
-            </div>
+            <!-- STUDENT DASHBOARD -->
+            <div class="student-dashboard">
+                <div class="dashboard-header">
+                    <h2 id="welcomeMessage">Welcome back, Student!</h2>
+                    <p>Track your progress and continue learning.</p>
+                </div>
 
-            <div class="dashboard-grid">
-                <div class="dashboard-sidebar">
-                    <div class="profile-card">
-                        <div class="profile-info">
-                            <h3 id="profileName">John Doe</h3>
-                            <p id="profileEmail">student@example.com</p>
+                <div class="dashboard-grid">
+                    <div class="dashboard-sidebar">
+                        <div class="profile-card">
+                            <div class="profile-info">
+                                <h3 id="profileName">John Doe</h3>
+                                <p id="profileEmail">student@example.com</p>
+                            </div>
+                        </div>
+
+                        <div class="stats-card">
+                            <h4>Quick Stats</h4>
+                            <div class="stat">
+                                <span class="stat-label">Lessons Completed</span>
+                                <span class="stat-value" id="lessonsCount">0</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">Quizzes Passed</span>
+                                <span class="stat-value" id="quizzesCount">0</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">Hours Studied</span>
+                                <span class="stat-value" id="hoursCount">0</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">Achievements</span>
+                                <span class="stat-value" id="achievementsCount">0</span>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="stats-card">
-                        <h4>Quick Stats</h4>
-                        <div class="stat">
-                            <span class="stat-label">Lessons Completed</span>
-                            <span class="stat-value" id="lessonsCount">0</span>
+                    <div class="dashboard-main">
+                        <div class="progress-section">
+                            <h3>Your Progress</h3>
+                            <div class="progress-cards">
+                                <div class="progress-card">
+                                    <h4>Mathematics</h4>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" id="mathProgress" style="width: 0%"></div>
+                                    </div>
+                                    <span class="progress-text" id="mathProgressText">0% Complete</span>
+                                </div>
+                                <div class="progress-card">
+                                    <h4>Science</h4>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" id="scienceProgress" style="width: 0%"></div>
+                                    </div>
+                                    <span class="progress-text" id="scienceProgressText">0% Complete</span>
+                                </div>
+                                <div class="progress-card">
+                                    <h4>English</h4>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" id="englishProgress" style="width: 0%"></div>
+                                    </div>
+                                    <span class="progress-text" id="englishProgressText">0% Complete</span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="stat">
-                            <span class="stat-label">Quizzes Passed</span>
-                            <span class="stat-value" id="quizzesCount">0</span>
+
+                        <div class="recent-activity">
+                            <h3>Recent Activity</h3>
+                            <div class="activity-list" id="activityList">
+                                <!-- Activities will be loaded dynamically -->
+                            </div>
                         </div>
-                        <div class="stat">
-                            <span class="stat-label">Hours Studied</span>
-                            <span class="stat-value" id="hoursCount">0</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-label">Achievements</span>
-                            <span class="stat-value" id="achievementsCount">0</span>
+
+                        <div class="achievements-section">
+                            <h3>Achievements</h3>
+                            <div class="achievements-grid">
+                                <div class="achievement locked" id="first-steps">
+                                    <div class="achievement-icon">🏆</div>
+                                    <h4>First Steps</h4>
+                                    <p>Complete your first lesson</p>
+                                </div>
+                                <div class="achievement locked" id="quiz-master">
+                                    <div class="achievement-icon">🎯</div>
+                                    <h4>Quiz Master</h4>
+                                    <p>Pass 5 quizzes</p>
+                                </div>
+                                <div class="achievement locked" id="dedicated-learner">
+                                    <div class="achievement-icon">📚</div>
+                                    <h4>Dedicated Learner</h4>
+                                    <p>Complete 10 lessons</p>
+                                </div>
+                                <div class="achievement locked" id="study-group">
+                                    <div class="achievement-icon">👥</div>
+                                    <h4>Study Group</h4>
+                                    <p>Join 5 study sessions</p>
+                                </div>
+                                <div class="achievement locked" id="academic-excellence">
+                                    <div class="achievement-icon">🌟</div>
+                                    <h4>Academic Excellence</h4>
+                                    <p>Complete all subjects</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="dashboard-main">
-                    <div class="progress-section">
-                        <h3>Your Progress</h3>
-                        <div class="progress-cards">
-                            <div class="progress-card">
-                                <h4>Mathematics</h4>
-                                <div class="progress-bar">
-                                    <div class="progress-fill" id="mathProgress" style="width: 0%"></div>
-                                </div>
-                                <span class="progress-text" id="mathProgressText">0% Complete</span>
-                            </div>
-                            <div class="progress-card">
-                                <h4>Science</h4>
-                                <div class="progress-bar">
-                                    <div class="progress-fill" id="scienceProgress" style="width: 0%"></div>
-                                </div>
-                                <span class="progress-text" id="scienceProgressText">0% Complete</span>
-                            </div>
-                            <div class="progress-card">
-                                <h4>English</h4>
-                                <div class="progress-bar">
-                                    <div class="progress-fill" id="englishProgress" style="width: 0%"></div>
-                                </div>
-                                <span class="progress-text" id="englishProgressText">0% Complete</span>
-                            </div>
+            <!-- ADMIN DASHBOARD -->
+            <div class="admin-dashboard">
+                <div class="dashboard-header">
+                    <h2 id="adminWelcome">Admin Control Panel</h2>
+                    <p>Manage lessons, users, and system settings.</p>
+                </div>
+
+                <div class="admin-container">
+                    <!-- Sidebar -->
+                    <div class="admin-sidebar">
+                        <h3>⚙️ Admin Menu</h3>
+                        <div class="admin-nav">
+                            <button class="nav-btn active" data-section="overview">Dashboard</button>
+                            <button class="nav-btn" data-section="lessons">Manage Lessons</button>
+                            <button class="nav-btn" data-section="users">Manage Users</button>
+                            <button class="nav-btn" data-section="settings">Settings</button>
                         </div>
                     </div>
 
-                    <div class="recent-activity">
-                        <h3>Recent Activity</h3>
-                        <div class="activity-list" id="activityList">
-                            <!-- Activities will be loaded dynamically -->
-                        </div>
-                    </div>
+                    <!-- Content Area -->
+                    <div class="admin-content">
+                        <!-- Overview Section -->
+                        <section id="overview" class="section active">
+                            <h2>Admin Overview</h2>
+                            <div class="stats-grid">
+                                <div class="stat-card">
+                                    <div class="stat-label">Total Users</div>
+                                    <div class="stat-value" id="totalUsers">0</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-label">Total Lessons</div>
+                                    <div class="stat-value" id="totalLessons">0</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-label">Active Sessions</div>
+                                    <div class="stat-value" id="activeSessions">0</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-label">Admin Accounts</div>
+                                    <div class="stat-value" id="adminCount">0</div>
+                                </div>
+                            </div>
+                            <div style="background: var(--bg-color); padding: 20px; border-radius: 8px; margin-top: 20px;">
+                                <h3>Welcome to the Admin Panel</h3>
+                                <p>Use the menu on the left to manage lessons, users, and system settings. You have full control over the PeerLearn platform.</p>
+                            </div>
+                        </section>
 
-                    <div class="achievements-section">
-                        <h3>Achievements</h3>
-                        <div class="achievements-grid">
-                            <div class="achievement locked" id="first-steps">
-                                <div class="achievement-icon">🏆</div>
-                                <h4>First Steps</h4>
-                                <p>Complete your first lesson</p>
+                        <!-- Lessons Management Section -->
+                        <section id="lessons" class="section">
+                            <h2>Manage Lessons</h2>
+                            
+                            <div class="lesson-form">
+                                <h3>Add New Lesson</h3>
+                                <form id="lessonForm">
+                                    <div class="form-input-group">
+                                        <label>Subject Category</label>
+                                        <select id="lessonCategory" required>
+                                            <option value="">Select a category...</option>
+                                            <option value="mathematics">Mathematics</option>
+                                            <option value="science">Science</option>
+                                            <option value="english">English & Writing</option>
+                                            <option value="history">History & Social Studies</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-input-group">
+                                        <label>Lesson Title</label>
+                                        <input type="text" id="lessonTitle" placeholder="e.g., Algebra Essentials" required>
+                                    </div>
+                                    <div class="form-input-group">
+                                        <label>Lesson ID (unique identifier)</label>
+                                        <input type="text" id="lessonId" placeholder="e.g., algebra-101" required>
+                                    </div>
+                                    <div class="form-input-group">
+                                        <label>Description</label>
+                                        <textarea id="lessonDesc" placeholder="Brief description of the lesson" required></textarea>
+                                    </div>
+                                    <div class="form-input-group">
+                                        <label>Content</label>
+                                        <textarea id="lessonContent" placeholder="Enter the full lesson content here..." required></textarea>
+                                    </div>
+                                    <div class="button-group">
+                                        <button type="submit" class="btn primary">Add Lesson</button>
+                                        <button type="reset" class="btn outline">Clear</button>
+                                    </div>
+                                </form>
                             </div>
-                            <div class="achievement locked" id="quiz-master">
-                                <div class="achievement-icon">🎯</div>
-                                <h4>Quiz Master</h4>
-                                <p>Pass 5 quizzes</p>
+
+                            <h3 style="margin-top: 30px;">Current Lessons</h3>
+                            <div class="lessons-list" id="lessonsList"></div>
+                        </section>
+
+                        <!-- Users Management Section -->
+                        <section id="users" class="section">
+                            <h2>Manage Users</h2>
+                            <div class="users-list" id="usersList"></div>
+                        </section>
+
+                        <!-- Settings Section -->
+                        <section id="settings" class="section">
+                            <h2>System Settings</h2>
+                            <div class="settings-form">
+                                <div class="form-input-group">
+                                    <label>Platform Name</label>
+                                    <input type="text" id="platformName" value="PeerLearn">
+                                </div>
+                                <div class="form-input-group">
+                                    <label>Platform Tagline</label>
+                                    <input type="text" id="platformTagline" value="Academic Learning Hub">
+                                </div>
+                                <div class="form-input-group">
+                                    <label>Max Students per Session</label>
+                                    <input type="number" id="maxStudents" value="6" min="1">
+                                </div>
+                                <div class="form-input-group">
+                                    <label>Enable Registrations</label>
+                                    <select id="enableReg">
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
+                                    </select>
+                                </div>
+                                <button class="btn primary" onclick="saveSettings()">Save Settings</button>
                             </div>
-                            <div class="achievement locked" id="dedicated-learner">
-                                <div class="achievement-icon">📚</div>
-                                <h4>Dedicated Learner</h4>
-                                <p>Complete 10 lessons</p>
-                            </div>
-                            <div class="achievement locked" id="study-group">
-                                <div class="achievement-icon">👥</div>
-                                <h4>Study Group</h4>
-                                <p>Join 5 study sessions</p>
-                            </div>
-                            <div class="achievement locked" id="academic-excellence">
-                                <div class="achievement-icon">🌟</div>
-                                <h4>Academic Excellence</h4>
-                                <p>Complete all subjects</p>
-                            </div>
-                        </div>
+                        </section>
                     </div>
                 </div>
             </div>
