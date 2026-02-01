@@ -261,6 +261,16 @@ body.dark .course-progress {
     color: white;
 }
 
+.course-card.completed .unit-header {
+    color: white;
+    border-bottom-color: rgba(255, 255, 255, 0.3);
+}
+
+.course-card.completed .lesson-number {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
 /* Sub-lessons */
 .sub-lessons {
     display: flex;
