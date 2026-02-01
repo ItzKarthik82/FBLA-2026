@@ -9,9 +9,27 @@ document.addEventListener('DOMContentLoaded', () => {
     function showNotif(msg, type) {
         const notif = document.createElement('div');
         notif.className = `notification-popup ${type}`;
-        notif.textContent = msg;
+        notif.innerHTML = `
+            <div class="notification-content">
+                <span class="notification-icon">${type === 'success' ? '✓' : '!'}</span>
+                <span class="notification-text">${msg}</span>
+                <button type="button" class="notification-close">×</button>
+            </div>
+        `;
         document.body.appendChild(notif);
-        setTimeout(() => notif.remove(), 3500);
+        
+        const closeBtn = notif.querySelector('.notification-close');
+        if (closeBtn) {
+            closeBtn.onclick = function() {
+                notif.remove();
+            };
+        }
+        
+        setTimeout(() => {
+            if (document.body.contains(notif)) {
+                notif.remove();
+            }
+        }, 4000);
     }
 
     function isValidEmail(email) {
