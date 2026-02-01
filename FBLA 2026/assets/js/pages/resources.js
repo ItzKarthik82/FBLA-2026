@@ -670,29 +670,75 @@ function loadCustomQuizzes() {
         'history & social studies': 'history-quizzes'
     };
 
+    // Group custom quizzes by category and unit
+    const categoryUnits = {};
     customQuizzes.forEach(quiz => {
         const normalizedCategory = quiz.category ? quiz.category.toLowerCase() : '';
-        const courseId = categoryToCourseId[normalizedCategory];
+        const unit = quiz.unit || 1; // Default to unit 1 if not specified
         
+        if (!categoryUnits[normalizedCategory]) {
+            categoryUnits[normalizedCategory] = {};
+        }
+        if (!categoryUnits[normalizedCategory][unit]) {
+            categoryUnits[normalizedCategory][unit] = [];
+        }
+        categoryUnits[normalizedCategory][unit].push(quiz);
+    });
+
+    // Add custom quizzes to their respective units
+    Object.keys(categoryUnits).forEach(category => {
+        const courseId = categoryToCourseId[category];
         if (!courseId) return;
 
         const quizContainer = document.getElementById(courseId);
         if (!quizContainer) return;
 
-        // Check if quiz already exists (avoid duplicates)
-        if (document.getElementById(`${quiz.id}-quiz-btn`)) return;
+        // Process each unit
+        Object.keys(categoryUnits[category]).forEach(unit => {
+            const quizzes = categoryUnits[category][unit];
+            
+            // Find the unit header or the quizzes container for this unit
+            const unitHeaders = quizContainer.querySelectorAll('.unit-header');
+            let insertPoint = null;
+            
+            // Find where to insert based on unit number
+            unitHeaders.forEach((header, index) => {
+                if (header.textContent.includes(`Unit ${unit}`)) {
+                    // Find the next unit header or end of quizzes
+                    const nextUnitHeader = unitHeaders[index + 1];
+                    if (nextUnitHeader) {
+                        insertPoint = nextUnitHeader;
+                    } else {
+                        // Last unit, append at the end
+                        insertPoint = null;
+                    }
+                }
+            });
 
-        const quizDiv = document.createElement('div');
-        quizDiv.className = 'quiz-item';
-        quizDiv.innerHTML = `
-            <div class="quiz-header">
-                <h4>${quiz.title}</h4>
-                <p>${quiz.description}</p>
-            </div>
-            <p style="font-size: 0.9em; color: var(--text-muted);">${quiz.questions.length} questions</p>
-            <button class="btn small" id="${quiz.id}-quiz-btn" onclick="startQuiz('${quiz.id}')">Take Quiz</button>
-        `;
-        quizContainer.appendChild(quizDiv);
+            // Add custom quizzes to this unit
+            quizzes.forEach(quiz => {
+                // Check if quiz already exists (avoid duplicates)
+                if (document.getElementById(`${quiz.id}-quiz-btn`)) return;
+
+                const quizNum = quiz.quizNumber || '1';
+                const displayNumber = `${quiz.unit}.${quizNum}`;
+
+                const quizDiv = document.createElement('div');
+                quizDiv.className = 'sub-lesson';
+                quizDiv.innerHTML = `
+                    <span class="lesson-number">${displayNumber}</span>
+                    <span class="lesson-title">${quiz.title}</span>
+                    <button class="btn small" id="${quiz.id}-quiz-btn" onclick="startQuiz('${quiz.id}')">Take Quiz</button>
+                `;
+                
+                // Insert before the next unit header, or append at the end
+                if (insertPoint) {
+                    quizContainer.insertBefore(quizDiv, insertPoint);
+                } else {
+                    quizContainer.appendChild(quizDiv);
+                }
+            });
+        });
     });
 }
 
@@ -700,6 +746,8 @@ function loadCustomVideos() {
     const customVideos = JSON.parse(localStorage.getItem('customVideos') || '[]');
     if (customVideos.length === 0) return;
 
+    // Videos are organized differently - we'll add them to a unit-based structure if needed
+    // For now, keep them in a flat grid but with unit organization
     const videosGrid = document.querySelector('#videos .videos-grid');
     if (!videosGrid) return;
 
@@ -707,13 +755,19 @@ function loadCustomVideos() {
         // Check if video already exists (avoid duplicates)
         if (document.getElementById(`${video.id}-video`)) return;
 
+        const videoNum = video.videoNumber || '1';
+        const displayNumber = `${video.unit || 1}.${videoNum}`;
+
         const videoDiv = document.createElement('div');
         videoDiv.className = 'video-card';
         videoDiv.id = `${video.id}-video`;
         videoDiv.innerHTML = `
             <iframe width="100%" height="200" src="https://www.youtube.com/embed/${video.youtubeId}" frameborder="0" allowfullscreen></iframe>
-            <h4>${video.title}</h4>
-            <p>${video.description}</p>
+            <div style="padding: 12px;">
+                <span style="display: inline-block; background: rgba(102, 126, 234, 0.1); color: #667eea; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; margin-bottom: 6px;">${displayNumber}</span>
+                <h4>${video.title}</h4>
+                <p>${video.description}</p>
+            </div>
         `;
         videosGrid.appendChild(videoDiv);
     });
@@ -734,42 +788,77 @@ function loadCustomMaterials() {
         'history & social studies': 'history-materials'
     };
 
+    // Group custom materials by category and unit
+    const categoryUnits = {};
     customMaterials.forEach(material => {
         const normalizedCategory = material.category ? material.category.toLowerCase() : '';
-        const courseId = categoryToCourseId[normalizedCategory];
+        const unit = material.unit || 1; // Default to unit 1 if not specified
         
+        if (!categoryUnits[normalizedCategory]) {
+            categoryUnits[normalizedCategory] = {};
+        }
+        if (!categoryUnits[normalizedCategory][unit]) {
+            categoryUnits[normalizedCategory][unit] = [];
+        }
+        categoryUnits[normalizedCategory][unit].push(material);
+    });
+
+    // Add custom materials to their respective units
+    Object.keys(categoryUnits).forEach(category => {
+        const courseId = categoryToCourseId[category];
         if (!courseId) return;
 
         const materialContainer = document.getElementById(courseId);
         if (!materialContainer) return;
 
-        // Check if material already exists (avoid duplicates)
-        if (document.getElementById(`${material.id}-material`)) return;
+        // Process each unit
+        Object.keys(categoryUnits[category]).forEach(unit => {
+            const materials = categoryUnits[category][unit];
+            
+            // Find the unit header or the materials container for this unit
+            const unitHeaders = materialContainer.querySelectorAll('.unit-header');
+            let insertPoint = null;
+            
+            // Find where to insert based on unit number
+            unitHeaders.forEach((header, index) => {
+                if (header.textContent.includes(`Unit ${unit}`)) {
+                    // Find the next unit header or end of materials
+                    const nextUnitHeader = unitHeaders[index + 1];
+                    if (nextUnitHeader) {
+                        insertPoint = nextUnitHeader;
+                    } else {
+                        // Last unit, append at the end
+                        insertPoint = null;
+                    }
+                }
+            });
 
-        const materialDiv = document.createElement('div');
-        materialDiv.className = 'material-item';
-        materialDiv.id = `${material.id}-material`;
-        
-        const typeEmoji = {
-            'pdf': '📄',
-            'doc': '📝',
-            'txt': '📋',
-            'image': '🖼️',
-            'other': '📎'
-        };
-        
-        materialDiv.innerHTML = `
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
-                <span style="font-size: 1.5em;">${typeEmoji[material.type] || '📎'}</span>
-                <div>
-                    <h4 style="margin: 0;">${material.title}</h4>
-                    <p style="margin: 0; font-size: 0.85em; color: var(--text-muted);">${material.type.toUpperCase()}</p>
-                </div>
-            </div>
-            <p style="margin: 8px 0; font-size: 0.9em; color: var(--text-muted);">${material.description}</p>
-            <a href="${material.url}" target="_blank" class="btn small" style="display: inline-block;">Download/View</a>
-        `;
-        materialContainer.appendChild(materialDiv);
+            // Add custom materials to this unit
+            materials.forEach(material => {
+                // Check if material already exists (avoid duplicates)
+                if (document.getElementById(`${material.id}-material`)) return;
+
+                const materialNum = material.materialNumber || '1';
+                const displayNumber = `${material.unit}.${materialNum}`;
+
+                const materialDiv = document.createElement('div');
+                materialDiv.className = 'sub-lesson';
+                materialDiv.id = `${material.id}-material`;
+                
+                materialDiv.innerHTML = `
+                    <span class="lesson-number">${displayNumber}</span>
+                    <span class="lesson-title">${material.title}</span>
+                    <a href="${material.url}" target="_blank" class="btn small" style="display: inline-block;">Download</a>
+                `;
+                
+                // Insert before the next unit header, or append at the end
+                if (insertPoint) {
+                    materialContainer.insertBefore(materialDiv, insertPoint);
+                } else {
+                    materialContainer.appendChild(materialDiv);
+                }
+            });
+        });
     });
 }
 

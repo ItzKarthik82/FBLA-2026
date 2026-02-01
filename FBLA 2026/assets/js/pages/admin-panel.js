@@ -371,12 +371,21 @@ function setupQuizForm() {
         e.preventDefault();
         
         const category = document.getElementById('quizCategory').value;
+        const unit = document.getElementById('quizUnit').value;
+        const quizNumber = document.getElementById('quizNumber').value.trim();
         const title = document.getElementById('quizTitle').value;
         const id = document.getElementById('quizId').value;
         const desc = document.getElementById('quizDesc').value;
 
-        if (!category || !title || !id || !desc) {
+        if (!category || !unit || !quizNumber || !title || !id || !desc) {
             showNotification('Please fill in all fields!', 'error');
+            return;
+        }
+
+        // Validate quiz number format
+        const quizNumValue = parseFloat(quizNumber);
+        if (isNaN(quizNumValue) || quizNumValue <= 0) {
+            showNotification('Please enter a valid quiz number', 'error');
             return;
         }
 
@@ -411,6 +420,8 @@ function setupQuizForm() {
             id: id,
             title: title,
             category: category,
+            unit: parseInt(unit),
+            quizNumber: quizNumber,
             description: desc,
             questions: questions,
             createdAt: new Date().toISOString()
@@ -488,13 +499,22 @@ function setupVideoForm() {
         e.preventDefault();
         
         const category = document.getElementById('videoCategory').value;
+        const unit = document.getElementById('videoUnit').value;
+        const videoNumber = document.getElementById('videoNumber').value.trim();
         const title = document.getElementById('videoTitle').value;
         const id = document.getElementById('videoId').value;
         const desc = document.getElementById('videoDesc').value;
         const youtubeId = document.getElementById('youtubeVideoId').value;
 
-        if (!category || !title || !id || !desc || !youtubeId) {
+        if (!category || !unit || !videoNumber || !title || !id || !desc || !youtubeId) {
             showNotification('Please fill in all fields!', 'error');
+            return;
+        }
+
+        // Validate video number format
+        const videoNumValue = parseFloat(videoNumber);
+        if (isNaN(videoNumValue) || videoNumValue <= 0) {
+            showNotification('Please enter a valid video number', 'error');
             return;
         }
 
@@ -503,6 +523,8 @@ function setupVideoForm() {
             id: id,
             title: title,
             category: category,
+            unit: parseInt(unit),
+            videoNumber: videoNumber,
             description: desc,
             youtubeId: youtubeId,
             createdAt: new Date().toISOString()
@@ -580,14 +602,23 @@ function setupMaterialsForm() {
         e.preventDefault();
         
         const category = document.getElementById('materialCategory').value;
+        const unit = document.getElementById('materialUnit').value;
+        const materialNumber = document.getElementById('materialNumber').value.trim();
         const title = document.getElementById('materialTitle').value;
         const id = document.getElementById('materialId').value;
         const desc = document.getElementById('materialDesc').value;
         const url = document.getElementById('materialUrl').value;
         const type = document.getElementById('materialType').value;
 
-        if (!category || !title || !id || !desc || !url || !type) {
+        if (!category || !unit || !materialNumber || !title || !id || !desc || !url || !type) {
             showNotification('Please fill in all fields!', 'error');
+            return;
+        }
+
+        // Validate material number format
+        const materialNumValue = parseFloat(materialNumber);
+        if (isNaN(materialNumValue) || materialNumValue <= 0) {
+            showNotification('Please enter a valid material number', 'error');
             return;
         }
 
@@ -596,6 +627,8 @@ function setupMaterialsForm() {
             id: id,
             title: title,
             category: category,
+            unit: parseInt(unit),
+            materialNumber: materialNumber,
             description: desc,
             url: url,
             type: type,
