@@ -95,22 +95,58 @@ function loadProgress() {
     const hours = Math.floor(totalMinutes / 60);
     const sessions = parseInt(localStorage.getItem('sessions') || '0');
 
-    const mathLessons = completedLessons.filter(id => ['algebra', 'geometry'].includes(id)).length;
-    const scienceLessons = completedLessons.filter(id => ['biology', 'chemistry'].includes(id)).length;
-    const englishLessons = completedLessons.filter(id => ['essay'].includes(id)).length;
-    const historyLessons = completedLessons.filter(id => ['history'].includes(id)).length;
+    const defaultLessons = [
+        { id: 'algebra', category: 'mathematics' },
+        { id: 'geometry', category: 'mathematics' },
+        { id: 'biology', category: 'science' },
+        { id: 'chemistry', category: 'science' },
+        { id: 'essay', category: 'english' },
+        { id: 'grammar', category: 'english' },
+        { id: 'history', category: 'history' },
+        { id: 'us-history', category: 'history' }
+    ];
+
+    const customLessons = JSON.parse(localStorage.getItem('customLessons') || '[]');
+
+    const normalizeCategory = (category) => {
+        const value = (category || '').toLowerCase().trim();
+        if (value === 'math') return 'mathematics';
+        if (value === 'english & writing') return 'english';
+        if (value === 'history & social studies') return 'history';
+        return value;
+    };
+
+    const allLessons = [
+        ...defaultLessons,
+        ...customLessons.map(lesson => ({
+            id: lesson.id,
+            category: normalizeCategory(lesson.category)
+        }))
+    ];
+
+    const countCategory = (category) => {
+        const total = allLessons.filter(lesson => lesson.category === category).length;
+        const completed = allLessons.filter(
+            lesson => lesson.category === category && completedLessons.includes(lesson.id)
+        ).length;
+        return { total, completed };
+    };
+
+    const math = countCategory('mathematics');
+    const science = countCategory('science');
+    const english = countCategory('english');
 
     updateDisplay('lessonsCount', completedLessons.length);
     updateDisplay('quizzesCount', quizzes);
     updateDisplay('hoursCount', hours);
 
-    const mathProgress = Math.min(100, (mathLessons / 2) * 100);
-    const scienceProgress = Math.min(100, (scienceLessons / 2) * 100);
-    const englishProgress = Math.min(100, (englishLessons / 1) * 100);
+    const mathProgress = math.total > 0 ? Math.min(100, (math.completed / math.total) * 100) : 0;
+    const scienceProgress = science.total > 0 ? Math.min(100, (science.completed / science.total) * 100) : 0;
+    const englishProgress = english.total > 0 ? Math.min(100, (english.completed / english.total) * 100) : 0;
 
-    updateProgressBar('mathProgress', mathProgress);
-    updateProgressBar('scienceProgress', scienceProgress);
-    updateProgressBar('englishProgress', englishProgress);
+    updateProgressBar('mathProgress', Math.round(mathProgress));
+    updateProgressBar('scienceProgress', Math.round(scienceProgress));
+    updateProgressBar('englishProgress', Math.round(englishProgress));
 
     updateAchievements(completedLessons.length, quizzes, sessions);
 }

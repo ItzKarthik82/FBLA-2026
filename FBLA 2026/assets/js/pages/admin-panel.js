@@ -249,12 +249,6 @@ function initAdminPanel() {
         }
     }
 
-    // Load saved settings
-    const saved = JSON.parse(localStorage.getItem('adminSettings') || '{}');
-    if (saved.platformName) document.getElementById('platformName').value = saved.platformName;
-    if (saved.platformTagline) document.getElementById('platformTagline').value = saved.platformTagline;
-    if (saved.maxStudents) document.getElementById('maxStudents').value = saved.maxStudents;
-    if (saved.enableReg !== undefined) document.getElementById('enableReg').value = saved.enableReg;
 }
 
 window.makeAdmin = function(index) {
@@ -290,18 +284,6 @@ window.removeUser = function(index) {
     if (usersList) {
         loadUsers();
     }
-};
-
-window.saveSettings = function() {
-    const settings = {
-        platformName: document.getElementById('platformName').value,
-        platformTagline: document.getElementById('platformTagline').value,
-        maxStudents: document.getElementById('maxStudents').value,
-        enableReg: document.getElementById('enableReg').value === 'true'
-    };
-
-    localStorage.setItem('adminSettings', JSON.stringify(settings));
-    showNotification('Settings saved successfully!', 'success');
 };
 
 function loadUsers() {

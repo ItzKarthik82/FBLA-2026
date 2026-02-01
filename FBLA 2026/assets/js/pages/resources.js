@@ -120,8 +120,10 @@ function updateLessonProgress() {
     });
 
     lessons.forEach(lesson => {
-        const statusEl = document.getElementById(lesson.statusId);
-        const btnEl = document.getElementById(lesson.btnId);
+        const statusEl = document.getElementById(lesson.statusId)
+            || document.querySelector(`[data-lesson-id="${lesson.id}"][data-role="status"]`);
+        const btnEl = document.getElementById(lesson.btnId)
+            || document.querySelector(`[data-lesson-id="${lesson.id}"][data-role="button"]`);
 
         if (completedLessons.includes(lesson.id)) {
             if (statusEl) statusEl.textContent = '✓ Completed';
@@ -145,15 +147,25 @@ function updateLessonProgress() {
 
     Object.keys(courses).forEach(courseKey => {
         const course = courses[courseKey];
-        const completed = course.lessons.filter(lesson => completedLessons.includes(lesson)).length;
-        const total = course.lessons.length;
+        const courseEl = document.getElementById(course.courseId);
+
+        let lessonIds = course.lessons;
+        if (courseEl) {
+            const domLessonIds = Array.from(courseEl.querySelectorAll('.sub-lesson button'))
+                .map(btn => btn.getAttribute('data-lesson-id') || btn.id.replace('-btn', ''))
+                .filter(Boolean);
+            if (domLessonIds.length > 0) {
+                lessonIds = domLessonIds;
+            }
+        }
+
+        const completed = lessonIds.filter(lesson => completedLessons.includes(lesson)).length;
+        const total = lessonIds.length;
 
         const progressEl = document.getElementById(course.progressId);
         if (progressEl) {
             progressEl.textContent = `${completed} / ${total} completed`;
         }
-
-        const courseEl = document.getElementById(course.courseId);
         if (courseEl) {
             if (completed === total && total > 0) {
                 courseEl.classList.add('completed');
@@ -564,8 +576,8 @@ function loadCustomLessons() {
             subLesson.className = 'sub-lesson';
             subLesson.innerHTML = `
                 <span class="lesson-title">${lesson.title}</span>
-                <span class="completion-status" id="${lesson.id}-status"></span>
-                <button class="btn small" id="${lesson.id}-btn" onclick="startLesson('${lesson.id}')">Start Lesson</button>
+                <span class="completion-status" id="${lesson.id}-status" data-lesson-id="${lesson.id}" data-role="status"></span>
+                <button class="btn small" id="${lesson.id}-btn" data-lesson-id="${lesson.id}" data-role="button" onclick="startLesson('${lesson.id}')">Start Lesson</button>
             `;
             subLessonsDiv.appendChild(subLesson);
 
