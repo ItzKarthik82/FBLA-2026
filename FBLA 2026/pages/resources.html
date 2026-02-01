@@ -9,6 +9,12 @@
     <link rel="stylesheet" href="../assets/css/resources.css">
     <script src="../assets/js/core.js" defer></script>
     <script src="../assets/js/progress.js" defer></script>
+    <script>
+        // Check if user is logged in
+        if (!localStorage.getItem('userLoggedIn')) {
+            window.location.href = 'login.html';
+        }
+    </script>
     <script src="../assets/js/pages/resources.js" defer></script>
 </head>
 <body>

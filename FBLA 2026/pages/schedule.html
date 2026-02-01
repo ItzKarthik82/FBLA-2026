@@ -8,6 +8,12 @@
     <link rel="stylesheet" href="../assets/css/components.css">
     <link rel="stylesheet" href="../assets/css/schedule.css">
     <script src="../assets/js/core.js" defer></script>
+    <script>
+        // Check if user is logged in
+        if (!localStorage.getItem('userLoggedIn')) {
+            window.location.href = 'login.html';
+        }
+    </script>
     <script src="../assets/js/pages/schedule.js" defer></script>
 </head>
 <body>
