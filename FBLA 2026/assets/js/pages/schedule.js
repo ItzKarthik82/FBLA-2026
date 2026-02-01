@@ -575,6 +575,9 @@ function loadCustomSessions() {
 function filterSessionCards(category, button) {
     const sessionCards = document.querySelectorAll('.session-card');
     const customGroup = document.querySelector('.session-day-group[data-custom="true"]');
+    const currentView = document.querySelector('.view-btn.active')?.dataset.view || 'upcoming';
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
     document.querySelectorAll('.pill-btn').forEach(btn => btn.classList.remove('active'));
     if (button) button.classList.add('active');
@@ -584,8 +587,35 @@ function filterSessionCards(category, button) {
     sessionCards.forEach(card => {
         const cardCategory = card.dataset.category;
         const isCustom = card.getAttribute('data-custom') === 'true';
+        
+        // Check category filter
+        const categoryMatch = category === 'all' || cardCategory === category;
+        
+        // Check view filter for custom sessions
+        let viewMatch = true;
+        if (isCustom && categoryMatch) {
+            const timeMain = card.querySelector('.time-main');
+            if (timeMain) {
+                const fullDateStr = timeMain.textContent;
+                const sessionDate = parseSessionDateString(fullDateStr);
+                
+                if (currentView === 'today') {
+                    viewMatch = sessionDate.toDateString() === today.toDateString();
+                } else if (currentView === 'week') {
+                    const weekEnd = new Date(today);
+                    weekEnd.setDate(weekEnd.getDate() + 6);
+                    viewMatch = sessionDate >= today && sessionDate <= weekEnd;
+                } else if (currentView === 'month') {
+                    viewMatch = sessionDate.getMonth() === today.getMonth() &&
+                               sessionDate.getFullYear() === today.getFullYear();
+                } else {
+                    // upcoming
+                    viewMatch = sessionDate >= today;
+                }
+            }
+        }
 
-        if (category === 'all' || cardCategory === category) {
+        if (categoryMatch && viewMatch) {
             card.style.display = 'grid';
             setTimeout(() => card.classList.add('fade-in'), 10);
             if (isCustom) {
@@ -610,86 +640,87 @@ function switchSessionView(view, button) {
     document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
     if (button) button.classList.add('active');
 
-    let hasVisibleCustomSessions = false;
-
-    dayGroups.forEach((group, index) => {
-        if (group.getAttribute('data-custom') === 'true') {
-            const customCards = group.querySelectorAll('.session-card[data-custom="true"]');
-            customCards.forEach(card => {
-                const timeMain = card.querySelector('.time-main');
-                if (timeMain) {
-                    const dateStr = timeMain.textContent;
-                    const sessionDate = parseSessionDateString(dateStr);
-
-                    let shouldShow = false;
-
-                    if (view === 'today') {
-                        shouldShow = sessionDate.toDateString() === today.toDateString();
-                    } else if (view === 'week') {
-                        const weekEnd = new Date(today);
-                        weekEnd.setDate(weekEnd.getDate() + 6);
-                        shouldShow = sessionDate >= today && sessionDate <= weekEnd;
-                    } else if (view === 'month') {
-                        shouldShow = sessionDate.getMonth() === today.getMonth() &&
-                                   sessionDate.getFullYear() === today.getFullYear();
-                    } else {
-                        shouldShow = sessionDate >= today;
-                    }
-
-                    if (shouldShow) {
-                        card.style.display = 'grid';
-                        hasVisibleCustomSessions = true;
-                    } else {
-                        card.style.display = 'none';
-                    }
-                }
-            });
-
-            group.style.display = hasVisibleCustomSessions ? 'flex' : 'none';
-            return;
-        }
-
-        if (view === 'today') {
-            group.style.display = index === 0 ? 'flex' : 'none';
-        } else if (view === 'week') {
-            group.style.display = index === 2 ? 'flex' : 'none';
-        } else if (view === 'month') {
-            const headerBanner = group.querySelector('.day-header-banner h3');
-            if (headerBanner) {
-                const headerText = headerBanner.textContent;
-                let groupMonth = null;
-
-                if (headerText.includes('January')) {
-                    groupMonth = 0;
-                } else if (headerText.includes('February')) {
-                    groupMonth = 1;
-                } else if (headerText.includes('March')) {
-                    groupMonth = 2;
-                } else if (headerText.includes('April')) {
-                    groupMonth = 3;
-                } else if (headerText.includes('May')) {
-                    groupMonth = 4;
-                } else if (headerText.includes('June')) {
-                    groupMonth = 5;
-                } else if (headerText.includes('July')) {
-                    groupMonth = 6;
-                } else if (headerText.includes('August')) {
-                    groupMonth = 7;
-                } else if (headerText.includes('September')) {
-                    groupMonth = 8;
-                } else if (headerText.includes('October')) {
-                    groupMonth = 9;
-                } else if (headerText.includes('November')) {
-                    groupMonth = 10;
-                } else if (headerText.includes('December')) {
-                    groupMonth = 11;
-                }
-
-                const isCurrentMonth = groupMonth === today.getMonth();
-                group.style.display = isCurrentMonth ? 'flex' : 'none';
+    // Re-apply category filter with new view
+    const activePillBtn = document.querySelector('.pill-btn.active');
+    const activeCategory = activePillBtn?.dataset.filter || 'all';
+    
+    // Re-filter all sessions with current category and new view
+    const sessionCards = document.querySelectorAll('.session-card');
+    const customGroup = document.querySelector('.session-day-group[data-custom="true"]');
+    let hasVisibleCustomCards = false;
+    
+    sessionCards.forEach(card => {
+        const cardCategory = card.dataset.category;
+        const isCustom = card.getAttribute('data-custom') === 'true';
+        
+        // Check category filter
+        const categoryMatch = activeCategory === 'all' || cardCategory === activeCategory;
+        
+        // Check view filter
+        let viewMatch = true;
+        const timeMain = card.querySelector('.time-main');
+        
+        if (timeMain && categoryMatch) {
+            const fullDateStr = timeMain.textContent;
+            const sessionDate = parseSessionDateString(fullDateStr);
+            
+            if (view === 'today') {
+                viewMatch = sessionDate.toDateString() === today.toDateString();
+            } else if (view === 'week') {
+                const weekEnd = new Date(today);
+                weekEnd.setDate(weekEnd.getDate() + 6);
+                viewMatch = sessionDate >= today && sessionDate <= weekEnd;
+            } else if (view === 'month') {
+                viewMatch = sessionDate.getMonth() === today.getMonth() &&
+                           sessionDate.getFullYear() === today.getFullYear();
+            } else {
+                // upcoming
+                viewMatch = sessionDate >= today;
             }
-        } else {
-            group.style.display = 'flex';
+        }
+        
+        if (isCustom && categoryMatch && viewMatch) {
+            card.style.display = 'grid';
+            hasVisibleCustomCards = true;
+        } else if (isCustom) {
+            card.style.display = 'none';
+        }
+    });
+
+    if (customGroup) {
+        customGroup.style.display = hasVisibleCustomCards ? 'flex' : 'none';
+    }
+
+    // Show/hide default session groups based on view
+    dayGroups.forEach((group, index) => {
+        const isCustom = group.getAttribute('data-custom') === 'true';
+        
+        if (!isCustom) {
+            if (view === 'today') {
+                group.style.display = index === 0 ? 'flex' : 'none';
+            } else if (view === 'week') {
+                group.style.display = index === 2 ? 'flex' : 'none';
+            } else if (view === 'month') {
+                const headerBanner = group.querySelector('.day-header-banner h3');
+                if (headerBanner) {
+                    const headerText = headerBanner.textContent;
+                    const currentMonth = today.getMonth();
+                    const monthText = headerText.toLowerCase();
+                    const months = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
+                    
+                    let groupMonth = -1;
+                    for (let i = 0; i < months.length; i++) {
+                        if (monthText.includes(months[i])) {
+                            groupMonth = i;
+                            break;
+                        }
+                    }
+                    
+                    group.style.display = groupMonth === currentMonth ? 'flex' : 'none';
+                }
+            } else {
+                group.style.display = 'flex';
+            }
         }
     });
 }
@@ -700,15 +731,22 @@ function parseSessionDateString(dateStr) {
         'Jul': 6, 'Aug': 7, 'Sep': 8, 'Oct': 9, 'Nov': 10, 'Dec': 11
     };
 
+    // Handle format like "Fri, Jan 31, 3:00 PM" or "Fri, Jan 31"
     const parts = dateStr.split(',');
-    if (parts.length >= 3) {
+    if (parts.length >= 2) {
+        // parts[1] will be something like " Jan 31" or " Jan 31 " (with spaces)
         const monthDay = parts[1].trim().split(' ');
-        const month = monthMap[monthDay[0]];
-        const day = parseInt(monthDay[1]);
-        const year = new Date().getFullYear();
-
-        return new Date(year, month, day);
+        if (monthDay.length >= 2) {
+            const month = monthMap[monthDay[0]];
+            const day = parseInt(monthDay[1]);
+            
+            if (!isNaN(month) && !isNaN(day)) {
+                const year = new Date().getFullYear();
+                return new Date(year, month, day);
+            }
+        }
     }
+    
     return new Date();
 }
 

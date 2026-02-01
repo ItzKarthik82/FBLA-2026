@@ -443,25 +443,14 @@ body.dark .card p {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    background: var(--gray-900);
+    background: var(--primary);
     color: white;
-    padding: 12px 20px;
+    padding: 10px 16px;
     border-radius: var(--border-radius);
     box-shadow: var(--shadow-lg);
     z-index: 2000;
-    opacity: 0;
-    transform: translateY(100px);
-    transition: all 0.3s ease;
-}
-
-.toast.show {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-body.dark .toast {
-    background: var(--gray-100);
-    color: var(--gray-900);
+    font-size: 13px;
+    max-width: 250px;
 }
 
 /* Calculator Toggle */

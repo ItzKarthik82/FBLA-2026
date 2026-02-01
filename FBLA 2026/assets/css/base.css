@@ -307,6 +307,11 @@ body.dark .site-footer {
     to { transform: translateY(0); opacity: 1; }
 }
 
+@keyframes slideOut {
+    from { transform: translateY(0); opacity: 1; }
+    to { transform: translateY(20px); opacity: 0; }
+}
+
 @keyframes spin {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
