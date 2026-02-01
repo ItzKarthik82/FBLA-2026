@@ -135,6 +135,7 @@ function loadProgress() {
     const math = countCategory('mathematics');
     const science = countCategory('science');
     const english = countCategory('english');
+    const history = countCategory('history');
 
     updateDisplay('lessonsCount', completedLessons.length);
     updateDisplay('quizzesCount', quizzes);
@@ -143,10 +144,12 @@ function loadProgress() {
     const mathProgress = math.total > 0 ? Math.min(100, (math.completed / math.total) * 100) : 0;
     const scienceProgress = science.total > 0 ? Math.min(100, (science.completed / science.total) * 100) : 0;
     const englishProgress = english.total > 0 ? Math.min(100, (english.completed / english.total) * 100) : 0;
+    const historyProgress = history.total > 0 ? Math.min(100, (history.completed / history.total) * 100) : 0;
 
     updateProgressBar('mathProgress', Math.round(mathProgress));
     updateProgressBar('scienceProgress', Math.round(scienceProgress));
     updateProgressBar('englishProgress', Math.round(englishProgress));
+    updateProgressBar('historyProgress', Math.round(historyProgress));
 
     updateAchievements(completedLessons.length, quizzes, sessions);
 }
