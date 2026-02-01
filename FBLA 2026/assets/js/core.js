@@ -6,14 +6,20 @@ function checkAuth() {
 function getUserInfo() {
     return {
         name: localStorage.getItem('userName') || '',
-        email: localStorage.getItem('userEmail') || ''
+        email: localStorage.getItem('userEmail') || '',
+        isAdmin: localStorage.getItem('userIsAdmin') === 'true'
     };
+}
+
+function isUserAdmin() {
+    return localStorage.getItem('userIsAdmin') === 'true';
 }
 
 function logout() {
     localStorage.removeItem('userLoggedIn');
     localStorage.removeItem('userName');
     localStorage.removeItem('userEmail');
+    localStorage.removeItem('userIsAdmin');
     alert('You have been logged out successfully!');
     window.location.href = 'index.html';
 }

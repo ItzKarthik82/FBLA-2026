@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Setup - PeerLearn</title>
+    <link rel="stylesheet" href="../assets/css/base.css">
+    <link rel="stylesheet" href="../assets/css/components.css">
+    <link rel="stylesheet" href="../assets/css/login.css">
+    <script src="../assets/js/core.js" defer></script>
+</head>
+<body>
+    <header class="site-header">
+        <div class="container">
+            <h1 class="brand">PeerLearn</h1>
+            <p class="tag">Academic Learning Hub - Admin Setup</p>
+        </div>
+    </header>
+
+    <main class="content">
+        <div class="login-page">
+            <div class="auth-container">
+                <div class="auth-left">
+                    <h1>Admin Setup</h1>
+                    <p>Create the first administrator account for PeerLearn. This account will have special privileges to manage users and system settings.</p>
+                    <ul class="features-list">
+                        <li>Manage user accounts</li>
+                        <li>View all study sessions</li>
+                        <li>Access system analytics</li>
+                        <li>Configure settings</li>
+                    </ul>
+                </div>
+
+                <div class="auth-right">
+                    <div class="auth-header">
+                        <h2>Create Admin Account</h2>
+                        <p>Set up your administrator credentials</p>
+                    </div>
+
+                    <form id="adminSetup" class="form-container active">
+                        <div class="form-input-group">
+                            <label>Admin Key</label>
+                            <input type="password" id="adminKey" placeholder="Enter admin key">
+                            <div class="error-text" id="adminKeyErr"></div>
+                        </div>
+
+                        <div class="form-input-group">
+                            <label>Full Name</label>
+                            <input type="text" id="adminName" placeholder="Administrator Name">
+                            <div class="error-text" id="adminNameErr"></div>
+                        </div>
+
+                        <div class="form-input-group">
+                            <label>Email Address</label>
+                            <input type="email" id="adminEmail" placeholder="admin@example.com">
+                            <div class="error-text" id="adminEmailErr"></div>
+                        </div>
+
+                        <div class="form-input-group">
+                            <label>Password</label>
+                            <input type="password" id="adminPass" placeholder="••••••••">
+                            <div class="error-text" id="adminPassErr"></div>
+                            <small>Must be at least 6 characters</small>
+                        </div>
+
+                        <div class="form-input-group">
+                            <label>Confirm Password</label>
+                            <input type="password" id="adminPassConfirm" placeholder="••••••••">
+                            <div class="error-text" id="adminPassConfirmErr"></div>
+                        </div>
+
+                        <div class="form-input-group">
+                            <label>Security Question</label>
+                            <select id="adminQuestion">
+                                <option value="">Choose a question...</option>
+                                <option value="pet">What was your first pet's name?</option>
+                                <option value="city">What city were you born in?</option>
+                                <option value="school">What was your elementary school?</option>
+                                <option value="teacher">Favorite teacher's name?</option>
+                                <option value="color">What is your favorite color?</option>
+                            </select>
+                            <div class="error-text" id="adminQuestionErr"></div>
+                        </div>
+
+                        <div class="form-input-group">
+                            <label>Your Answer</label>
+                            <input type="text" id="adminAnswer" placeholder="Your answer">
+                            <div class="error-text" id="adminAnswerErr"></div>
+                        </div>
+
+                        <button type="submit" class="submit-button">Create Admin Account</button>
+                        <div class="form-link">
+                            <a href="login.html">Back to Login</a>
+                        </div>
+                    </form>
+
+                    <div id="successMessage" class="form-container" style="display: none; text-align: center;">
+                        <div style="font-size: 3em; margin: 20px 0;">✓</div>
+                        <h3>Admin Account Created Successfully!</h3>
+                        <p>Your administrator account is ready to use.</p>
+                        <a href="login.html" class="submit-button" style="display: inline-block; text-decoration: none; margin-top: 20px;">Go to Login</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>PeerLearn</h4>
+                    <p>Student-built, student-powered learning platform.</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 PeerLearn. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check if admin already exists
+            const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+            const adminExists = users.some(u => u.isAdmin);
+
+            if (adminExists) {
+                document.getElementById('adminSetup').style.display = 'none';
+                const msg = document.getElementById('successMessage');
+                msg.style.display = 'block';
+                msg.innerHTML = `
+                    <div style="font-size: 3em; margin: 20px 0;">⚠️</div>
+                    <h3>Admin Account Already Exists</h3>
+                    <p>An administrator account has already been created for this system.</p>
+                    <a href="login.html" class="submit-button" style="display: inline-block; text-decoration: none; margin-top: 20px;">Go to Login</a>
+                `;
+                return;
+            }
+
+            const form = document.getElementById('adminSetup');
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                const adminKey = document.getElementById('adminKey').value.trim();
+                const name = document.getElementById('adminName').value.trim();
+                const email = document.getElementById('adminEmail').value.trim();
+                const pass = document.getElementById('adminPass').value;
+                const passConfirm = document.getElementById('adminPassConfirm').value;
+                const question = document.getElementById('adminQuestion').value;
+                const answer = document.getElementById('adminAnswer').value.trim();
+
+                // Clear errors
+                document.querySelectorAll('.error-text').forEach(e => e.style.display = 'none');
+
+                let valid = true;
+
+                // Check admin key
+                const correctKey = 'PeerLearnAdmin';
+                if (adminKey !== correctKey) {
+                    document.getElementById('adminKeyErr').textContent = 'Invalid admin key';
+                    document.getElementById('adminKeyErr').style.display = 'block';
+                    valid = false;
+                }
+
+                if (!name) {
+                    document.getElementById('adminNameErr').textContent = 'Name is required';
+                    document.getElementById('adminNameErr').style.display = 'block';
+                    valid = false;
+                }
+
+                if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                    document.getElementById('adminEmailErr').textContent = email ? 'Invalid email format' : 'Email is required';
+                    document.getElementById('adminEmailErr').style.display = 'block';
+                    valid = false;
+                }
+
+                if (!pass || pass.length < 6) {
+                    document.getElementById('adminPassErr').textContent = pass ? 'Password must be 6+ characters' : 'Password is required';
+                    document.getElementById('adminPassErr').style.display = 'block';
+                    valid = false;
+                }
+
+                if (!passConfirm || pass !== passConfirm) {
+                    document.getElementById('adminPassConfirmErr').textContent = passConfirm ? 'Passwords do not match' : 'Confirm your password';
+                    document.getElementById('adminPassConfirmErr').style.display = 'block';
+                    valid = false;
+                }
+
+                if (!question) {
+                    document.getElementById('adminQuestionErr').textContent = 'Select a security question';
+                    document.getElementById('adminQuestionErr').style.display = 'block';
+                    valid = false;
+                }
+
+                if (!answer) {
+                    document.getElementById('adminAnswerErr').textContent = 'Answer is required';
+                    document.getElementById('adminAnswerErr').style.display = 'block';
+                    valid = false;
+                }
+
+                if (!valid) return;
+
+                // Create admin user
+                const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+                users.push({
+                    name,
+                    email,
+                    password: pass,
+                    securityQuestion: question,
+                    securityAnswer: answer.toLowerCase(),
+                    isAdmin: true
+                });
+
+                localStorage.setItem('registeredUsers', JSON.stringify(users));
+
+                // Show success message
+                form.style.display = 'none';
+                document.getElementById('successMessage').style.display = 'block';
+            });
+        });
+    </script>
+</body>
+</html>

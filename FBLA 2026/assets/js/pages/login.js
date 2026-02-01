@@ -344,6 +344,7 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('userLoggedIn', 'true');
             localStorage.setItem('userName', user.name);
             localStorage.setItem('userEmail', user.email);
+            localStorage.setItem('userIsAdmin', user.isAdmin ? 'true' : 'false');
             showNotif('Login successful!', 'success');
             setTimeout(() => window.location.href = 'dashboard.html', 1500);
         } else {
@@ -436,12 +437,14 @@ document.addEventListener('DOMContentLoaded', () => {
             email,
             password: pass,
             securityQuestion: question,
-            securityAnswer: answer.toLowerCase()
+            securityAnswer: answer.toLowerCase(),
+            isAdmin: false
         });
         localStorage.setItem('registeredUsers', JSON.stringify(users));
         localStorage.setItem('userLoggedIn', 'true');
         localStorage.setItem('userName', name);
         localStorage.setItem('userEmail', email);
+        localStorage.setItem('userIsAdmin', 'false');
 
         showNotif('Account created! Logging in...', 'success');
         setTimeout(() => window.location.href = 'dashboard.html', 1500);
