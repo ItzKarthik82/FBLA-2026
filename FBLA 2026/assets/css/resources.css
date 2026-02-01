@@ -268,14 +268,34 @@ body.dark .course-progress {
     gap: 12px;
 }
 
+/* Unit Headers */
+.unit-header {
+    font-weight: 700;
+    font-size: 16px;
+    color: #667eea;
+    padding: 16px 12px 8px 12px;
+    margin-top: 12px;
+    border-bottom: 2px solid rgba(102, 126, 234, 0.2);
+}
+
+.unit-header:first-child {
+    margin-top: 0;
+}
+
+body.dark .unit-header {
+    color: #8b9dfa;
+    border-bottom-color: rgba(139, 157, 250, 0.2);
+}
+
 .sub-lesson {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    gap: 12px;
     padding: 12px;
     background: var(--gray-50);
     border-radius: var(--border-radius);
     transition: var(--transition);
+    margin-top: 8px;
 }
 
 body.dark .sub-lesson {
@@ -290,9 +310,26 @@ body.dark .sub-lesson:hover {
     background: var(--gray-700);
 }
 
+.lesson-number {
+    font-weight: 700;
+    font-size: 14px;
+    color: #667eea;
+    background: rgba(102, 126, 234, 0.1);
+    padding: 4px 10px;
+    border-radius: 6px;
+    min-width: 45px;
+    text-align: center;
+}
+
+body.dark .lesson-number {
+    color: #8b9dfa;
+    background: rgba(139, 157, 250, 0.15);
+}
+
 .lesson-title {
     font-weight: 500;
     color: var(--gray-900);
+    flex: 1;
 }
 
 body.dark .lesson-title {
