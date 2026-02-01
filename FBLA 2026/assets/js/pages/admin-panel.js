@@ -36,7 +36,13 @@ function initAdminPanel() {
     loadDashboardStats();
     setupNavigation();
     setupLessonForm();
+    setupQuizForm();
+    setupVideoForm();
+    setupMaterialsForm();
     loadLessons();
+    loadQuizzes();
+    loadVideos();
+    loadMaterials();
     loadUsers();
 
     function setupNavigation() {
@@ -317,6 +323,338 @@ window.removeUser = function(index) {
     if (usersList) {
         loadUsers();
     }
+};
+
+// ==================== QUIZ MANAGEMENT ====================
+function setupQuizForm() {
+    const form = document.getElementById('quizForm');
+    if (!form) return;
+
+    // Create default question fields
+    const container = document.getElementById('questionsContainer');
+    if (container) {
+        container.innerHTML = '';
+        for (let i = 1; i <= 5; i++) {
+            container.innerHTML += `
+                <div class="form-input-group">
+                    <label>Question ${i}</label>
+                    <input type="text" class="quiz-question" placeholder="Enter question ${i}" data-q="${i}">
+                    <div style="margin-top: 8px; display: flex; gap: 8px; flex-wrap: wrap;">
+                        ${['A', 'B', 'C', 'D'].map(opt => `
+                            <input type="text" class="quiz-option" placeholder="Option ${opt}" data-q="${i}" data-opt="${opt}" style="flex: 1; min-width: 100px;">
+                        `).join('')}
+                    </div>
+                    <select class="quiz-answer" data-q="${i}" style="margin-top: 8px;">
+                        <option value="">Select correct answer...</option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                    </select>
+                </div>
+            `;
+        }
+    }
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const category = document.getElementById('quizCategory').value;
+        const title = document.getElementById('quizTitle').value;
+        const id = document.getElementById('quizId').value;
+        const desc = document.getElementById('quizDesc').value;
+
+        if (!category || !title || !id || !desc) {
+            showNotification('Please fill in all fields!', 'error');
+            return;
+        }
+
+        // Build questions array
+        const questions = [];
+        for (let i = 1; i <= 5; i++) {
+            const q = document.querySelector(`.quiz-question[data-q="${i}"]`).value;
+            if (q.trim()) {
+                const options = {};
+                ['A', 'B', 'C', 'D'].forEach(opt => {
+                    const opt_val = document.querySelector(`.quiz-option[data-q="${i}"][data-opt="${opt}"]`).value;
+                    if (opt_val) options[opt] = opt_val;
+                });
+                const answer = document.querySelector(`.quiz-answer[data-q="${i}"]`).value;
+                if (answer && Object.keys(options).length > 0) {
+                    questions.push({
+                        question: q,
+                        options: options,
+                        correctAnswer: answer
+                    });
+                }
+            }
+        }
+
+        if (questions.length === 0) {
+            showNotification('Add at least one complete question!', 'error');
+            return;
+        }
+
+        const customQuizzes = JSON.parse(localStorage.getItem('customQuizzes') || '[]');
+        const newQuiz = {
+            id: id,
+            title: title,
+            category: category,
+            description: desc,
+            questions: questions,
+            createdAt: new Date().toISOString()
+        };
+
+        customQuizzes.push(newQuiz);
+        localStorage.setItem('customQuizzes', JSON.stringify(customQuizzes));
+
+        showNotification(`Quiz "${title}" added successfully!`, 'success');
+        form.reset();
+        loadQuizzes();
+        
+        // Dispatch event for resources page to update
+        window.dispatchEvent(new Event('quizzesUpdated'));
+    });
+}
+
+function loadQuizzes() {
+    const customQuizzes = JSON.parse(localStorage.getItem('customQuizzes') || '[]');
+    const quizzesList = document.getElementById('quizzesList');
+    if (!quizzesList) return;
+
+    quizzesList.innerHTML = '';
+
+    if (customQuizzes.length === 0) {
+        quizzesList.innerHTML = '<p style="color: var(--text-muted);">No custom quizzes created yet.</p>';
+        return;
+    }
+
+    customQuizzes.forEach((quiz, index) => {
+        const quizDiv = document.createElement('div');
+        quizDiv.className = 'admin-item';
+        quizDiv.innerHTML = `
+            <div>
+                <h4>${quiz.title}</h4>
+                <p style="margin: 5px 0; color: var(--text-muted);">${quiz.description}</p>
+                <p style="margin: 5px 0; font-size: 0.9em; color: var(--text-muted);">
+                    Category: ${quiz.category} • Questions: ${quiz.questions.length}
+                </p>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn small outline" onclick="window.editQuiz(${index})">Edit</button>
+                <button class="btn small danger" onclick="window.deleteQuiz(${index})">Delete</button>
+            </div>
+        `;
+        quizzesList.appendChild(quizDiv);
+    });
+}
+
+window.editQuiz = function(index) {
+    showNotification('Edit functionality coming soon!', 'error');
+};
+
+window.deleteQuiz = function(index) {
+    if (!confirm('Delete this quiz permanently?')) return;
+
+    const customQuizzes = JSON.parse(localStorage.getItem('customQuizzes') || '[]');
+    const quizTitle = customQuizzes[index].title;
+    customQuizzes.splice(index, 1);
+    localStorage.setItem('customQuizzes', JSON.stringify(customQuizzes));
+
+    showNotification(`Quiz "${quizTitle}" deleted!`, 'success');
+    loadQuizzes();
+    
+    // Dispatch event for resources page to update
+    window.dispatchEvent(new Event('quizzesUpdated'));
+};
+
+// ==================== VIDEO MANAGEMENT ====================
+function setupVideoForm() {
+    const form = document.getElementById('videoForm');
+    if (!form) return;
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const category = document.getElementById('videoCategory').value;
+        const title = document.getElementById('videoTitle').value;
+        const id = document.getElementById('videoId').value;
+        const desc = document.getElementById('videoDesc').value;
+        const youtubeId = document.getElementById('youtubeVideoId').value;
+
+        if (!category || !title || !id || !desc || !youtubeId) {
+            showNotification('Please fill in all fields!', 'error');
+            return;
+        }
+
+        const customVideos = JSON.parse(localStorage.getItem('customVideos') || '[]');
+        const newVideo = {
+            id: id,
+            title: title,
+            category: category,
+            description: desc,
+            youtubeId: youtubeId,
+            createdAt: new Date().toISOString()
+        };
+
+        customVideos.push(newVideo);
+        localStorage.setItem('customVideos', JSON.stringify(customVideos));
+
+        showNotification(`Video "${title}" added successfully!`, 'success');
+        form.reset();
+        loadVideos();
+        
+        // Dispatch event for resources page to update
+        window.dispatchEvent(new Event('videosUpdated'));
+    });
+}
+
+function loadVideos() {
+    const customVideos = JSON.parse(localStorage.getItem('customVideos') || '[]');
+    const videosList = document.getElementById('videosList');
+    if (!videosList) return;
+
+    videosList.innerHTML = '';
+
+    if (customVideos.length === 0) {
+        videosList.innerHTML = '<p style="color: var(--text-muted);">No custom videos created yet.</p>';
+        return;
+    }
+
+    customVideos.forEach((video, index) => {
+        const videoDiv = document.createElement('div');
+        videoDiv.className = 'admin-item';
+        videoDiv.innerHTML = `
+            <div>
+                <h4>${video.title}</h4>
+                <p style="margin: 5px 0; color: var(--text-muted);">${video.description}</p>
+                <p style="margin: 5px 0; font-size: 0.9em; color: var(--text-muted);">
+                    Category: ${video.category} • YouTube ID: ${video.youtubeId}
+                </p>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn small outline" onclick="window.editVideo(${index})">Edit</button>
+                <button class="btn small danger" onclick="window.deleteVideo(${index})">Delete</button>
+            </div>
+        `;
+        videosList.appendChild(videoDiv);
+    });
+}
+
+window.editVideo = function(index) {
+    showNotification('Edit functionality coming soon!', 'error');
+};
+
+window.deleteVideo = function(index) {
+    if (!confirm('Delete this video permanently?')) return;
+
+    const customVideos = JSON.parse(localStorage.getItem('customVideos') || '[]');
+    const videoTitle = customVideos[index].title;
+    customVideos.splice(index, 1);
+    localStorage.setItem('customVideos', JSON.stringify(customVideos));
+
+    showNotification(`Video "${videoTitle}" deleted!`, 'success');
+    loadVideos();
+    
+    // Dispatch event for resources page to update
+    window.dispatchEvent(new Event('videosUpdated'));
+};
+
+// ==================== MATERIALS MANAGEMENT ====================
+function setupMaterialsForm() {
+    const form = document.getElementById('materialsForm');
+    if (!form) return;
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const category = document.getElementById('materialCategory').value;
+        const title = document.getElementById('materialTitle').value;
+        const id = document.getElementById('materialId').value;
+        const desc = document.getElementById('materialDesc').value;
+        const url = document.getElementById('materialUrl').value;
+        const type = document.getElementById('materialType').value;
+
+        if (!category || !title || !id || !desc || !url || !type) {
+            showNotification('Please fill in all fields!', 'error');
+            return;
+        }
+
+        const customMaterials = JSON.parse(localStorage.getItem('customMaterials') || '[]');
+        const newMaterial = {
+            id: id,
+            title: title,
+            category: category,
+            description: desc,
+            url: url,
+            type: type,
+            createdAt: new Date().toISOString()
+        };
+
+        customMaterials.push(newMaterial);
+        localStorage.setItem('customMaterials', JSON.stringify(customMaterials));
+
+        showNotification(`Material "${title}" added successfully!`, 'success');
+        form.reset();
+        loadMaterials();
+        
+        // Dispatch event for resources page to update
+        window.dispatchEvent(new Event('materialsUpdated'));
+    });
+}
+
+function loadMaterials() {
+    const customMaterials = JSON.parse(localStorage.getItem('customMaterials') || '[]');
+    const materialsList = document.getElementById('materialsList');
+    if (!materialsList) return;
+
+    materialsList.innerHTML = '';
+
+    if (customMaterials.length === 0) {
+        materialsList.innerHTML = '<p style="color: var(--text-muted);">No custom materials created yet.</p>';
+        return;
+    }
+
+    customMaterials.forEach((material, index) => {
+        const materialDiv = document.createElement('div');
+        materialDiv.className = 'admin-item';
+        materialDiv.innerHTML = `
+            <div>
+                <h4>${material.title}</h4>
+                <p style="margin: 5px 0; color: var(--text-muted);">${material.description}</p>
+                <p style="margin: 5px 0; font-size: 0.9em; color: var(--text-muted);">
+                    Category: ${material.category} • Type: ${material.type.toUpperCase()}
+                </p>
+                <p style="margin: 5px 0; font-size: 0.85em; word-break: break-all;">
+                    <a href="${material.url}" target="_blank" style="color: var(--primary);">View File →</a>
+                </p>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn small outline" onclick="window.editMaterial(${index})">Edit</button>
+                <button class="btn small danger" onclick="window.deleteMaterial(${index})">Delete</button>
+            </div>
+        `;
+        materialsList.appendChild(materialDiv);
+    });
+}
+
+window.editMaterial = function(index) {
+    showNotification('Edit functionality coming soon!', 'error');
+};
+
+window.deleteMaterial = function(index) {
+    if (!confirm('Delete this material permanently?')) return;
+
+    const customMaterials = JSON.parse(localStorage.getItem('customMaterials') || '[]');
+    const materialTitle = customMaterials[index].title;
+    customMaterials.splice(index, 1);
+    localStorage.setItem('customMaterials', JSON.stringify(customMaterials));
+
+    showNotification(`Material "${materialTitle}" deleted!`, 'success');
+    loadMaterials();
+    
+    // Dispatch event for resources page to update
+    window.dispatchEvent(new Event('materialsUpdated'));
 };
 
 function loadUsers() {

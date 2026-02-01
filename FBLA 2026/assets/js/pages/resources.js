@@ -330,7 +330,7 @@ function submitQuizAnswer() {
 }
 
 function getCurrentQuizData() {
-    return {
+    const defaultQuizzes = {
         'algebra': {
             title: 'Algebra Quiz',
             questions: [
@@ -412,6 +412,22 @@ function getCurrentQuizData() {
             ]
         }
     };
+    
+    // Merge custom quizzes from localStorage
+    const customQuizzes = JSON.parse(localStorage.getItem('customQuizzes') || '[]');
+    customQuizzes.forEach(quiz => {
+        // Convert custom quiz format to match default format
+        defaultQuizzes[quiz.id] = {
+            title: quiz.title,
+            questions: quiz.questions.map(q => ({
+                question: q.question,
+                options: [q.options.A, q.options.B, q.options.C, q.options.D],
+                correct: ['A', 'B', 'C', 'D'].indexOf(q.correctAnswer)
+            }))
+        };
+    });
+    
+    return defaultQuizzes;
 }
 
 function closeQuizModal() {
@@ -605,14 +621,149 @@ function loadCustomLessons() {
     });
 }
 
+function loadCustomQuizzes() {
+    const customQuizzes = JSON.parse(localStorage.getItem('customQuizzes') || '[]');
+    if (customQuizzes.length === 0) return;
+
+    // Map categories to existing quiz containers
+    const categoryToCourseId = {
+        'mathematics': 'math-quizzes',
+        'math': 'math-quizzes',
+        'science': 'science-quizzes',
+        'english': 'english-quizzes',
+        'english & writing': 'english-quizzes',
+        'history': 'history-quizzes',
+        'history & social studies': 'history-quizzes'
+    };
+
+    customQuizzes.forEach(quiz => {
+        const normalizedCategory = quiz.category ? quiz.category.toLowerCase() : '';
+        const courseId = categoryToCourseId[normalizedCategory];
+        
+        if (!courseId) return;
+
+        const quizContainer = document.getElementById(courseId);
+        if (!quizContainer) return;
+
+        // Check if quiz already exists (avoid duplicates)
+        if (document.getElementById(`${quiz.id}-quiz-btn`)) return;
+
+        const quizDiv = document.createElement('div');
+        quizDiv.className = 'quiz-item';
+        quizDiv.innerHTML = `
+            <div class="quiz-header">
+                <h4>${quiz.title}</h4>
+                <p>${quiz.description}</p>
+            </div>
+            <p style="font-size: 0.9em; color: var(--text-muted);">${quiz.questions.length} questions</p>
+            <button class="btn small" id="${quiz.id}-quiz-btn" onclick="startQuiz('${quiz.id}')">Take Quiz</button>
+        `;
+        quizContainer.appendChild(quizDiv);
+    });
+}
+
+function loadCustomVideos() {
+    const customVideos = JSON.parse(localStorage.getItem('customVideos') || '[]');
+    if (customVideos.length === 0) return;
+
+    const videosGrid = document.querySelector('#videos .videos-grid');
+    if (!videosGrid) return;
+
+    customVideos.forEach(video => {
+        // Check if video already exists (avoid duplicates)
+        if (document.getElementById(`${video.id}-video`)) return;
+
+        const videoDiv = document.createElement('div');
+        videoDiv.className = 'video-card';
+        videoDiv.id = `${video.id}-video`;
+        videoDiv.innerHTML = `
+            <iframe width="100%" height="200" src="https://www.youtube.com/embed/${video.youtubeId}" frameborder="0" allowfullscreen></iframe>
+            <h4>${video.title}</h4>
+            <p>${video.description}</p>
+        `;
+        videosGrid.appendChild(videoDiv);
+    });
+}
+
+function loadCustomMaterials() {
+    const customMaterials = JSON.parse(localStorage.getItem('customMaterials') || '[]');
+    if (customMaterials.length === 0) return;
+
+    // Map categories to existing materials containers
+    const categoryToCourseId = {
+        'mathematics': 'math-materials',
+        'math': 'math-materials',
+        'science': 'science-materials',
+        'english': 'english-materials',
+        'english & writing': 'english-materials',
+        'history': 'history-materials',
+        'history & social studies': 'history-materials'
+    };
+
+    customMaterials.forEach(material => {
+        const normalizedCategory = material.category ? material.category.toLowerCase() : '';
+        const courseId = categoryToCourseId[normalizedCategory];
+        
+        if (!courseId) return;
+
+        const materialContainer = document.getElementById(courseId);
+        if (!materialContainer) return;
+
+        // Check if material already exists (avoid duplicates)
+        if (document.getElementById(`${material.id}-material`)) return;
+
+        const materialDiv = document.createElement('div');
+        materialDiv.className = 'material-item';
+        materialDiv.id = `${material.id}-material`;
+        
+        const typeEmoji = {
+            'pdf': '📄',
+            'doc': '📝',
+            'txt': '📋',
+            'image': '🖼️',
+            'other': '📎'
+        };
+        
+        materialDiv.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                <span style="font-size: 1.5em;">${typeEmoji[material.type] || '📎'}</span>
+                <div>
+                    <h4 style="margin: 0;">${material.title}</h4>
+                    <p style="margin: 0; font-size: 0.85em; color: var(--text-muted);">${material.type.toUpperCase()}</p>
+                </div>
+            </div>
+            <p style="margin: 8px 0; font-size: 0.9em; color: var(--text-muted);">${material.description}</p>
+            <a href="${material.url}" target="_blank" class="btn small" style="display: inline-block;">Download/View</a>
+        `;
+        materialContainer.appendChild(materialDiv);
+    });
+}
+
 window.addEventListener('pageshow', () => {
     updateLessonProgress();
     updateQuizProgress();
     loadCustomLessons();
+    loadCustomQuizzes();
+    loadCustomVideos();
+    loadCustomMaterials();
 });
 
 // Listen for lesson updates from admin panel
 window.addEventListener('lessonsUpdated', () => {
     loadCustomLessons();
     updateLessonProgress();
+});
+// Listen for quiz updates from admin panel
+window.addEventListener('quizzesUpdated', () => {
+    loadCustomQuizzes();
+});
+
+// Listen for video updates from admin panel
+window.addEventListener('videosUpdated', () => {
+    loadCustomVideos();
+});
+
+// Listen for materials updates from admin panel
+window.addEventListener('materialsUpdated', () => {
+    loadCustomMaterials();
 });

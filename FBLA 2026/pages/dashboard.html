@@ -582,6 +582,9 @@
                         <div class="admin-nav">
                             <button class="nav-btn active" data-section="overview">Dashboard</button>
                             <button class="nav-btn" data-section="lessons">Manage Lessons</button>
+                            <button class="nav-btn" data-section="quizzes">Manage Quizzes</button>
+                            <button class="nav-btn" data-section="videos">Manage Videos</button>
+                            <button class="nav-btn" data-section="materials">Manage Materials</button>
                             <button class="nav-btn" data-section="users">Manage Users</button>
                         </div>
                     </div>
@@ -658,6 +661,147 @@
 
                             <h3 style="margin-top: 30px;">Current Lessons</h3>
                             <div class="lessons-list" id="lessonsList"></div>
+                        </section>
+
+                        <!-- Quizzes Management Section -->
+                        <section id="quizzes" class="section">
+                            <h2>Manage Quizzes</h2>
+                            
+                            <div class="quiz-form">
+                                <h3>Add New Quiz</h3>
+                                <form id="quizForm">
+                                    <div class="form-input-group">
+                                        <label>Subject Category</label>
+                                        <select id="quizCategory" required>
+                                            <option value="">Select a category...</option>
+                                            <option value="mathematics">Mathematics</option>
+                                            <option value="science">Science</option>
+                                            <option value="english">English & Writing</option>
+                                            <option value="history">History & Social Studies</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-input-group">
+                                        <label>Quiz Title</label>
+                                        <input type="text" id="quizTitle" placeholder="e.g., Algebra Quiz 1" required>
+                                    </div>
+                                    <div class="form-input-group">
+                                        <label>Quiz ID (unique identifier)</label>
+                                        <input type="text" id="quizId" placeholder="e.g., algebra-quiz-1" required>
+                                    </div>
+                                    <div class="form-input-group">
+                                        <label>Description</label>
+                                        <textarea id="quizDesc" placeholder="Brief description of the quiz" required></textarea>
+                                    </div>
+                                    <div id="questionsContainer"></div>
+                                    <div class="button-group">
+                                        <button type="submit" class="btn primary">Add Quiz</button>
+                                        <button type="reset" class="btn outline">Clear</button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <h3 style="margin-top: 30px;">Current Quizzes</h3>
+                            <div class="quizzes-list" id="quizzesList"></div>
+                        </section>
+
+                        <!-- Videos Management Section -->
+                        <section id="videos" class="section">
+                            <h2>Manage Videos</h2>
+                            
+                            <div class="video-form">
+                                <h3>Add New Video</h3>
+                                <form id="videoForm">
+                                    <div class="form-input-group">
+                                        <label>Subject Category</label>
+                                        <select id="videoCategory" required>
+                                            <option value="">Select a category...</option>
+                                            <option value="mathematics">Mathematics</option>
+                                            <option value="science">Science</option>
+                                            <option value="english">English & Writing</option>
+                                            <option value="history">History & Social Studies</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-input-group">
+                                        <label>Video Title</label>
+                                        <input type="text" id="videoTitle" placeholder="e.g., Introduction to Calculus" required>
+                                    </div>
+                                    <div class="form-input-group">
+                                        <label>Video ID (unique identifier)</label>
+                                        <input type="text" id="videoId" placeholder="e.g., calculus-intro" required>
+                                    </div>
+                                    <div class="form-input-group">
+                                        <label>Description</label>
+                                        <textarea id="videoDesc" placeholder="Brief description of the video" required></textarea>
+                                    </div>
+                                    <div class="form-input-group">
+                                        <label>YouTube Video ID</label>
+                                        <input type="text" id="youtubeVideoId" placeholder="e.g., dQw4w9WgXcQ" required>
+                                        <small>Just the video ID from the YouTube URL (part after 'v=')</small>
+                                    </div>
+                                    <div class="button-group">
+                                        <button type="submit" class="btn primary">Add Video</button>
+                                        <button type="reset" class="btn outline">Clear</button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <h3 style="margin-top: 30px;">Current Videos</h3>
+                            <div class="videos-list" id="videosList"></div>
+                        </section>
+
+                        <!-- Materials Management Section -->
+                        <section id="materials" class="section">
+                            <h2>Manage Materials</h2>
+                            
+                            <div class="materials-form">
+                                <h3>Add New Material</h3>
+                                <form id="materialsForm">
+                                    <div class="form-input-group">
+                                        <label>Subject Category</label>
+                                        <select id="materialCategory" required>
+                                            <option value="">Select a category...</option>
+                                            <option value="mathematics">Mathematics</option>
+                                            <option value="science">Science</option>
+                                            <option value="english">English & Writing</option>
+                                            <option value="history">History & Social Studies</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-input-group">
+                                        <label>Material Title</label>
+                                        <input type="text" id="materialTitle" placeholder="e.g., Geometry Study Guide" required>
+                                    </div>
+                                    <div class="form-input-group">
+                                        <label>Material ID (unique identifier)</label>
+                                        <input type="text" id="materialId" placeholder="e.g., geometry-guide" required>
+                                    </div>
+                                    <div class="form-input-group">
+                                        <label>Description</label>
+                                        <textarea id="materialDesc" placeholder="Brief description of the material" required></textarea>
+                                    </div>
+                                    <div class="form-input-group">
+                                        <label>File URL</label>
+                                        <input type="url" id="materialUrl" placeholder="e.g., https://example.com/guide.pdf" required>
+                                    </div>
+                                    <div class="form-input-group">
+                                        <label>File Type</label>
+                                        <select id="materialType" required>
+                                            <option value="">Select file type...</option>
+                                            <option value="pdf">PDF</option>
+                                            <option value="doc">Word Document</option>
+                                            <option value="txt">Text File</option>
+                                            <option value="image">Image</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+                                    <div class="button-group">
+                                        <button type="submit" class="btn primary">Add Material</button>
+                                        <button type="reset" class="btn outline">Clear</button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <h3 style="margin-top: 30px;">Current Materials</h3>
+                            <div class="materials-list" id="materialsList"></div>
                         </section>
 
                         <!-- Users Management Section -->
