@@ -42,31 +42,60 @@
                             <label>Admin Key</label>
                             <input type="password" id="adminKey" placeholder="Enter admin key">
                             <div class="error-text" id="adminKeyErr"></div>
+                            <div class="requirements-list" id="adminKeyReqs">
+                                <div class="req-item">
+                                    <div class="req-check" id="adminKeyCheck"></div>
+                                    <span>Enter the correct admin key</span>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="form-input-group">
                             <label>Full Name</label>
                             <input type="text" id="adminName" placeholder="Administrator Name">
                             <div class="error-text" id="adminNameErr"></div>
+                            <div class="requirements-list" id="adminNameReqs">
+                                <div class="req-item">
+                                    <div class="req-check" id="adminNameCheck"></div>
+                                    <span>Enter your full name</span>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="form-input-group">
                             <label>Email Address</label>
                             <input type="email" id="adminEmail" placeholder="admin@example.com">
                             <div class="error-text" id="adminEmailErr"></div>
+                            <div class="requirements-list" id="adminEmailReqs">
+                                <div class="req-item">
+                                    <div class="req-check" id="adminEmailCheck"></div>
+                                    <span>Enter a valid email address</span>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="form-input-group">
                             <label>Password</label>
                             <input type="password" id="adminPass" placeholder="••••••••">
                             <div class="error-text" id="adminPassErr"></div>
-                            <small>Must be at least 6 characters</small>
+                            <div class="requirements-list" id="adminPassReqs">
+                                <div class="req-item">
+                                    <div class="req-check" id="adminPassCheck"></div>
+                                    <span>Password must be at least 6 characters</span>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="form-input-group">
                             <label>Confirm Password</label>
                             <input type="password" id="adminPassConfirm" placeholder="••••••••">
                             <div class="error-text" id="adminPassConfirmErr"></div>
+                            <div class="requirements-list" id="adminPassConfirmReqs">
+                                <div class="req-item">
+                                    <div class="req-check" id="adminPassConfirmCheck"></div>
+                                    <span>Passwords must match</span>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="form-input-group">
@@ -80,12 +109,24 @@
                                 <option value="color">What is your favorite color?</option>
                             </select>
                             <div class="error-text" id="adminQuestionErr"></div>
+                            <div class="requirements-list" id="adminQuestionReqs">
+                                <div class="req-item">
+                                    <div class="req-check" id="adminQuestionCheck"></div>
+                                    <span>Select a security question</span>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="form-input-group">
                             <label>Your Answer</label>
                             <input type="text" id="adminAnswer" placeholder="Your answer">
                             <div class="error-text" id="adminAnswerErr"></div>
+                            <div class="requirements-list" id="adminAnswerReqs">
+                                <div class="req-item">
+                                    <div class="req-check" id="adminAnswerCheck"></div>
+                                    <span>Provide your answer</span>
+                                </div>
+                            </div>
                         </div>
 
                         <button type="submit" class="submit-button">Create Admin Account</button>
@@ -138,6 +179,94 @@
                 return;
             }
 
+            const focusState = {};
+
+            function isValidEmail(email) {
+                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            }
+
+            function updateReqDisplay(containerId, checkId, isMet, show) {
+                const container = document.getElementById(containerId);
+                const check = document.getElementById(checkId);
+                const item = check ? check.parentElement : null;
+
+                const shouldShow = show && !isMet;
+
+                if (shouldShow) {
+                    container.classList.add('show');
+                    check.classList.remove('met');
+                    check.classList.add('unmet');
+                    check.textContent = '!';
+                    if (item) {
+                        item.classList.remove('met');
+                        item.classList.add('unmet');
+                    }
+                } else if (isMet) {
+                    container.classList.remove('show');
+                    check.classList.remove('unmet');
+                    check.classList.add('met');
+                    check.textContent = '✓';
+                    if (item) {
+                        item.classList.remove('unmet');
+                        item.classList.add('met');
+                    }
+                } else {
+                    container.classList.remove('show');
+                }
+            }
+
+            function updateAdminReqs() {
+                const adminKey = document.getElementById('adminKey').value;
+                const name = document.getElementById('adminName').value.trim();
+                const email = document.getElementById('adminEmail').value.trim();
+                const pass = document.getElementById('adminPass').value;
+                const confirm = document.getElementById('adminPassConfirm').value;
+                const question = document.getElementById('adminQuestion').value;
+                const answer = document.getElementById('adminAnswer').value.trim();
+
+                const correctKey = 'PeerLearnAdmin';
+                const keyValid = adminKey === correctKey;
+                const nameValid = name.length > 0;
+                const emailValid = isValidEmail(email);
+                const passValid = pass.length >= 6;
+                const matchValid = pass === confirm && pass.length > 0;
+                const questionValid = question.length > 0;
+                const answerValid = answer.length > 0;
+
+                updateReqDisplay('adminKeyReqs', 'adminKeyCheck', keyValid, focusState.adminKey || adminKey.length > 0);
+                updateReqDisplay('adminNameReqs', 'adminNameCheck', nameValid, focusState.adminName || name.length > 0);
+                updateReqDisplay('adminEmailReqs', 'adminEmailCheck', emailValid, focusState.adminEmail || email.length > 0);
+                updateReqDisplay('adminPassReqs', 'adminPassCheck', passValid, focusState.adminPass || pass.length > 0);
+                updateReqDisplay('adminPassConfirmReqs', 'adminPassConfirmCheck', matchValid, focusState.adminPassConfirm || confirm.length > 0);
+                updateReqDisplay('adminQuestionReqs', 'adminQuestionCheck', questionValid, focusState.adminQuestion || question.length > 0);
+                updateReqDisplay('adminAnswerReqs', 'adminAnswerCheck', answerValid, focusState.adminAnswer || answer.length > 0);
+            }
+
+            // Add input listeners for real-time validation
+            document.querySelectorAll('#adminSetup input, #adminSetup select').forEach(field => {
+                field.addEventListener('input', updateAdminReqs);
+                field.addEventListener('change', updateAdminReqs);
+
+                field.addEventListener('focus', () => {
+                    focusState[field.id] = true;
+                    updateAdminReqs();
+                });
+
+                field.addEventListener('blur', () => {
+                    focusState[field.id] = false;
+                    updateAdminReqs();
+                });
+
+                // Clear error on input
+                field.addEventListener('input', () => {
+                    const errorId = field.id + 'Err';
+                    const errorEl = document.getElementById(errorId);
+                    if (errorEl) {
+                        errorEl.style.display = 'none';
+                    }
+                });
+            });
+
             const form = document.getElementById('adminSetup');
 
             form.addEventListener('submit', (e) => {
@@ -170,7 +299,7 @@
                     valid = false;
                 }
 
-                if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                if (!email || !isValidEmail(email)) {
                     document.getElementById('adminEmailErr').textContent = email ? 'Invalid email format' : 'Email is required';
                     document.getElementById('adminEmailErr').style.display = 'block';
                     valid = false;
