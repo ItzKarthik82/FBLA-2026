@@ -67,6 +67,24 @@
     flex-wrap: wrap;
 }
 
+#joinSessionBtn {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+}
+
+#joinSessionBtn:hover {
+    background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
+}
+
+#exploreResourcesBtn {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+#exploreResourcesBtn:hover {
+    background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+}
+
 .code-preview {
     background: #f3f4f6;
     border-radius: var(--border-radius-lg);
