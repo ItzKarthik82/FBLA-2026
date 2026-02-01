@@ -517,8 +517,13 @@ function loadCustomLessons() {
     const customLessons = JSON.parse(localStorage.getItem('customLessons') || '[]');
     if (customLessons.length === 0) return;
 
-    const coursesGrid = document.querySelector('.courses-grid');
-    if (!coursesGrid) return;
+    // Map categories to existing course containers
+    const categoryToCourseId = {
+        'math': 'math-course',
+        'science': 'science-course',
+        'english': 'english-course',
+        'history': 'history-course'
+    };
 
     // Group custom lessons by category
     const categories = {};
@@ -529,68 +534,55 @@ function loadCustomLessons() {
         categories[lesson.category].push(lesson);
     });
 
-    // Create course cards for custom lessons
-    Object.keys(categories).forEach(category => {
-        const lessons = categories[category];
-        
-        // Check if a course card for this category already exists
-        let courseCard = document.getElementById(`${category}-custom-course`);
-        
-        if (!courseCard) {
-            // Create new course card
-            courseCard = document.createElement('div');
-            courseCard.className = 'course-card';
-            courseCard.id = `${category}-custom-course`;
-            
-            const categoryTitle = category.charAt(0).toUpperCase() + category.slice(1).replace('-', ' ');
-            courseCard.innerHTML = `
-                <h3>${categoryTitle} (Custom)</h3>
-                <p>Custom lessons created by instructors.</p>
-                <div class="course-progress" id="${category}-custom-progress">0 / ${lessons.length} completed</div>
-                <div class="sub-lessons" id="${category}-custom-lessons"></div>
-            `;
-            
-            coursesGrid.appendChild(courseCard);
-        }
-
-        // Add lessons to the course card
-        const subLessonsDiv = document.getElementById(`${category}-custom-lessons`);
-        if (subLessonsDiv) {
-            subLessonsDiv.innerHTML = '';
-
-            lessons.forEach(lesson => {
-                const subLesson = document.createElement('div');
-                subLesson.className = 'sub-lesson';
-                subLesson.innerHTML = `
-                    <span class="lesson-title">${lesson.title}</span>
-                    <span class="completion-status" id="${lesson.id}-status"></span>
-                    <button class="btn small" id="${lesson.id}-btn" onclick="startLesson('${lesson.id}')">Start Lesson</button>
-                `;
-                subLessonsDiv.appendChild(subLesson);
-            });
-
-            // Update progress for this category
-            const completedLessons = JSON.parse(localStorage.getItem('completedLessons') || '[]');
-            const completed = lessons.filter(l => completedLessons.includes(l.id)).length;
-            const progressEl = document.getElementById(`${category}-custom-progress`);
-            if (progressEl) {
-                progressEl.textContent = `${completed} / ${lessons.length} completed`;
-            }
-        }
-    });
-
-    // Update all lesson statuses
     const completedLessons = JSON.parse(localStorage.getItem('completedLessons') || '[]');
-    customLessons.forEach(lesson => {
-        const statusEl = document.getElementById(`${lesson.id}-status`);
-        const btnEl = document.getElementById(`${lesson.id}-btn`);
 
-        if (completedLessons.includes(lesson.id)) {
-            if (statusEl) statusEl.textContent = '✓ Completed';
-            if (btnEl) btnEl.classList.add('completed');
-        } else {
-            if (statusEl) statusEl.textContent = '';
-            if (btnEl) btnEl.classList.remove('completed');
+    // Add custom lessons to existing course cards
+    Object.keys(categories).forEach(category => {
+        const courseId = categoryToCourseId[category];
+        if (!courseId) return; // Skip if category doesn't map to a course
+
+        const courseCard = document.getElementById(courseId);
+        if (!courseCard) return;
+
+        const subLessonsDiv = courseCard.querySelector('.sub-lessons');
+        if (!subLessonsDiv) return;
+
+        const lessons = categories[category];
+
+        // Add custom lessons to the existing sub-lessons div
+        lessons.forEach(lesson => {
+            // Check if lesson already exists (avoid duplicates)
+            if (document.getElementById(`${lesson.id}-btn`)) return;
+
+            const subLesson = document.createElement('div');
+            subLesson.className = 'sub-lesson';
+            subLesson.innerHTML = `
+                <span class="lesson-title">${lesson.title}</span>
+                <span class="completion-status" id="${lesson.id}-status"></span>
+                <button class="btn small" id="${lesson.id}-btn" onclick="startLesson('${lesson.id}')">Start Lesson</button>
+            `;
+            subLessonsDiv.appendChild(subLesson);
+
+            // Set initial completion status
+            const statusEl = document.getElementById(`${lesson.id}-status`);
+            const btnEl = document.getElementById(`${lesson.id}-btn`);
+            if (completedLessons.includes(lesson.id)) {
+                if (statusEl) statusEl.textContent = '✓ Completed';
+                if (btnEl) btnEl.classList.add('completed');
+            }
+        });
+
+        // Update course progress to include custom lessons
+        const progressEl = courseCard.querySelector('.course-progress');
+        if (progressEl) {
+            const allCourseLessons = Array.from(courseCard.querySelectorAll('.sub-lesson')).map(el => {
+                const btn = el.querySelector('button');
+                return btn ? btn.id.replace('-btn', '') : null;
+            }).filter(Boolean);
+
+            const completed = allCourseLessons.filter(lessonId => completedLessons.includes(lessonId)).length;
+            const total = allCourseLessons.length;
+            progressEl.textContent = `${completed} / ${total} completed`;
         }
     });
 }
