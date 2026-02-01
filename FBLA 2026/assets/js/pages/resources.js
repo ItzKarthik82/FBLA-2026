@@ -160,10 +160,22 @@ function startQuiz(quizId) {
     const quizTitle = document.getElementById('quizTitle');
     if (quizTitle) quizTitle.textContent = quiz.title;
 
+    // Reset quiz UI
+    const resultDiv = document.getElementById('quizResult');
+    const questionContainer = document.getElementById('quizQuestionContainer');
+    const navigation = document.getElementById('quizNavigation');
+
+    if (questionContainer) questionContainer.style.display = 'block';
+    if (navigation) navigation.style.display = 'flex';
+    if (resultDiv) {
+        resultDiv.style.display = 'none';
+        resultDiv.innerHTML = '';
+    }
+
     showQuestion(quiz, 0);
 
     const quizModal = document.getElementById('quizModal');
-    if (quizModal) quizModal.style.display = 'block';
+    if (quizModal) quizModal.classList.add('open');
 }
 
 function showQuestion(quiz, index) {
@@ -373,7 +385,7 @@ function getCurrentQuizData() {
 
 function closeQuizModal() {
     const quizModal = document.getElementById('quizModal');
-    if (quizModal) quizModal.style.display = 'none';
+    if (quizModal) quizModal.classList.remove('open');
     const questionContainer = document.getElementById('quizQuestionContainer');
     if (questionContainer) questionContainer.style.display = 'block';
     const result = document.getElementById('quizResult');
