@@ -116,11 +116,19 @@
         .form-input-group textarea {
             width: 100%;
             padding: 10px;
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--gray-300);
             border-radius: 6px;
-            background: var(--input-bg);
-            color: var(--text-color);
+            background: var(--white);
+            color: var(--text);
             font-family: inherit;
+        }
+
+        body.dark .form-input-group input,
+        body.dark .form-input-group select,
+        body.dark .form-input-group textarea {
+            background: var(--gray-800);
+            border-color: var(--gray-700);
+            color: var(--text);
         }
 
         .form-input-group textarea {
