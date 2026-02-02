@@ -54,8 +54,19 @@ function startLesson(lessonId) {
 
         if (lessonTitle) lessonTitle.textContent = data.title;
 
-        fetch(`assets/materials/${data.file}`)
-            .then(response => response.text())
+        const primaryPath = `assets/materials/${data.file}`;
+        const fallbackPath = `../assets/materials/${data.file}`;
+
+        const fetchLesson = (path) =>
+            fetch(path).then(response => {
+                if (!response.ok) {
+                    throw new Error('Lesson content not found');
+                }
+                return response.text();
+            });
+
+        fetchLesson(primaryPath)
+            .catch(() => fetchLesson(fallbackPath))
             .then(content => {
                 if (lessonContent) lessonContent.innerHTML = `<pre>${content}</pre>`;
                 if (lessonModal) lessonModal.classList.add('open');
