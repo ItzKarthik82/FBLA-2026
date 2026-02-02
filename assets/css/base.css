@@ -58,6 +58,13 @@ body.dark {
     background: var(--bg);
     color: var(--text);
 }
+    body.dark select,
+    body.dark input,
+    body.dark textarea {
+        background-color: var(--gray-800) !important;
+        color: var(--text) !important;
+        border-color: var(--gray-700) !important;
+    }
 
 /* Container */
 .container {
