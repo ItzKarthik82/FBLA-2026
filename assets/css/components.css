@@ -548,28 +548,7 @@ body.dark .notification-popup.error .notification-content {
 
 /* Calculator Toggle */
 .calc-toggle-btn {
-    position: fixed;
-    top: 80px;
-    right: 20px;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background: var(--primary);
-    border: none;
-    font-size: 28px;
-    cursor: pointer;
-    box-shadow: var(--shadow-lg);
-    transition: var(--transition);
-    z-index: 998;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.calc-toggle-btn:hover {
-    background: var(--primary-dark);
-    transform: scale(1.1);
-    box-shadow: var(--shadow-xl);
+    display: none;
 }
 
 /* Floating Calculator */
