@@ -115,6 +115,19 @@ body.dark .source-item ul {
     color: var(--text);
 }
 
+body.dark .sources-section h2,
+body.dark .sources-section h4,
+body.dark .sources-section p,
+body.dark .sources-section ul,
+body.dark .sources-section li {
+    color: var(--text) !important;
+}
+
+body.dark .sources-section p[style*="color"],
+body.dark .sources-section h4[style*="color"] {
+    color: var(--text) !important;
+}
+
 .source-item ul li {
     margin: 6px 0;
     line-height: 1.6;
