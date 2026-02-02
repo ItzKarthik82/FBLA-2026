@@ -81,6 +81,14 @@ body.dark .pill-btn {
     color: var(--text-muted);
 }
 
+body.dark .pill-btn:hover,
+body.dark .pill-btn.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
 .pill-btn:hover,
 .pill-btn.active {
     background: var(--primary);
@@ -132,6 +140,14 @@ body.dark .view-btn {
     border-color: var(--gray-700);
     color: var(--text-muted);
     background: var(--card-bg);
+}
+
+body.dark .view-btn:hover,
+body.dark .view-btn.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
 }
 
 .view-btn:hover {
