@@ -96,6 +96,14 @@ body.dark .tab-btn {
     box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
+body.dark .tab-btn.active,
+body.dark .tab-btn:hover {
+    background: var(--primary) !important;
+    border-color: var(--primary) !important;
+    color: white !important;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3) !important;
+}
+
 .tab-content {
     display: none;
 }
