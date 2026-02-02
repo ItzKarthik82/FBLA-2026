@@ -97,6 +97,14 @@ body.dark .pill-btn.active {
     box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
+body.dark .pill-btn:hover,
+body.dark .pill-btn.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
 .pill-indicator {
     display: none;
     width: 8px;
