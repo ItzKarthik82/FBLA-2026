@@ -145,6 +145,54 @@
         </div>
     </footer>
 
+    <!-- Floating Calculator -->
+    <div id="floatingCalc" class="floating-calculator">
+        <div class="calc-header">
+            <div>
+                <h3>Calculator</h3>
+                <button class="sci-toggle" onclick="toggleScientific()">Scientific</button>
+            </div>
+            <button class="calc-close-btn" onclick="closeFloatingCalc()">✕</button>
+        </div>
+        <div id="calcDisplay" class="calc-display">0</div>
+        <div id="basicButtons" class="calc-buttons">
+            <button onclick="calcPress('7')">7</button>
+            <button onclick="calcPress('8')">8</button>
+            <button onclick="calcPress('9')">9</button>
+            <button onclick="calcPress('/')" class="operator">/</button>
+            <button onclick="calcPress('4')">4</button>
+            <button onclick="calcPress('5')">5</button>
+            <button onclick="calcPress('6')">6</button>
+            <button onclick="calcPress('*')" class="operator">*</button>
+            <button onclick="calcPress('1')">1</button>
+            <button onclick="calcPress('2')">2</button>
+            <button onclick="calcPress('3')">3</button>
+            <button onclick="calcPress('-')" class="operator">-</button>
+            <button onclick="calcPress('0')" class="zero">0</button>
+            <button onclick="calcPress('C')" class="clear">C</button>
+            <button onclick="calcPress('=')" class="equals">=</button>
+            <button onclick="calcPress('+')" class="operator">+</button>
+        </div>
+        <div id="scientificButtons" class="calc-buttons sci-buttons" style="display: none;">
+            <button onclick="calcPress('sin(')" class="sci-btn">sin</button>
+            <button onclick="calcPress('cos(')" class="sci-btn">cos</button>
+            <button onclick="calcPress('tan(')" class="sci-btn">tan</button>
+            <button onclick="calcPress('3.14159')" class="sci-btn">π</button>
+            <button onclick="calcPress('(')" class="operator">(</button>
+            <button onclick="calcPress(')')" class="operator">)</button>
+            <button onclick="calcPress('sqrt(')" class="sci-btn">√</button>
+            <button onclick="calcPress('^')" class="operator">x^y</button>
+            <button onclick="calcPress('log(')" class="sci-btn">log</button>
+            <button onclick="calcPress('ln(')" class="sci-btn">ln</button>
+            <button onclick="calcPress('2.71828')" class="sci-btn">e</button>
+            <button onclick="calcFactorial()" class="sci-btn">n!</button>
+            <button onclick="calcPress('.')" class="operator">.</button>
+            <button onclick="calcPress('C')" class="clear">C</button>
+            <button onclick="calcPress('=')" class="equals">=</button>
+            <button onclick="calcPress('+')" class="operator">+</button>
+        </div>
+    </div>
+
     <script>
         // Add active navigation styling
         document.addEventListener('DOMContentLoaded', function() {
