@@ -54,7 +54,7 @@ function startLesson(lessonId) {
 
         if (lessonTitle) lessonTitle.textContent = data.title;
 
-        fetch(`../assets/materials/${data.file}`)
+        fetch(`assets/materials/${data.file}`)
             .then(response => response.text())
             .then(content => {
                 if (lessonContent) lessonContent.innerHTML = `<pre>${content}</pre>`;
