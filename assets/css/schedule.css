@@ -480,6 +480,15 @@ body.dark .propose-session textarea {
     color: var(--text);
 }
 
+body.dark .propose-session input[type="date"] {
+    color-scheme: dark;
+}
+
+body.dark .propose-session input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    opacity: 0.8;
+}
+
 .propose-session input:focus,
 .propose-session select:focus,
 .propose-session textarea:focus {
