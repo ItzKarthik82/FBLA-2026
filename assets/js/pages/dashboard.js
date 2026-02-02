@@ -1,7 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
     initBaseUI();
-    requireAuth();
     updateAuthUI();
+    
+    if (!checkAuth()) {
+        window.location.href = 'login.html';
+        return;
+    }
     
     const userInfo = getUserInfo();
     
