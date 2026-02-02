@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sources & References - PeerLearn</title>
-    <link rel="stylesheet" href="../assets/css/base.css">
-    <link rel="stylesheet" href="../assets/css/components.css">
-    <link rel="stylesheet" href="../assets/css/sources.css">
-    <script src="../assets/js/core.js" defer></script>
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/sources.css">
+    <script src="assets/js/core.js" defer></script>
 </head>
 <body>
     <header class="site-header">
@@ -16,11 +16,11 @@
             <p class="tag">Academic Learning Hub</p>
             <nav>
                 <ul class="nav">
-                    <li><a href="../index.html">Home</a></li>
-                    <li><a href="pages/schedule.html">Schedule</a></li>
-                    <li><a href="pages/resources.html">Resources</a></li>
-                    <li><a href="pages/dashboard.html">Dashboard</a></li>
-                    <li><a href="pages/sources.html" class="active">Sources</a></li>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="schedule.html">Schedule</a></li>
+                    <li><a href="resources.html">Resources</a></li>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="sources.html" class="active">Sources</a></li>
                 </ul>
             </nav>
             <div class="header-actions">
@@ -119,11 +119,11 @@
                 <div class="footer-section">
                     <h4>Quick Links</h4>
                     <ul>
-                        <li><a href="../index.html">Home</a></li>
-                        <li><a href="pages/schedule.html">Schedule</a></li>
-                        <li><a href="pages/resources.html">Resources</a></li>
-                        <li><a href="pages/dashboard.html">Dashboard</a></li>
-                        <li><a href="pages/sources.html">Sources</a></li>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="schedule.html">Schedule</a></li>
+                        <li><a href="resources.html">Resources</a></li>
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                        <li><a href="sources.html">Sources</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
@@ -143,7 +143,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const currentPage = window.location.pathname;
             if (currentPage.includes('sources.html')) {
-                document.querySelector('a[href="pages/sources.html"]')?.classList.add('active');
+                document.querySelector('a[href="sources.html"]')?.classList.add('active');
             }
         });
     </script>
