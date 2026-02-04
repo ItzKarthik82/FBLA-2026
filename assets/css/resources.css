@@ -444,6 +444,18 @@ body.dark .video-card h4 {
     color: var(--text);
 }
 
+.video-card .channel {
+    padding: 0 16px 8px;
+    color: var(--gray-500);
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+body.dark .video-card .channel {
+    color: var(--gray-400);
+}
+
 .video-card p {
     padding: 0 16px 16px;
     color: var(--gray-600);
