@@ -454,6 +454,14 @@ body.dark .video-card p {
     color: var(--text-muted);
 }
 
+.video-card .btn {
+    display: inline-flex;
+    width: calc(100% - 32px);
+    margin: 0 16px 16px;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
 /* Quiz Section */
 .quiz-section {
     max-width: 600px;
