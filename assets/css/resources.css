@@ -367,6 +367,19 @@ body.dark .lesson-title {
     transform: translateY(-2px);
 }
 
+/* Video Watch Button Styling */
+.video-card .btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+}
+
+.video-card .btn:hover {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+    transform: translateY(-2px);
+}
+
 /* Videos Grid */
 .videos-grid {
     display: grid;
