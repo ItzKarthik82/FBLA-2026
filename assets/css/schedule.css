@@ -188,6 +188,7 @@ body.dark .calendar-panel-header h3 {
     gap: 0;
     overflow: hidden;
     border-top: 1px solid var(--gray-200);
+    align-items: start;
 }
 
 body.dark .calendar-wrapper {
@@ -199,9 +200,10 @@ body.dark .calendar-wrapper {
     flex-direction: column;
     align-items: flex-end;
     padding-right: 16px;
-    gap: 16px;
+    padding-top: 50px;
     background: var(--gray-50);
     border-right: 1px solid var(--gray-200);
+    height: max-content;
 }
 
 body.dark .calendar-time-axis {
@@ -213,6 +215,12 @@ body.dark .calendar-time-axis {
     font-size: 12px;
     color: var(--gray-600);
     line-height: 1.4;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    height: 72px;
+    padding: 0 8px;
+    flex-shrink: 0;
 }
 
 body.dark .time-label {
@@ -232,6 +240,7 @@ body.dark .time-label {
     border-right: 1px solid var(--gray-200);
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 }
 
 body.dark .calendar-day-column {
@@ -245,7 +254,7 @@ body.dark .calendar-day-column {
 .calendar-day-header {
     position: sticky;
     top: 0;
-    z-index: 1;
+    z-index: 2;
     background: var(--white);
     padding: 14px 12px;
     border-bottom: 1px solid var(--gray-200);
@@ -256,6 +265,8 @@ body.dark .calendar-day-column {
     font-size: 13px;
     font-weight: 700;
     color: var(--gray-900);
+    height: 50px;
+    flex-shrink: 0;
 }
 
 body.dark .calendar-day-header {
@@ -276,8 +287,10 @@ body.dark .calendar-day-header span {
 
 .calendar-day-body {
     position: relative;
-    min-height: 960px;
+    width: 100%;
+    height: 1008px;
     background: linear-gradient(180deg, transparent 0%, transparent 92%, rgba(102, 126, 234, 0.06) 92%);
+    flex-grow: 1;
 }
 
 .calendar-slot {
