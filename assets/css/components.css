@@ -299,7 +299,7 @@ body.dark .session-modal-content {
 .session-modal-content .modal-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     padding: 20px;
     border-bottom: 2px solid var(--gray-200);
     background: linear-gradient(135deg, var(--primary), var(--primary-dark));
@@ -308,6 +308,12 @@ body.dark .session-modal-content {
 
 body.dark .session-modal-content .modal-header {
     border-color: var(--gray-700);
+}
+
+.session-modal-content .modal-header > div {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
 
 .session-modal-content .modal-header h3 {

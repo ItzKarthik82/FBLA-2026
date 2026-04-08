@@ -274,9 +274,22 @@ function copyToClipboard(text, button) {
     });
 }
 
-function joinSession(sessionTitle, meetingLink, host, level, dateTime, isCustom = false) {
-    const sessionId = generateSessionId(sessionTitle, dateTime);
-    const isInterested = isSessionInterested(sessionId);
+function joinSession(sessionTitle, meetingLink, host, level, dateTime, isCustom = false, category = 'math') {
+    const categoryColors = {
+        math: '#7c3aed',
+        science: '#14b8a6',
+        english: '#ec4899',
+        history: '#f97316'
+    };
+
+    // If category not provided, try to detect from title
+    if (!category || category === '') {
+        const titleLower = sessionTitle.toLowerCase();
+        if (titleLower.includes('math') || titleLower.includes('calculus') || titleLower.includes('algebra') || titleLower.includes('geometry')) category = 'math';
+        else if (titleLower.includes('science') || titleLower.includes('chemistry') || titleLower.includes('biology')) category = 'science';
+        else if (titleLower.includes('english') || titleLower.includes('essay') || titleLower.includes('grammar') || titleLower.includes('literature') || titleLower.includes('writing')) category = 'english';
+        else if (titleLower.includes('history') || titleLower.includes('world')) category = 'history';
+    }
 
     const meetingLinkHTML = meetingLink ? `
         <div class="info-group">
@@ -303,13 +316,16 @@ function joinSession(sessionTitle, meetingLink, host, level, dateTime, isCustom 
     modal.innerHTML = `
         <div class="modal-content session-modal-content">
             <div class="modal-header">
-                <h3>${sessionTitle}</h3>
+                <div>
+                    <h3>${sessionTitle}</h3>
+                    <span class="category-badge" style="background: ${categoryColors[category] || '#667eea'};">${category.charAt(0).toUpperCase() + category.slice(1)}</span>
+                </div>
                 <span class="close" onclick="this.parentElement.parentElement.parentElement.remove()">&times;</span>
             </div>
             <div class="modal-body">
                 <div class="session-modal-info">
                     <div class="info-group">
-                        <span class="info-label">📅 Session Time</span>
+                        <span class="info-label">📅 When</span>
                         <p>${dateTime}</p>
                     </div>
                     <div class="info-group">
@@ -325,9 +341,6 @@ function joinSession(sessionTitle, meetingLink, host, level, dateTime, isCustom 
             </div>
             <div class="modal-footer">
                 ${customActionsHTML}
-                <button class="btn small ${isInterested ? 'interested' : ''}" onclick="toggleSessionInterest('${sessionId}', '${sessionTitle}', '${dateTime}', this)">
-                    ${isInterested ? '❤️ Interested' : '🤍 Mark Interested'}
-                </button>
                 <button class="btn small secondary" onclick="this.parentElement.parentElement.parentElement.remove()">Close</button>
             </div>
         </div>
@@ -452,6 +465,9 @@ function loadCustomSessions() {
             <strong>${session.title}</strong>
             <span>${formatSessionTime(sessionDate)} · ${session.host}</span>
         `;
+        
+        eventBlock.style.cursor = 'pointer';
+        eventBlock.onclick = () => joinSession(session.title, session.meetingLink, session.host, session.level, session.dateTime, true, session.category);
 
         dayBody.appendChild(eventBlock);
     });
@@ -721,6 +737,13 @@ function openBrowseSessionModal(title, dateTime, category, level, host, meetingL
     const existingSessions = JSON.parse(localStorage.getItem('customSessions') || '[]');
     const alreadyAdded = existingSessions.some(s => s.title === title && s.dateTime === dateTime);
 
+    const categoryColors = {
+        math: '#7c3aed',
+        science: '#14b8a6',
+        english: '#ec4899',
+        history: '#f97316'
+    };
+
     const meetingLinkHTML = meetingLink ? `
         <div class="info-group">
             <span class="info-label">🔗 Meeting Link</span>
@@ -743,7 +766,7 @@ function openBrowseSessionModal(title, dateTime, category, level, host, meetingL
             <div class="modal-header">
                 <div>
                     <h3>${title}</h3>
-                    <span class="category-badge" style="background: var(--${category === 'math' ? 'purple' : category === 'science' ? 'teal' : category === 'english' ? 'pink' : 'orange'}-600);">${category.charAt(0).toUpperCase() + category.slice(1)}</span>
+                    <span class="category-badge" style="background: ${categoryColors[category] || '#667eea'};">${category.charAt(0).toUpperCase() + category.slice(1)}</span>
                 </div>
                 <span class="close" onclick="this.parentElement.parentElement.parentElement.remove()">&times;</span>
             </div>
@@ -769,7 +792,7 @@ function openBrowseSessionModal(title, dateTime, category, level, host, meetingL
                 <button class="btn small ${isInterested ? 'interested' : ''}" onclick="toggleSessionInterest('${sessionId}', '${title}', '${dateTime}', this)">
                     ${isInterested ? '❤️ Interested' : '🤍 Mark Interested'}
                 </button>
-                <button class="btn small ${alreadyAdded ? 'disabled' : 'primary'}" onclick="addToCalendarFromModal('${title}', '${dateTime}', '${category}', '${level}', '${host}', '${meetingLink}')" ${alreadyAdded ? 'disabled' : ''}>
+                <button class="btn small ${alreadyAdded ? 'disabled' : 'primary'}" onclick="addToCalendarFromModal('${title}', '${dateTime}', '${category}', '${level}', '${host.replace(/'/g, "\\'")}', '${meetingLink}')" ${alreadyAdded ? 'disabled' : ''}>
                     ${alreadyAdded ? '✓ Added to Calendar' : '📌 Add to Calendar'}
                 </button>
                 <button class="btn small secondary" onclick="this.parentElement.parentElement.parentElement.remove()">Close</button>

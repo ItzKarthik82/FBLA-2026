@@ -1063,6 +1063,19 @@ body.dark .session-card .detail-label {
     box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
 }
 
+/* Modal Category Badge */
+.category-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: var(--border-radius);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: white;
+    margin-top: 8px;
+}
+
 /* Responsive Design for Session Browser */
 @media (max-width: 1200px) {
     .session-browser {
