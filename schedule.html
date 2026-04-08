@@ -58,16 +58,6 @@
                 </div>
             </div>
 
-            <!-- View Toggle & Sort Options -->
-            <div class="schedule-controls">
-                <div class="view-options">
-                    <button class="view-btn active" data-view="upcoming">Upcoming</button>
-                    <button class="view-btn" data-view="today">Today</button>
-                    <button class="view-btn" data-view="week">This Week</button>
-                    <button class="view-btn" data-view="month">This Month</button>
-                </div>
-            </div>
-
             <!-- Subject Filter Pills -->
             <div class="filter-pills">
                 <button class="pill-btn active" data-filter="all">
@@ -87,342 +77,190 @@
                 </button>
             </div>
 
-            <!-- Sessions List View -->
-            <div class="sessions-list">
-                <!-- Today's Sessions -->
-                <div class="session-day-group">
-                    <div class="day-header-banner today">
-                        <h3>Today - Saturday, February 7</h3>
-                    </div>
-                    <div class="session-card math" data-category="math">
-                        <div class="session-time-badge">
-                            <div class="time-icon"></div>
-                            <div class="time-info">
-                                <span class="time-main">12:00 PM</span>
-                                <span class="time-duration">60 min</span>
-                            </div>
-                        </div>
-                        <div class="session-content">
-                            <div class="session-header">
-                                <h4>Geometry Concepts</h4>
-                                <span class="session-badge math-badge">Mathematics</span>
-                            </div>
-                            <div class="session-meta">
-                                <span class="meta-item">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                        <circle cx="12" cy="7" r="4"></circle>
-                                    </svg>
-                                    Casey
-                                </span>
-                                <span class="meta-item">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
-                                    </svg>
-                                    Intermediate
-                                </span>
-                                <span class="meta-item participants">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                        <circle cx="9" cy="7" r="4"></circle>
-                                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                                    </svg>
-                                    12 interested
-                                </span>
-                            </div>
-                            <p class="session-description">Master geometric shapes, angles, and theorems. Perfect for visual learners!</p>
-                        </div>
-                        <button class="session-join-btn" onclick="joinSession('Geometry Concepts', 'https://meet.google.com/caj-dety-izt', 'Casey', 'Intermediate', 'Saturday, February 7, 12:00 PM')">
-                            Join Session →
-                        </button>
+            <div class="calendar-panel">
+                <div class="calendar-panel-header">
+                    <div>
+                        <span class="calendar-heading-label">Week view</span>
+                        <h3>Study Calendar</h3>
                     </div>
                 </div>
 
-                <!-- Tomorrow's Sessions -->
-                <div class="session-day-group">
-                    <div class="day-header-banner">
-                        <h3>Tomorrow - Sunday, February 8</h3>
+                <div class="calendar-wrapper">
+                    <div class="calendar-time-axis">
+                        <div class="time-label">8 AM</div>
+                        <div class="time-label">9 AM</div>
+                        <div class="time-label">10 AM</div>
+                        <div class="time-label">11 AM</div>
+                        <div class="time-label">12 PM</div>
+                        <div class="time-label">1 PM</div>
+                        <div class="time-label">2 PM</div>
+                        <div class="time-label">3 PM</div>
+                        <div class="time-label">4 PM</div>
+                        <div class="time-label">5 PM</div>
+                        <div class="time-label">6 PM</div>
+                        <div class="time-label">7 PM</div>
+                        <div class="time-label">8 PM</div>
                     </div>
-                    <div class="session-card science" data-category="science">
-                        <div class="session-time-badge">
-                            <div class="time-icon"></div>
-                            <div class="time-info">
-                                <span class="time-main">6:00 PM</span>
-                                <span class="time-duration">90 min</span>
+                    <div class="calendar-main-grid">
+                        <div class="calendar-day-column" data-day="1">
+                            <div class="calendar-day-header">Mon <span>Apr 8</span></div>
+                            <div class="calendar-day-body">
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-event event-math" data-category="math" style="top:288px; height:72px;">
+                                    <strong>Geometry Concepts</strong>
+                                    <span>12:00 PM · Casey</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="session-content">
-                            <div class="session-header">
-                                <h4>Chemistry Lab Basics</h4>
-                                <span class="session-badge science-badge">Science</span>
-                            </div>
-                            <div class="session-meta">
-                                <span class="meta-item">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                        <circle cx="12" cy="7" r="4"></circle>
-                                    </svg>
-                                    Riley
-                                </span>
-                                <span class="meta-item">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
-                                    </svg>
-                                    Intermediate
-                                </span>
-                                <span class="meta-item participants">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                        <circle cx="9" cy="7" r="4"></circle>
-                                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                                    </svg>
-                                    8 interested
-                                </span>
-                            </div>
-                            <p class="session-description">Learn essential lab safety and basic chemical reactions. Hands-on virtual demonstrations included.</p>
-                        </div>
-                        <button class="session-join-btn" onclick="joinSession('Chemistry Lab Basics', 'https://meet.google.com/bis-wgpy-vrs', 'Riley', 'Intermediate', 'Sunday, February 8, 6:00 PM')">
-                            Join Session →
-                        </button>
-                    </div>
-                </div>
-
-                <!-- This Week -->
-                <div class="session-day-group">
-                    <div class="day-header-banner">
-                        <h3>This Week - Feb 9-13</h3>
-                    </div>
-                    
-                    <div class="session-card math" data-category="math">
-                        <div class="session-time-badge">
-                            <div class="time-icon"></div>
-                            <div class="time-info">
-                                <span class="time-main">Mon, Feb 9, 4:00 PM</span>
-                                <span class="time-duration">60 min</span>
+                        <div class="calendar-day-column" data-day="2">
+                            <div class="calendar-day-header">Tue <span>Apr 9</span></div>
+                            <div class="calendar-day-body">
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-event event-science" data-category="science" style="top:720px; height:108px;">
+                                    <strong>Chemistry Lab Basics</strong>
+                                    <span>6:00 PM · Riley</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="session-content">
-                            <div class="session-header">
-                                <h4>Algebra Fundamentals</h4>
-                                <span class="session-badge math-badge">Mathematics</span>
-                            </div>
-                            <div class="session-meta">
-                                <span class="meta-item">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                        <circle cx="12" cy="7" r="4"></circle>
-                                    </svg>
-                                    Alex
-                                </span>
-                                <span class="meta-item">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
-                                    </svg>
-                                    Beginner
-                                </span>
-                                <span class="meta-item participants">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                        <circle cx="9" cy="7" r="4"></circle>
-                                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                                    </svg>
-                                    15 interested
-                                </span>
-                            </div>
-                            <p class="session-description">Start your algebra journey! Variables, equations, and problem-solving basics.</p>
-                        </div>
-                        <button class="session-join-btn" onclick="joinSession('Algebra Fundamentals', 'https://meet.google.com/ejx-etzw-noy', 'Alex', 'Beginner', 'Monday, February 9, 4:00 PM')">
-                            Join Session →
-                        </button>
-                    </div>
-
-                    <div class="session-card science" data-category="science">
-                        <div class="session-time-badge">
-                            <div class="time-icon"></div>
-                            <div class="time-info">
-                                <span class="time-main">Wed, Feb 11, 6:00 PM</span>
-                                <span class="time-duration">75 min</span>
+                        <div class="calendar-day-column" data-day="3">
+                            <div class="calendar-day-header">Wed <span>Apr 10</span></div>
+                            <div class="calendar-day-body">
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-event event-science" data-category="science" style="top:720px; height:72px;">
+                                    <strong>Biology Basics</strong>
+                                    <span>6:00 PM · Jordan</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="session-content">
-                            <div class="session-header">
-                                <h4>Biology Basics</h4>
-                                <span class="session-badge science-badge">Science</span>
-                            </div>
-                            <div class="session-meta">
-                                <span class="meta-item">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                        <circle cx="12" cy="7" r="4"></circle>
-                                    </svg>
-                                    Jordan
-                                </span>
-                                <span class="meta-item">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
-                                    </svg>
-                                    Beginner
-                                </span>
-                                <span class="meta-item participants">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                        <circle cx="9" cy="7" r="4"></circle>
-                                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                                    </svg>
-                                    10 interested
-                                </span>
-                            </div>
-                            <p class="session-description">Introduction to cells, organisms, and life processes. Great for beginners!</p>
-                        </div>
-                        <button class="session-join-btn" onclick="joinSession('Biology Basics', 'https://meet.google.com/ouh-htvf-ghe', 'Jordan', 'Beginner', 'Wednesday, February 11, 6:00 PM')">
-                            Join Session →
-                        </button>
-                    </div>
-
-                    <div class="session-card english" data-category="english">
-                        <div class="session-time-badge">
-                            <div class="time-icon"></div>
-                            <div class="time-info">
-                                <span class="time-main">Thu, Feb 12, 5:30 PM</span>
-                                <span class="time-duration">90 min</span>
+                        <div class="calendar-day-column" data-day="4">
+                            <div class="calendar-day-header">Thu <span>Apr 11</span></div>
+                            <div class="calendar-day-body">
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-event event-english" data-category="english" style="top:684px; height:108px;">
+                                    <strong>Essay Writing</strong>
+                                    <span>5:30 PM · Sam</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="session-content">
-                            <div class="session-header">
-                                <h4>Essay Writing</h4>
-                                <span class="session-badge english-badge">English</span>
-                            </div>
-                            <div class="session-meta">
-                                <span class="meta-item">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                        <circle cx="12" cy="7" r="4"></circle>
-                                    </svg>
-                                    Sam
-                                </span>
-                                <span class="meta-item">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
-                                    </svg>
-                                    Intermediate
-                                </span>
-                                <span class="meta-item participants">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                        <circle cx="9" cy="7" r="4"></circle>
-                                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                                    </svg>
-                                    18 interested
-                                </span>
-                            </div>
-                            <p class="session-description">Master essay structure, thesis statements, and persuasive arguments. Peer review included.</p>
-                        </div>
-                        <button class="session-join-btn" onclick="joinSession('Essay Writing', 'https://meet.google.com/gvf-ocxq-esc', 'Sam', 'Intermediate', 'Thursday, February 12, 5:30 PM')">
-                            Join Session →
-                        </button>
-                    </div>
-
-                    <div class="session-card history" data-category="history">
-                        <div class="session-time-badge">
-                            <div class="time-icon"></div>
-                            <div class="time-info">
-                                <span class="time-main">Fri, Feb 13, 7:00 PM</span>
-                                <span class="time-duration">60 min</span>
+                        <div class="calendar-day-column" data-day="5">
+                            <div class="calendar-day-header">Fri <span>Apr 12</span></div>
+                            <div class="calendar-day-body">
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-event event-history" data-category="history" style="top:792px; height:72px;">
+                                    <strong>World History Overview</strong>
+                                    <span>7:00 PM · Taylor</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="session-content">
-                            <div class="session-header">
-                                <h4>World History Overview</h4>
-                                <span class="session-badge history-badge">History</span>
+                        <div class="calendar-day-column" data-day="6">
+                            <div class="calendar-day-header">Sat <span>Apr 13</span></div>
+                            <div class="calendar-day-body">
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-event event-math" data-category="math" style="top:504px; height:72px;">
+                                    <strong>Advanced Calculus</strong>
+                                    <span>3:00 PM · Morgan</span>
+                                </div>
                             </div>
-                            <div class="session-meta">
-                                <span class="meta-item">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                        <circle cx="12" cy="7" r="4"></circle>
-                                    </svg>
-                                    Taylor
-                                </span>
-                                <span class="meta-item">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
-                                    </svg>
-                                    Beginner
-                                </span>
-                                <span class="meta-item participants">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                        <circle cx="9" cy="7" r="4"></circle>
-                                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                                    </svg>
-                                    9 interested
-                                </span>
-                            </div>
-                            <p class="session-description">Journey through major world events and civilizations. Interactive timeline discussions.</p>
                         </div>
-                        <button class="session-join-btn" onclick="joinSession('World History Overview', 'https://meet.google.com/hnf-pfjm-omk', 'Taylor', 'Beginner', 'Friday, February 13, 7:00 PM')">
-                            Join Session →
-                        </button>
+                        <div class="calendar-day-column" data-day="0">
+                            <div class="calendar-day-header">Sun <span>Apr 14</span></div>
+                            <div class="calendar-day-body">
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                                <div class="calendar-slot"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-                <!-- Later in February -->
-                <div class="session-day-group">
-                    <div class="day-header-banner">
-                        <h3>Saturday, February 14</h3>
-                    </div>
-                    <div class="session-card math" data-category="math">
-                        <div class="session-time-badge">
-                            <div class="time-icon"></div>
-                            <div class="time-info">
-                                <span class="time-main">Sat, Feb 14, 3:00 PM</span>
-                                <span class="time-duration">60 min</span>
-                            </div>
-                        </div>
-                        <div class="session-content">
-                            <div class="session-header">
-                                <h4>Advanced Calculus</h4>
-                                <span class="session-badge math-badge">Mathematics</span>
-                            </div>
-                            <div class="session-meta">
-                                <span class="meta-item">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                        <circle cx="12" cy="7" r="4"></circle>
-                                    </svg>
-                                    Morgan
-                                </span>
-                                <span class="meta-item">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
-                                    </svg>
-                                    Advanced
-                                </span>
-                                <span class="meta-item participants">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                        <circle cx="9" cy="7" r="4"></circle>
-                                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                                    </svg>
-                                    7 interested
-                                </span>
-                            </div>
-                            <p class="session-description">Derivatives, integrals, and limits. For students ready to advance their math skills.</p>
-                        </div>
-                        <button class="session-join-btn" onclick="joinSession('Advanced Calculus', 'https://meet.google.com/min-wjpn-fcz', 'Morgan', 'Advanced', 'Saturday, February 14, 3:00 PM')">
-                            Join Session →
-                        </button>
-                    </div>
+                <div class="calendar-legend">
+                    <span class="legend-pill math"></span> Mathematics
+                    <span class="legend-pill science"></span> Science
+                    <span class="legend-pill english"></span> English
+                    <span class="legend-pill history"></span> History
                 </div>
             </div>
-
             <div class="propose-session">
                 <h3>Host Your Own Session</h3>
                 <p>Share your knowledge with fellow students</p>

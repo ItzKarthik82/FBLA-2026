@@ -59,14 +59,6 @@ function proposeSession() {
     });
 
     localStorage.setItem('customSessions', JSON.stringify(sessions));
-
-    // Remove old custom sessions group to avoid duplicates
-    const oldCustomGroup = document.querySelector('.session-day-group[data-custom="true"]');
-    if (oldCustomGroup) {
-        oldCustomGroup.remove();
-    }
-
-    // Reload all custom sessions from localStorage
     loadCustomSessions();
 
     const actionText = isEditing ? 'updated' : 'added';
@@ -145,28 +137,8 @@ function saveEditedSession() {
     });
 
     localStorage.setItem('customSessions', JSON.stringify(filteredSessions));
-
-    const sessionsList = document.querySelector('.sessions-list');
-    if (sessionsList) {
-        const cards = sessionsList.querySelectorAll('.session-card[data-custom="true"]');
-        cards.forEach(card => {
-            const h4 = card.querySelector('h4');
-            if (h4 && h4.textContent === editingSession.title) {
-                card.remove();
-            }
-        });
-    }
-
     closeEditModal();
     editingSession = null;
-
-    // Remove old custom sessions group to avoid duplicates
-    const oldCustomGroup = document.querySelector('.session-day-group[data-custom="true"]');
-    if (oldCustomGroup) {
-        oldCustomGroup.remove();
-    }
-
-    // Reload all custom sessions from localStorage
     loadCustomSessions();
 
     showToast('Session updated successfully!');
@@ -180,14 +152,6 @@ function deleteCustomSession(title, fullDateTimeStr) {
     const sessions = JSON.parse(localStorage.getItem('customSessions') || '[]');
     const updatedSessions = sessions.filter(s => !(s.title === title && s.dateTime === fullDateTimeStr));
     localStorage.setItem('customSessions', JSON.stringify(updatedSessions));
-
-    // Remove old custom sessions group
-    const oldCustomGroup = document.querySelector('.session-day-group[data-custom="true"]');
-    if (oldCustomGroup) {
-        oldCustomGroup.remove();
-    }
-
-    // Reload all custom sessions from localStorage
     loadCustomSessions();
 
     showToast('Session deleted successfully!');
@@ -447,30 +411,17 @@ function initializeSchedulePage() {
     document.querySelectorAll('.pill-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             const filter = this.dataset.filter;
-            filterSessionCards(filter, this);
+            filterCalendarEvents(filter, this);
         });
     });
 
     const allBtn = document.querySelector('.pill-btn[data-filter="all"]');
     if (allBtn && allBtn.classList.contains('active')) {
-        filterSessionCards('all', allBtn);
-    }
-
-    document.querySelectorAll('.view-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const view = this.dataset.view;
-            switchSessionView(view, this);
-        });
-    });
-
-    const sortSelect = document.getElementById('sortSelect');
-    if (sortSelect) {
-        sortSelect.addEventListener('change', function() {
-            sortSessionCards(this.value);
-        });
+        filterCalendarEvents('all', allBtn);
     }
 
     loadCustomSessions();
+    filterCalendarEvents('all', allBtn);
 
     const editModal = document.getElementById('editSessionModal');
     if (editModal) {
@@ -484,152 +435,55 @@ function initializeSchedulePage() {
 
 function loadCustomSessions() {
     const sessions = JSON.parse(localStorage.getItem('customSessions') || '[]');
-    const sessionsList = document.querySelector('.sessions-list');
-
-    if (!sessionsList || sessions.length === 0) return;
-
-    let customGroup = document.querySelector('.session-day-group[data-custom="true"]');
-    if (!customGroup) {
-        customGroup = document.createElement('div');
-        customGroup.className = 'session-day-group';
-        customGroup.setAttribute('data-custom', 'true');
-        customGroup.innerHTML = '<div class="day-header-banner"><h3>Your Sessions</h3></div>';
-        sessionsList.appendChild(customGroup);
-    }
+    document.querySelectorAll('.calendar-event.custom-session').forEach(event => event.remove());
 
     sessions.forEach(session => {
-        const sessionCard = document.createElement('div');
-        sessionCard.className = `session-card ${session.category}`;
-        sessionCard.setAttribute('data-category', session.category);
-        sessionCard.setAttribute('data-custom', 'true');
+        const sessionDate = new Date(session.date);
+        const dayBody = getCalendarDayBody(sessionDate.getDay());
+        if (!dayBody) return;
 
-        const timeMatch = session.dateTime.match(/(\d{1,2}):(\d{2})\s(AM|PM)/);
-        const timeStr = timeMatch ? `${timeMatch[1]}:${timeMatch[2]} ${timeMatch[3]}` : '';
-
-        const dateMatch = session.dateTime.match(/(\w+),\s+(\w+)\s+(\d+)/);
-        let dateStr = '';
-        if (dateMatch) {
-            const dayMap = { 'Sunday': 'Sun', 'Monday': 'Mon', 'Tuesday': 'Tue', 'Wednesday': 'Wed', 'Thursday': 'Thu', 'Friday': 'Fri', 'Saturday': 'Sat' };
-            const monthMap = { 'January': 'Jan', 'February': 'Feb', 'March': 'Mar', 'April': 'Apr', 'May': 'May', 'June': 'Jun', 'July': 'Jul', 'August': 'Aug', 'September': 'Sep', 'October': 'Oct', 'November': 'Nov', 'December': 'Dec' };
-            const dayAbbrev = dayMap[dateMatch[1]] || dateMatch[1];
-            const monthAbbrev = monthMap[dateMatch[2]] || dateMatch[2];
-            dateStr = `${dayAbbrev}, ${monthAbbrev} ${dateMatch[3]}`;
-        }
-
-        sessionCard.innerHTML = `
-            <div class="session-time-badge">
-                <div class="time-icon"></div>
-                <div class="time-info">
-                    <span class="time-main">${dateStr}, ${timeStr}</span>
-                    <span class="time-duration">60 min</span>
-                </div>
-            </div>
-            <div class="session-content">
-                <div class="session-header">
-                    <h4>${session.title}</h4>
-                    <span class="session-badge ${session.category}-badge">${session.category.charAt(0).toUpperCase() + session.category.slice(1)}</span>
-                </div>
-                <div class="session-meta">
-                    <span class="meta-item">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="12" cy="7" r="4"></circle>
-                        </svg>
-                        ${session.host}
-                    </span>
-                    <span class="meta-item">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
-                        </svg>
-                        ${session.level}
-                    </span>
-                    <span class="meta-item participants">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="9" cy="7" r="4"></circle>
-                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                        </svg>
-                        You're hosting
-                    </span>
-                </div>
-                <p class="session-description">Your custom study session</p>
-            </div>
-            <div class="session-actions">
-                <button class="session-join-btn" onclick="joinSession('${session.title}', '${session.meetingLink}', '${session.host}', '${session.level}', '${session.dateTime}')">
-                    View Details →
-                </button>
-                <button class="session-edit-btn" onclick="editCustomSession('${session.title}', '${session.dateTime}', '${session.host}', '${session.date}', '${session.category}', '${session.level}', '${session.meetingLink}')">
-                    ✏️ Edit
-                </button>
-                <button class="session-delete-btn" onclick="deleteCustomSession('${session.title}', '${session.dateTime}')">
-                    🗑️ Delete
-                </button>
-            </div>
+        const { top, height } = calculateEventPosition(sessionDate);
+        const eventBlock = document.createElement('div');
+        eventBlock.className = `calendar-event event-${session.category} custom-session`;
+        eventBlock.dataset.category = session.category;
+        eventBlock.style.top = `${top}px`;
+        eventBlock.style.height = `${height}px`;
+        eventBlock.innerHTML = `
+            <strong>${session.title}</strong>
+            <span>${formatSessionTime(sessionDate)} · ${session.host}</span>
         `;
 
-        customGroup.appendChild(sessionCard);
+        dayBody.appendChild(eventBlock);
     });
+
+    const activeFilter = document.querySelector('.pill-btn.active')?.dataset.filter || 'all';
+    filterCalendarEvents(activeFilter);
 }
 
-function filterSessionCards(category, button) {
-    const sessionCards = document.querySelectorAll('.session-card');
-    const customGroup = document.querySelector('.session-day-group[data-custom="true"]');
-    const currentView = document.querySelector('.view-btn.active')?.dataset.view || 'upcoming';
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+function getCalendarDayBody(dayIndex) {
+    return document.querySelector(`.calendar-day-column[data-day="${dayIndex}"] .calendar-day-body`);
+}
 
+function calculateEventPosition(date) {
+    const startHour = date.getHours() + date.getMinutes() / 60;
+    const offset = startHour - 8;
+    const top = Math.max(0, offset * 72);
+    const height = Math.max(60, 1 * 72);
+    return { top, height };
+}
+
+function formatSessionTime(date) {
+    return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+}
+
+function filterCalendarEvents(category, button) {
     document.querySelectorAll('.pill-btn').forEach(btn => btn.classList.remove('active'));
     if (button) button.classList.add('active');
 
-    let hasVisibleCustomCards = false;
-
-    sessionCards.forEach(card => {
-        const cardCategory = card.dataset.category;
-        const isCustom = card.getAttribute('data-custom') === 'true';
-        
-        // Check category filter
-        const categoryMatch = category === 'all' || cardCategory === category;
-        
-        // Check view filter for custom sessions
-        let viewMatch = true;
-        if (isCustom && categoryMatch) {
-            const timeMain = card.querySelector('.time-main');
-            if (timeMain) {
-                const fullDateStr = timeMain.textContent;
-                const sessionDate = parseSessionDateString(fullDateStr);
-                
-                if (currentView === 'today') {
-                    viewMatch = sessionDate.toDateString() === today.toDateString();
-                } else if (currentView === 'week') {
-                    const weekEnd = new Date(today);
-                    weekEnd.setDate(weekEnd.getDate() + 6);
-                    viewMatch = sessionDate >= today && sessionDate <= weekEnd;
-                } else if (currentView === 'month') {
-                    viewMatch = sessionDate.getMonth() === today.getMonth() &&
-                               sessionDate.getFullYear() === today.getFullYear();
-                } else {
-                    // upcoming
-                    viewMatch = sessionDate >= today;
-                }
-            }
-        }
-
-        if (categoryMatch && viewMatch) {
-            card.style.display = 'grid';
-            setTimeout(() => card.classList.add('fade-in'), 10);
-            if (isCustom) {
-                hasVisibleCustomCards = true;
-            }
-        } else {
-            card.style.display = 'none';
-            card.classList.remove('fade-in');
-        }
+    document.querySelectorAll('.calendar-event').forEach(event => {
+        const eventCategory = event.dataset.category;
+        event.style.display = category === 'all' || eventCategory === category ? 'block' : 'none';
     });
-
-    if (customGroup) {
-        customGroup.style.display = hasVisibleCustomCards ? 'flex' : 'none';
-    }
 }
 
 function switchSessionView(view, button) {
