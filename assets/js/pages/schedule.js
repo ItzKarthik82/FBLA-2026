@@ -604,6 +604,250 @@ function parseSessionDateString(dateStr) {
     return new Date();
 }
 
+// Available sessions for browsing
+const availableSessions = [
+    {
+        title: "Advanced Algebra Study Group",
+        description: "Master complex equations, polynomials, and graphing techniques with step-by-step guidance.",
+        category: "math",
+        level: "Advanced",
+        host: "Dr. Sarah Chen",
+        meetingLink: "https://meet.google.com/abc-defg-hij",
+        dateTime: "Thursday, April 11, 7:00 PM"
+    },
+    {
+        title: "Chemistry Lab Review",
+        description: "Review key experiments, chemical reactions, and lab safety protocols for upcoming tests.",
+        category: "science",
+        level: "Intermediate",
+        host: "Prof. Michael Torres",
+        meetingLink: "https://meet.google.com/klm-nopq-rst",
+        dateTime: "Friday, April 12, 5:00 PM"
+    },
+    {
+        title: "Essay Writing Workshop",
+        description: "Learn effective essay structure, thesis development, and persuasive writing techniques.",
+        category: "english",
+        level: "Beginner",
+        host: "Ms. Emily Rodriguez",
+        meetingLink: "https://meet.google.com/uvw-xyza-bcd",
+        dateTime: "Saturday, April 13, 10:00 AM"
+    },
+    {
+        title: "World History Debate Prep",
+        description: "Prepare for history debates with research strategies and argumentation skills.",
+        category: "history",
+        level: "Intermediate",
+        host: "Mr. David Kim",
+        meetingLink: "https://meet.google.com/efg-hijk-lmn",
+        dateTime: "Monday, April 15, 6:00 PM"
+    },
+    {
+        title: "Calculus Problem Solving",
+        description: "Tackle derivatives, integrals, and limits with interactive problem-solving sessions.",
+        category: "math",
+        level: "Advanced",
+        host: "Dr. James Wilson",
+        meetingLink: "https://meet.google.com/opq-rstu-vwx",
+        dateTime: "Tuesday, April 16, 4:00 PM"
+    },
+    {
+        title: "Biology Cell Structure Deep Dive",
+        description: "Explore cellular organelles, membrane transport, and cell division processes.",
+        category: "science",
+        level: "Intermediate",
+        host: "Dr. Lisa Park",
+        meetingLink: "https://meet.google.com/yz-abcd-efg",
+        dateTime: "Wednesday, April 17, 3:00 PM"
+    },
+    {
+        title: "Grammar and Literature Analysis",
+        description: "Improve grammar skills and learn to analyze classic literature with expert guidance.",
+        category: "english",
+        level: "Beginner",
+        host: "Ms. Rachel Thompson",
+        meetingLink: "https://meet.google.com/hij-klmn-opq",
+        dateTime: "Thursday, April 18, 2:00 PM"
+    },
+    {
+        title: "American History Timeline Review",
+        description: "Review key events, figures, and movements that shaped American history.",
+        category: "history",
+        level: "Intermediate",
+        host: "Mr. Robert Johnson",
+        meetingLink: "https://meet.google.com/rst-uvwx-yza",
+        dateTime: "Friday, April 19, 6:00 PM"
+    }
+];
+
+function loadAvailableSessions() {
+    const sessionGrid = document.getElementById('sessionGrid');
+    if (!sessionGrid) return;
+
+    sessionGrid.innerHTML = '';
+
+    availableSessions.forEach(session => {
+        const sessionCard = document.createElement('div');
+        sessionCard.className = 'session-card';
+        sessionCard.dataset.category = session.category;
+
+        sessionCard.innerHTML = `
+            <h4>${session.title}</h4>
+            <div class="session-meta">
+                <span class="meta-item">📚 ${session.category.charAt(0).toUpperCase() + session.category.slice(1)}</span>
+                <span class="meta-item">🎯 ${session.level}</span>
+            </div>
+            <p class="session-description">${session.description}</p>
+            <div class="session-details">
+                <div class="detail-item">
+                    <span class="detail-label">👨‍🏫 Host:</span> ${session.host}
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">📅 When:</span> ${session.dateTime}
+                </div>
+            </div>
+            <button class="add-to-calendar-btn" onclick="openBrowseSessionModal('${session.title.replace(/'/g, "\\'")}', '${session.dateTime}', '${session.category}', '${session.level}', '${session.host.replace(/'/g, "\\'")}', '${session.meetingLink}', '${session.description.replace(/'/g, "\\'").replace(/"/g, '\\"')}')">
+                Join & Add to Calendar
+            </button>
+        `;
+
+        sessionGrid.appendChild(sessionCard);
+    });
+}
+
+function openBrowseSessionModal(title, dateTime, category, level, host, meetingLink, description) {
+    const sessionId = generateSessionId(title, dateTime);
+    const isInterested = isSessionInterested(sessionId);
+    const existingSessions = JSON.parse(localStorage.getItem('customSessions') || '[]');
+    const alreadyAdded = existingSessions.some(s => s.title === title && s.dateTime === dateTime);
+
+    const meetingLinkHTML = meetingLink ? `
+        <div class="info-group">
+            <span class="info-label">🔗 Meeting Link</span>
+            <div class="meeting-link-container">
+                <a href="${meetingLink}" target="_blank" class="btn small primary">Join Meeting</a>
+                <button class="btn small" onclick="copyToClipboard('${meetingLink}', this)">Copy Link</button>
+            </div>
+        </div>
+    ` : `
+        <div class="info-group">
+            <span class="info-label">🔗 Meeting Link</span>
+            <p class="text-muted">No meeting link provided</p>
+        </div>
+    `;
+
+    const modal = document.createElement('div');
+    modal.className = 'session-modal';
+    modal.innerHTML = `
+        <div class="modal-content session-modal-content">
+            <div class="modal-header">
+                <div>
+                    <h3>${title}</h3>
+                    <span class="category-badge" style="background: var(--${category === 'math' ? 'purple' : category === 'science' ? 'teal' : category === 'english' ? 'pink' : 'orange'}-600);">${category.charAt(0).toUpperCase() + category.slice(1)}</span>
+                </div>
+                <span class="close" onclick="this.parentElement.parentElement.parentElement.remove()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="session-modal-info">
+                    ${description ? `<div class="info-group"><p class="session-description">${description}</p></div>` : ''}
+                    <div class="info-group">
+                        <span class="info-label">📅 When</span>
+                        <p>${dateTime}</p>
+                    </div>
+                    <div class="info-group">
+                        <span class="info-label">👨‍🏫 Host</span>
+                        <p>${host}</p>
+                    </div>
+                    <div class="info-group">
+                        <span class="info-label">📊 Level</span>
+                        <p>${level}</p>
+                    </div>
+                    ${meetingLinkHTML}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn small ${isInterested ? 'interested' : ''}" onclick="toggleSessionInterest('${sessionId}', '${title}', '${dateTime}', this)">
+                    ${isInterested ? '❤️ Interested' : '🤍 Mark Interested'}
+                </button>
+                <button class="btn small ${alreadyAdded ? 'disabled' : 'primary'}" onclick="addToCalendarFromModal('${title}', '${dateTime}', '${category}', '${level}', '${host}', '${meetingLink}')" ${alreadyAdded ? 'disabled' : ''}>
+                    ${alreadyAdded ? '✓ Added to Calendar' : '📌 Add to Calendar'}
+                </button>
+                <button class="btn small secondary" onclick="this.parentElement.parentElement.parentElement.remove()">Close</button>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+}
+
+function addToCalendarFromModal(title, dateTime, category, level, host, meetingLink) {
+    // Check if already added
+    const existingSessions = JSON.parse(localStorage.getItem('customSessions') || '[]');
+    const alreadyExists = existingSessions.some(s => s.title === title && s.dateTime === dateTime);
+
+    if (alreadyExists) {
+        showToast('Session already added to your calendar!');
+        return;
+    }
+
+    // Parse the dateTime string to create a Date object
+    const dateMatch = dateTime.match(/(\w+), (\w+) (\d+), (\d+):(\d+) (AM|PM)/);
+    if (!dateMatch) {
+        showToast('Error parsing session date');
+        return;
+    }
+
+    const [, , monthName, day, hours, minutes, ampm] = dateMatch;
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                        'July', 'August', 'September', 'October', 'November', 'December'];
+    const month = monthNames.indexOf(monthName);
+    let hour = parseInt(hours);
+    if (ampm === 'PM' && hour !== 12) hour += 12;
+    if (ampm === 'AM' && hour === 12) hour = 0;
+
+    const year = new Date().getFullYear();
+    const sessionDate = new Date(year, month, parseInt(day), hour, parseInt(minutes), 0, 0);
+
+    // Add to custom sessions
+    const newSession = {
+        title: title,
+        host: host,
+        dateTime: dateTime,
+        category: category,
+        level: level,
+        meetingLink: meetingLink,
+        date: sessionDate.toISOString()
+    };
+
+    existingSessions.push(newSession);
+    localStorage.setItem('customSessions', JSON.stringify(existingSessions));
+
+    // Reload calendar to show the new session
+    loadCustomSessions();
+
+    // Update button to show it's added
+    const button = event.target;
+    button.textContent = '✓ Added to Calendar';
+    button.disabled = true;
+    button.classList.add('disabled');
+
+    showToast('Session added to your calendar!');
+}
+
+function initializeSchedulePage() {
+    // Attach filter button listeners
+    document.querySelectorAll('.pill-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            const category = button.dataset.filter;
+            filterCalendarEvents(category, button);
+        });
+    });
+
+    // Load custom sessions and available sessions
+    loadCustomSessions();
+    loadAvailableSessions();
+}
+
 function sortSessionCards(sortType) {
     const allCards = Array.from(document.querySelectorAll('.session-card'));
 

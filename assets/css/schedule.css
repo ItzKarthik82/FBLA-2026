@@ -707,23 +707,26 @@ body.dark .session-description {
 /* Propose/Create Session Form */
 .propose-session {
     background: var(--white);
-    padding: 40px;
+    padding: 48px 50px;
     border-radius: var(--border-radius-lg);
-    box-shadow: var(--shadow-md);
-    margin-top: 60px;
-    margin-bottom: 40px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    margin-top: 64px;
+    margin-bottom: 64px;
+    border: 1px solid var(--gray-200);
 }
 
 body.dark .propose-session {
     background: var(--card-bg);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    border-color: var(--gray-700);
 }
 
 .propose-session h3 {
-    font-size: 24px;
+    font-size: 32px;
     font-weight: 700;
-    margin: 0 0 8px 0;
+    margin: 0 0 12px 0;
     color: var(--gray-900);
+    letter-spacing: -0.5px;
 }
 
 body.dark .propose-session h3 {
@@ -731,9 +734,10 @@ body.dark .propose-session h3 {
 }
 
 .propose-session > p {
-    margin: 0 0 28px 0;
+    margin: 0 0 36px 0;
     color: var(--gray-600);
-    font-size: 14px;
+    font-size: 16px;
+    line-height: 1.6;
 }
 
 body.dark .propose-session > p {
@@ -742,17 +746,17 @@ body.dark .propose-session > p {
 
 .propose-session form {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
 }
 
 .propose-session input,
 .propose-session select,
 .propose-session textarea {
-    padding: 12px 14px;
+    padding: 14px 16px;
     border: 1px solid var(--gray-300);
     border-radius: var(--border-radius);
-    font-size: 14px;
+    font-size: 15px;
     font-family: inherit;
     transition: var(--transition);
     background: var(--white);
@@ -781,7 +785,7 @@ body.dark .propose-session input[type="date"]::-webkit-calendar-picker-indicator
 .propose-session textarea:focus {
     outline: none;
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
 }
 
 .propose-session input::placeholder {
@@ -794,7 +798,7 @@ body.dark .propose-session input::placeholder {
 
 .propose-session button[type="submit"] {
     grid-column: 1 / -1;
-    padding: 12px 32px;
+    padding: 16px 40px;
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
@@ -863,5 +867,369 @@ body.dark .propose-session input::placeholder {
 
     .day-header-banner h3 {
         font-size: 16px;
+    }
+}
+
+/* Session Browser */
+.session-browser {
+    margin-top: 64px;
+    padding: 48px 40px;
+    background: var(--gray-50);
+    border-radius: var(--border-radius-lg);
+    border: 1px solid var(--gray-200);
+}
+
+body.dark .session-browser {
+    background: var(--gray-800);
+    border-color: var(--gray-700);
+}
+
+.session-browser h3 {
+    margin: 0 0 12px 0;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--gray-900);
+    letter-spacing: -0.5px;
+}
+
+body.dark .session-browser h3 {
+    color: var(--text);
+}
+
+.session-browser p {
+    margin: 0 0 40px 0;
+    color: var(--gray-600);
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+body.dark .session-browser p {
+    color: var(--text-muted);
+}
+
+.session-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 28px;
+}
+
+.session-card {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--border-radius-lg);
+    padding: 32px;
+    transition: var(--transition);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+body.dark .session-card {
+    background: var(--gray-800);
+    border-color: var(--gray-700);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+}
+
+.session-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+    border-color: var(--primary);
+}
+
+body.dark .session-card:hover {
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35);
+    border-color: var(--primary);
+}
+
+.session-card h4 {
+    margin: 0 0 16px 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--gray-900);
+    line-height: 1.4;
+}
+
+body.dark .session-card h4 {
+    color: var(--text);
+}
+
+.session-card .session-meta {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    font-size: 13px;
+    color: var(--gray-600);
+    flex-wrap: wrap;
+}
+
+body.dark .session-card .session-meta {
+    color: var(--text-muted);
+}
+
+.session-card .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: var(--gray-100);
+    border-radius: var(--border-radius);
+    font-weight: 500;
+    font-size: 13px;
+}
+
+body.dark .session-card .meta-item {
+    background: var(--gray-700);
+}
+
+.session-card .session-description {
+    margin-bottom: 28px;
+    color: var(--gray-700);
+    line-height: 1.6;
+    font-size: 15px;
+    flex-grow: 1;
+}
+
+body.dark .session-card .session-description {
+    color: var(--text-muted);
+}
+
+.session-card .session-details {
+    margin-bottom: 28px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+body.dark .session-card .session-details {
+    border-bottom-color: var(--gray-700);
+}
+
+.session-card .detail-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 12px;
+    font-size: 14px;
+    color: var(--gray-600);
+}
+
+.session-card .detail-item:last-child {
+    margin-bottom: 0;
+}
+
+body.dark .session-card .detail-item {
+    color: var(--text-muted);
+}
+
+.session-card .detail-label {
+    font-weight: 600;
+    color: var(--gray-900);
+    min-width: fit-content;
+}
+
+body.dark .session-card .detail-label {
+    color: var(--text);
+}
+
+.session-card .add-to-calendar-btn {
+    width: 100%;
+    padding: 14px 24px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    margin-top: auto;
+}
+
+.session-card .add-to-calendar-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+}
+
+.session-card .add-to-calendar-btn:disabled {
+    background: #10b981;
+    cursor: default;
+    transform: none;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.session-card .add-to-calendar-btn:disabled:hover {
+    transform: none;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+/* Responsive Design for Session Browser */
+@media (max-width: 1200px) {
+    .session-browser {
+        padding: 40px 32px;
+        margin-top: 56px;
+    }
+
+    .session-grid {
+        grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+        gap: 24px;
+    }
+}
+
+@media (max-width: 768px) {
+    .session-browser {
+        padding: 36px 24px;
+        margin-top: 48px;
+    }
+
+    .session-browser h3 {
+        font-size: 28px;
+    }
+
+    .session-browser p {
+        margin-bottom: 32px;
+    }
+
+    .session-grid {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+    }
+
+    .session-card {
+        padding: 24px;
+    }
+
+    .session-card h4 {
+        font-size: 18px;
+        margin-bottom: 14px;
+    }
+
+    .session-card .session-meta {
+        gap: 10px;
+        margin-bottom: 16px;
+    }
+
+    .session-card .session-description {
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+
+    .session-card .session-details {
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+    }
+
+    .session-card .detail-item {
+        font-size: 13px;
+        margin-bottom: 10px;
+    }
+
+    .propose-session {
+        padding: 36px 28px;
+        margin-top: 48px;
+        margin-bottom: 48px;
+    }
+
+    .propose-session h3 {
+        font-size: 28px;
+        margin-bottom: 10px;
+    }
+
+    .propose-session > p {
+        margin-bottom: 28px;
+        font-size: 15px;
+    }
+
+    .propose-session form {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .propose-session button[type="submit"] {
+        padding: 14px 32px;
+    }
+}
+
+@media (max-width: 480px) {
+    .session-browser {
+        padding: 24px 16px;
+        margin-top: 40px;
+        margin-bottom: 40px;
+    }
+
+    .session-browser h3 {
+        font-size: 24px;
+        margin-bottom: 8px;
+    }
+
+    .session-browser p {
+        font-size: 15px;
+        margin-bottom: 24px;
+    }
+
+    .session-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .session-card {
+        padding: 20px;
+    }
+
+    .session-card h4 {
+        font-size: 16px;
+        margin-bottom: 12px;
+    }
+
+    .session-card .session-meta {
+        gap: 8px;
+        margin-bottom: 14px;
+    }
+
+    .session-card .meta-item {
+        padding: 5px 10px;
+        font-size: 12px;
+    }
+
+    .session-card .session-description {
+        font-size: 13px;
+        margin-bottom: 16px;
+    }
+
+    .session-card .session-details {
+        margin-bottom: 16px;
+        padding-bottom: 16px;
+    }
+
+    .session-card .detail-item {
+        font-size: 12px;
+        margin-bottom: 8px;
+        gap: 8px;
+    }
+
+    .session-card .add-to-calendar-btn {
+        padding: 12px 20px;
+        font-size: 14px;
+    }
+
+    .propose-session {
+        padding: 24px 16px;
+        margin-top: 40px;
+        margin-bottom: 40px;
+    }
+
+    .propose-session h3 {
+        font-size: 24px;
+        margin-bottom: 8px;
+    }
+
+    .propose-session > p {
+        margin-bottom: 20px;
+        font-size: 14px;
+    }
+
+    .propose-session button[type="submit"] {
+        padding: 12px 24px;
+        font-size: 15px;
     }
 }
