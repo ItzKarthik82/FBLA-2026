@@ -1031,6 +1031,27 @@ body.dark .session-card .detail-label {
     color: var(--text);
 }
 
+.session-card .session-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.session-card .status-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    color: white;
+    background: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.35);
+}
+
 .session-card .add-to-calendar-btn {
     width: 100%;
     padding: 14px 24px;

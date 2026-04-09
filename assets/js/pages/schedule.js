@@ -421,6 +421,7 @@ function deleteSession(sessionTitle, dateTime, modal) {
             modal.remove();
         }
         loadCustomSessions();
+        loadAvailableSessions();
         showToast('Session deleted successfully');
     }
 }
@@ -727,13 +728,19 @@ function loadAvailableSessions() {
 
     sessionGrid.innerHTML = '';
 
+    const existingSessions = JSON.parse(localStorage.getItem('customSessions') || '[]');
+
     availableSessions.forEach(session => {
+        const alreadyAdded = existingSessions.some(s => s.title === session.title && s.dateTime === session.dateTime);
         const sessionCard = document.createElement('div');
         sessionCard.className = 'session-card';
         sessionCard.dataset.category = session.category;
 
         sessionCard.innerHTML = `
-            <h4>${session.title}</h4>
+            <div class="session-title-row">
+                <h4>${session.title}</h4>
+                ${alreadyAdded ? '<span class="status-pill added">Added</span>' : ''}
+            </div>
             <div class="session-meta">
                 <span class="meta-item">📚 ${session.category.charAt(0).toUpperCase() + session.category.slice(1)}</span>
                 <span class="meta-item">🎯 ${session.level}</span>
@@ -747,8 +754,8 @@ function loadAvailableSessions() {
                     <span class="detail-label">📅 When:</span> ${session.dateTime}
                 </div>
             </div>
-            <button class="add-to-calendar-btn" onclick="openBrowseSessionModal('${session.title.replace(/'/g, "\\'")}', '${session.dateTime}', '${session.category}', '${session.level}', '${session.host.replace(/'/g, "\\'")}', '${session.meetingLink}', '${session.description.replace(/'/g, "\\'").replace(/"/g, '\\"')}')">
-                Add to Calendar
+            <button class="add-to-calendar-btn ${alreadyAdded ? 'disabled' : ''}" ${alreadyAdded ? 'disabled' : ''} onclick="openBrowseSessionModal('${session.title.replace(/'/g, "\\'")}', '${session.dateTime}', '${session.category}', '${session.level}', '${session.host.replace(/'/g, "\\'")}', '${session.meetingLink}', '${session.description.replace(/'/g, "\\'").replace(/"/g, '\\"')}')">
+                ${alreadyAdded ? '✓ Added' : 'Add to Calendar'}
             </button>
         `;
 
@@ -857,6 +864,9 @@ function addToCalendarFromModal(button, title, dateTime, category, level, host, 
 
     // Reload calendar to show the new session
     loadCustomSessions();
+    
+    // Update browse sessions to show the "Added" badge
+    loadAvailableSessions();
 
     // Update button to show it's added
     if (button) {
