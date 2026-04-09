@@ -40,11 +40,15 @@ function proposeSession() {
     const sessions = JSON.parse(localStorage.getItem('customSessions') || '[]');
 
     if (isEditing) {
-        const editIndex = sessions.findIndex(s =>
-            s.title === editingSession.title && s.dateTime === editingSession.dateTime
-        );
-        if (editIndex > -1) {
-            sessions.splice(editIndex, 1);
+        if (!editingSession?.isBase) {
+            const editIndex = sessions.findIndex(s =>
+                s.title === editingSession.title && s.dateTime === editingSession.dateTime
+            );
+            if (editIndex > -1) {
+                sessions.splice(editIndex, 1);
+            }
+        } else {
+            hideStaticSampleSession(editingSession.title, editingSession.dateTime);
         }
     }
 
@@ -159,6 +163,32 @@ function deleteCustomSession(title, fullDateTimeStr) {
 
 function generateSessionId(title, dateTime) {
     return `${title}-${dateTime}`.replace(/[^a-zA-Z0-9]/g, '-');
+}
+
+function getHiddenSampleSessions() {
+    return JSON.parse(localStorage.getItem('hiddenSampleSessions') || '[]');
+}
+
+function setHiddenSampleSessions(ids) {
+    localStorage.setItem('hiddenSampleSessions', JSON.stringify(ids));
+}
+
+function hideStaticSampleSession(title, dateTime) {
+    const sessionId = generateSessionId(title, dateTime);
+    const hiddenSessions = getHiddenSampleSessions();
+    if (!hiddenSessions.includes(sessionId)) {
+        hiddenSessions.push(sessionId);
+        setHiddenSampleSessions(hiddenSessions);
+    }
+    applyHiddenSampleOverrides();
+}
+
+function applyHiddenSampleOverrides() {
+    const hiddenSessions = getHiddenSampleSessions();
+    document.querySelectorAll('.calendar-event[data-source="base"]').forEach(event => {
+        const sessionId = generateSessionId(event.dataset.title || '', event.dataset.datetime || '');
+        event.style.display = hiddenSessions.includes(sessionId) ? 'none' : 'block';
+    });
 }
 
 function isSessionInterested(sessionId) {
@@ -307,7 +337,7 @@ function joinSession(sessionTitle, meetingLink, host, level, dateTime, isCustom 
     `;
 
     const customActionsHTML = isCustom ? `
-        <button class="btn small delete-session-btn" data-title="${sessionTitle}" data-link="${meetingLink}" data-host="${host}" data-level="${level}" data-datetime="${dateTime}">Edit Session</button>
+        <button class="btn small delete-session-btn" data-title="${sessionTitle}" data-link="${meetingLink}" data-host="${host}" data-level="${level}" data-category="${category}" data-datetime="${dateTime}">Edit Session</button>
         <button class="btn small danger delete-session-btn" data-title="${sessionTitle}" data-datetime="${dateTime}">Delete Session</button>
     ` : '';
 
@@ -366,8 +396,9 @@ function joinSession(sessionTitle, meetingLink, host, level, dateTime, isCustom 
                 const link = this.getAttribute('data-link');
                 const hostName = this.getAttribute('data-host');
                 const lvl = this.getAttribute('data-level');
+                const categoryName = this.getAttribute('data-category');
                 const dt = this.getAttribute('data-datetime');
-                editSession(title, link, hostName, lvl, dt, title, modal);
+                editSession(title, link, hostName, lvl, categoryName, dt, title, modal);
             });
         }
     }
@@ -379,16 +410,22 @@ function deleteSession(sessionTitle, dateTime, modal) {
         const updatedSessions = sessions.filter(s =>
             !(s.title === sessionTitle && s.dateTime === dateTime)
         );
+
+        if (updatedSessions.length === sessions.length) {
+            hideStaticSampleSession(sessionTitle, dateTime);
+        }
+
         localStorage.setItem('customSessions', JSON.stringify(updatedSessions));
 
         if (modal) {
             modal.remove();
         }
+        loadCustomSessions();
         showToast('Session deleted successfully');
     }
 }
 
-function editSession(oldTitle, oldMeetingLink, oldHost, oldLevel, oldDateTime, displayTitle, modal) {
+function editSession(oldTitle, oldMeetingLink, oldHost, oldLevel, oldCategory, oldDateTime, displayTitle, modal) {
     const dateMatch = oldDateTime.match(/(\w+), (\w+) (\d+), (\d+):(\d+) (AM|PM)/);
     if (!dateMatch) {
         showToast('Error parsing session date');
@@ -409,41 +446,23 @@ function editSession(oldTitle, oldMeetingLink, oldHost, oldLevel, oldDateTime, d
     document.getElementById('sessionTitle').value = oldTitle;
     document.getElementById('sessionHost').value = oldHost;
     document.getElementById('sessionTime').value = dateTimeLocal;
+    document.getElementById('sessionCategory').value = oldCategory || 'math';
     document.getElementById('sessionLevel').value = oldLevel;
     document.getElementById('meetingLink').value = oldMeetingLink;
 
-    editingSession = { title: oldTitle, dateTime: oldDateTime };
+    const sessions = JSON.parse(localStorage.getItem('customSessions') || '[]');
+    const sessionExists = sessions.some(s => s.title === oldTitle && s.dateTime === oldDateTime);
+
+    editingSession = {
+        title: oldTitle,
+        dateTime: oldDateTime,
+        isBase: !sessionExists
+    };
 
     if (modal) modal.remove();
 
     document.getElementById('hostForm').scrollIntoView({ behavior: 'smooth' });
     showToast('Edit the session details and click Create Session');
-}
-
-function initializeSchedulePage() {
-    document.querySelectorAll('.pill-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const filter = this.dataset.filter;
-            filterCalendarEvents(filter, this);
-        });
-    });
-
-    const allBtn = document.querySelector('.pill-btn[data-filter="all"]');
-    if (allBtn && allBtn.classList.contains('active')) {
-        filterCalendarEvents('all', allBtn);
-    }
-
-    loadCustomSessions();
-    filterCalendarEvents('all', allBtn);
-
-    const editModal = document.getElementById('editSessionModal');
-    if (editModal) {
-        window.addEventListener('click', function(event) {
-            if (event.target === editModal) {
-                closeEditModal();
-            }
-        });
-    }
 }
 
 function loadCustomSessions() {
@@ -459,6 +478,7 @@ function loadCustomSessions() {
         const eventBlock = document.createElement('div');
         eventBlock.className = `calendar-event event-${session.category} custom-session`;
         eventBlock.dataset.category = session.category;
+        eventBlock.dataset.source = 'custom';
         eventBlock.style.top = `${top}px`;
         eventBlock.style.height = `${height}px`;
         eventBlock.innerHTML = `
@@ -474,6 +494,7 @@ function loadCustomSessions() {
 
     const activeFilter = document.querySelector('.pill-btn.active')?.dataset.filter || 'all';
     filterCalendarEvents(activeFilter);
+    applyHiddenSampleOverrides();
 }
 
 function getCalendarDayBody(dayIndex) {
@@ -493,12 +514,16 @@ function formatSessionTime(date) {
 }
 
 function filterCalendarEvents(category, button) {
+    const hiddenSessions = getHiddenSampleSessions();
+
     document.querySelectorAll('.pill-btn').forEach(btn => btn.classList.remove('active'));
     if (button) button.classList.add('active');
 
     document.querySelectorAll('.calendar-event').forEach(event => {
         const eventCategory = event.dataset.category;
-        event.style.display = category === 'all' || eventCategory === category ? 'block' : 'none';
+        const isHiddenBase = event.dataset.source === 'base' && hiddenSessions.includes(generateSessionId(event.dataset.title || '', event.dataset.datetime || ''));
+        const shouldShow = (category === 'all' || eventCategory === category) && !isHiddenBase;
+        event.style.display = shouldShow ? 'block' : 'none';
     });
 }
 
@@ -723,7 +748,7 @@ function loadAvailableSessions() {
                 </div>
             </div>
             <button class="add-to-calendar-btn" onclick="openBrowseSessionModal('${session.title.replace(/'/g, "\\'")}', '${session.dateTime}', '${session.category}', '${session.level}', '${session.host.replace(/'/g, "\\'")}', '${session.meetingLink}', '${session.description.replace(/'/g, "\\'").replace(/"/g, '\\"')}')">
-                Join & Add to Calendar
+                Add to Calendar
             </button>
         `;
 
@@ -743,21 +768,6 @@ function openBrowseSessionModal(title, dateTime, category, level, host, meetingL
         english: '#ec4899',
         history: '#f97316'
     };
-
-    const meetingLinkHTML = meetingLink ? `
-        <div class="info-group">
-            <span class="info-label">🔗 Meeting Link</span>
-            <div class="meeting-link-container">
-                <a href="${meetingLink}" target="_blank" class="btn small primary">Join Meeting</a>
-                <button class="btn small" onclick="copyToClipboard('${meetingLink}', this)">Copy Link</button>
-            </div>
-        </div>
-    ` : `
-        <div class="info-group">
-            <span class="info-label">🔗 Meeting Link</span>
-            <p class="text-muted">No meeting link provided</p>
-        </div>
-    `;
 
     const modal = document.createElement('div');
     modal.className = 'session-modal';
@@ -785,14 +795,14 @@ function openBrowseSessionModal(title, dateTime, category, level, host, meetingL
                         <span class="info-label">📊 Level</span>
                         <p>${level}</p>
                     </div>
-                    ${meetingLinkHTML}
+                    ${alreadyAdded ? `<div class="info-group"><span class="info-label">📌 Status</span><p class="text-muted">This session is already on your calendar.</p></div>` : ''}
                 </div>
             </div>
             <div class="modal-footer">
                 <button class="btn small ${isInterested ? 'interested' : ''}" onclick="toggleSessionInterest('${sessionId}', '${title}', '${dateTime}', this)">
                     ${isInterested ? '❤️ Interested' : '🤍 Mark Interested'}
                 </button>
-                <button class="btn small ${alreadyAdded ? 'disabled' : 'primary'}" onclick="addToCalendarFromModal('${title}', '${dateTime}', '${category}', '${level}', '${host.replace(/'/g, "\\'")}', '${meetingLink}')" ${alreadyAdded ? 'disabled' : ''}>
+                <button class="btn small ${alreadyAdded ? 'disabled' : 'primary'}" onclick="addToCalendarFromModal(this, '${title}', '${dateTime}', '${category}', '${level}', '${host.replace(/'/g, "\\'")}', '${meetingLink}')" ${alreadyAdded ? 'disabled' : ''}>
                     ${alreadyAdded ? '✓ Added to Calendar' : '📌 Add to Calendar'}
                 </button>
                 <button class="btn small secondary" onclick="this.parentElement.parentElement.parentElement.remove()">Close</button>
@@ -803,7 +813,7 @@ function openBrowseSessionModal(title, dateTime, category, level, host, meetingL
     document.body.appendChild(modal);
 }
 
-function addToCalendarFromModal(title, dateTime, category, level, host, meetingLink) {
+function addToCalendarFromModal(button, title, dateTime, category, level, host, meetingLink) {
     // Check if already added
     const existingSessions = JSON.parse(localStorage.getItem('customSessions') || '[]');
     const alreadyExists = existingSessions.some(s => s.title === title && s.dateTime === dateTime);
@@ -849,10 +859,11 @@ function addToCalendarFromModal(title, dateTime, category, level, host, meetingL
     loadCustomSessions();
 
     // Update button to show it's added
-    const button = event.target;
-    button.textContent = '✓ Added to Calendar';
-    button.disabled = true;
-    button.classList.add('disabled');
+    if (button) {
+        button.textContent = '✓ Added to Calendar';
+        button.disabled = true;
+        button.classList.add('disabled');
+    }
 
     showToast('Session added to your calendar!');
 }
@@ -867,7 +878,10 @@ function initializeSchedulePage() {
     });
 
     // Load custom sessions and available sessions
+    const allBtn = document.querySelector('.pill-btn[data-filter="all"]');
     loadCustomSessions();
+    applyHiddenSampleOverrides();
+    filterCalendarEvents('all', allBtn);
     loadAvailableSessions();
 }
 
