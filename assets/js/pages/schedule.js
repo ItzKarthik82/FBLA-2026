@@ -736,7 +736,10 @@ function renderMonthCalendar() {
         grid.appendChild(cell);
     }
 
-    container.appendChild(grid);
+    const gridWrapper = document.createElement('div');
+    gridWrapper.className = 'month-grid-wrapper';
+    gridWrapper.appendChild(grid);
+    container.appendChild(gridWrapper);
 }
 
 function openMonthEventModal(eventData) {
