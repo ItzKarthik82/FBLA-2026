@@ -1,4 +1,6 @@
 let editingSession = null;
+let selectedMonthIndex = new Date().getMonth();
+const selectedMonthYear = 2026;
 
 function proposeSession() {
     const title = document.getElementById('sessionTitle').value;
@@ -547,9 +549,263 @@ function filterCalendarEvents(category, button) {
         const shouldShow = (category === 'all' || eventCategory === category) && !isHiddenBase;
         event.style.display = shouldShow ? 'block' : 'none';
     });
+
+    if (document.getElementById('monthCalendar')?.style.display !== 'none') {
+        renderMonthCalendar();
+    }
 }
 
-function switchSessionView(view, button) {
+function switchCalendarMode(view, button) {
+    const weekCalendar = document.getElementById('weekCalendar');
+    const monthCalendar = document.getElementById('monthCalendar');
+    const viewLabel = document.getElementById('calendarViewLabel');
+
+    document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
+    if (button) button.classList.add('active');
+
+    if (view === 'month') {
+        if (weekCalendar) weekCalendar.style.display = 'none';
+        if (monthCalendar) monthCalendar.style.display = 'block';
+        if (viewLabel) viewLabel.textContent = 'Month view';
+        renderMonthCalendar();
+    } else {
+        if (weekCalendar) weekCalendar.style.display = 'block';
+        if (monthCalendar) monthCalendar.style.display = 'none';
+        if (viewLabel) viewLabel.textContent = 'Week view';
+    }
+}
+
+function getMonthViewEvents() {
+    const hiddenSessions = getHiddenSampleSessions();
+    const events = [];
+
+    document.querySelectorAll('.calendar-event[data-source="base"]').forEach(el => {
+        const dateTime = el.dataset.datetime || '';
+        const title = el.dataset.title || '';
+        const category = el.dataset.category || 'math';
+        const sessionId = generateSessionId(title, dateTime);
+        if (hiddenSessions.includes(sessionId)) return;
+
+        const sessionDate = parseSessionDateTime(dateTime);
+        if (!sessionDate || isNaN(sessionDate)) return;
+
+        events.push({
+            title,
+            dateTime,
+            category,
+            date: sessionDate,
+            source: 'base'
+        });
+    });
+
+    const customSessions = JSON.parse(localStorage.getItem('customSessions') || '[]');
+    customSessions.forEach(session => {
+        const sessionDate = new Date(session.date);
+        if (isNaN(sessionDate)) return;
+
+        events.push({
+            title: session.title,
+            dateTime: session.dateTime,
+            category: session.category,
+            date: sessionDate,
+            source: 'custom',
+            host: session.host,
+            level: session.level,
+            meetingLink: session.meetingLink
+        });
+    });
+
+    return events;
+}
+
+function renderMonthCalendar() {
+    const container = document.getElementById('monthCalendar');
+    if (!container) return;
+
+    const today = new Date();
+    const year = selectedMonthYear;
+    const month = selectedMonthIndex;
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const daysInMonth = lastDay.getDate();
+    const startDayIndex = firstDay.getDay();
+    const events = getMonthViewEvents();
+    const activeCategory = document.querySelector('.pill-btn.active')?.dataset.filter || 'all';
+
+    container.innerHTML = '';
+
+    const titleBlock = document.createElement('div');
+    titleBlock.className = 'month-calendar-header';
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const monthSelect = document.createElement('select');
+    monthSelect.className = 'month-select';
+    monthSelect.setAttribute('aria-label', 'Select month');
+
+    monthNames.forEach((name, index) => {
+        const option = document.createElement('option');
+        option.value = index;
+        option.textContent = name;
+        if (index === month) option.selected = true;
+        monthSelect.appendChild(option);
+    });
+
+    monthSelect.addEventListener('change', event => {
+        selectedMonthIndex = parseInt(event.target.value, 10);
+        renderMonthCalendar();
+    });
+
+    titleBlock.innerHTML = `
+        <div>
+            <span class="calendar-heading-label">Month view</span>
+        </div>
+    `;
+    const selectRow = document.createElement('div');
+    selectRow.className = 'month-select-row';
+    const yearText = document.createElement('span');
+    yearText.className = 'month-year-label';
+    yearText.textContent = year;
+    selectRow.appendChild(monthSelect);
+    selectRow.appendChild(yearText);
+    titleBlock.appendChild(selectRow);
+    container.appendChild(titleBlock);
+
+    const grid = document.createElement('div');
+    grid.className = 'month-grid';
+    ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].forEach(day => {
+        const label = document.createElement('div');
+        label.className = 'month-grid-weekday';
+        label.textContent = day;
+        grid.appendChild(label);
+    });
+
+    const totalCells = Math.ceil((startDayIndex + daysInMonth) / 7) * 7;
+    let dayNumber = 1;
+
+    for (let index = 0; index < totalCells; index++) {
+        const cell = document.createElement('div');
+        cell.className = 'month-day-cell';
+
+        if (index < startDayIndex || dayNumber > daysInMonth) {
+            cell.classList.add('empty');
+        } else {
+            const currentDate = new Date(year, month, dayNumber);
+            const isToday = currentDate.toDateString() === today.toDateString();
+            if (isToday) cell.classList.add('today');
+
+            const numberLabel = document.createElement('div');
+            numberLabel.className = 'day-number';
+            numberLabel.textContent = dayNumber;
+            cell.appendChild(numberLabel);
+
+            const eventsContainer = document.createElement('div');
+            eventsContainer.className = 'day-events';
+
+            const dayEvents = events.filter(event => {
+                const eventDate = event.date;
+                const matchesCategory = activeCategory === 'all' || event.category === activeCategory;
+                return matchesCategory && eventDate.getDate() === dayNumber && eventDate.getMonth() === month && eventDate.getFullYear() === year;
+            });
+
+            dayEvents.slice(0, 3).forEach(event => {
+                const pill = document.createElement('button');
+                pill.type = 'button';
+                pill.className = `day-event-pill event-${event.category}`;
+                pill.textContent = event.title;
+                pill.title = event.dateTime;
+                pill.onclick = () => openMonthEventModal(event);
+                eventsContainer.appendChild(pill);
+            });
+
+            if (dayEvents.length > 3) {
+                const more = document.createElement('span');
+                more.className = 'day-more-count';
+                more.textContent = `+${dayEvents.length - 3} more`;
+                eventsContainer.appendChild(more);
+            }
+
+            cell.appendChild(eventsContainer);
+            dayNumber++;
+        }
+
+        grid.appendChild(cell);
+    }
+
+    container.appendChild(grid);
+}
+
+function openMonthEventModal(eventData) {
+    const categoryColors = {
+        math: '#7c3aed',
+        science: '#14b8a6',
+        english: '#ec4899',
+        history: '#f97316'
+    };
+
+    const customActionsHTML = eventData.source === 'custom' ? `
+                <button class="btn small edit-session-btn" data-title="${eventData.title}" data-link="${eventData.meetingLink || ''}" data-host="${eventData.host || ''}" data-level="${eventData.level || ''}" data-category="${eventData.category}" data-datetime="${eventData.dateTime}">Edit Session</button>
+                <button class="btn small danger delete-session-btn" data-title="${eventData.title}" data-datetime="${eventData.dateTime}">Delete Session</button>
+            ` : '';
+
+    const modal = document.createElement('div');
+    modal.className = 'session-modal';
+    modal.innerHTML = `
+        <div class="modal-content session-modal-content">
+            <div class="modal-header">
+                <div>
+                    <h3>${eventData.title}</h3>
+                    <span class="category-badge" style="background: ${categoryColors[eventData.category] || '#667eea'};">${eventData.category.charAt(0).toUpperCase() + eventData.category.slice(1)}</span>
+                </div>
+                <span class="close" onclick="this.parentElement.parentElement.parentElement.remove()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="session-modal-info">
+                    <div class="info-group">
+                        <span class="info-label">📅 When</span>
+                        <p>${eventData.dateTime}</p>
+                    </div>
+                    <div class="info-group">
+                        <span class="info-label">📊 Level</span>
+                        <p>${eventData.level || 'Open'}</p>
+                    </div>
+                    ${eventData.host ? `<div class="info-group"><span class="info-label">👨‍🏫 Host</span><p>${eventData.host}</p></div>` : ''}
+                </div>
+            </div>
+            <div class="modal-footer">
+                ${eventData.meetingLink ? `<button class="btn small primary" onclick="joinSession('${eventData.title.replace(/'/g, "\\'")}', '${eventData.meetingLink}', '${(eventData.host || 'Study Host').replace(/'/g, "\\'")}', '${eventData.level || 'Open'}', '${eventData.dateTime}', ${eventData.source === 'custom'}, '${eventData.category}')">Join Meeting</button>` : ''}
+                ${customActionsHTML}
+                <button class="btn small secondary" onclick="this.parentElement.parentElement.parentElement.remove()">Close</button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+
+    if (eventData.source === 'custom') {
+        const deleteBtn = modal.querySelector('.btn.small.danger.delete-session-btn');
+        const editBtn = modal.querySelector('.btn.small.edit-session-btn');
+
+        if (deleteBtn) {
+            deleteBtn.addEventListener('click', function() {
+                const title = this.getAttribute('data-title');
+                const datetime = this.getAttribute('data-datetime');
+                deleteSession(title, datetime, modal);
+            });
+        }
+
+        if (editBtn) {
+            editBtn.addEventListener('click', function() {
+                const title = this.getAttribute('data-title');
+                const link = this.getAttribute('data-link');
+                const hostName = this.getAttribute('data-host');
+                const lvl = this.getAttribute('data-level');
+                const categoryName = this.getAttribute('data-category');
+                const dt = this.getAttribute('data-datetime');
+                editSession(title, link, hostName, lvl, categoryName, dt, title, modal);
+            });
+        }
+    }
+}
+
+function switchCalendarView(view, button) {
     const dayGroups = document.querySelectorAll('.session-day-group');
     const today = new Date();
     today.setHours(0, 0, 0, 0);

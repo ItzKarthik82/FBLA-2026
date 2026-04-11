@@ -80,14 +80,19 @@
             <div class="calendar-panel">
                 <div class="calendar-panel-header">
                     <div>
-                        <span class="calendar-heading-label">Week view</span>
+                        <span class="calendar-heading-label" id="calendarViewLabel">Week view</span>
                         <h3>Study Calendar</h3>
+                    </div>
+                    <div class="calendar-panel-actions">
+                        <button class="view-btn active" data-view="week" onclick="switchCalendarMode('week', this)">Week</button>
+                        <button class="view-btn" data-view="month" onclick="switchCalendarMode('month', this)">Month</button>
                     </div>
                 </div>
 
-                <div class="calendar-wrapper">
-                    <div class="calendar-time-axis">
-                        <div class="time-label">8 AM</div>
+                <div id="weekCalendar">
+                    <div class="calendar-wrapper">
+                        <div class="calendar-time-axis">
+                            <div class="time-label">8 AM</div>
                         <div class="time-label">9 AM</div>
                         <div class="time-label">10 AM</div>
                         <div class="time-label">11 AM</div>
@@ -262,6 +267,8 @@
                         </div>
                     </div>
                 </div>
+            </div>
+                <div id="monthCalendar" class="month-calendar" style="display: none;"></div>
                 <div class="calendar-legend">
                     <span class="legend-pill math"></span> Mathematics
                     <span class="legend-pill science"></span> Science

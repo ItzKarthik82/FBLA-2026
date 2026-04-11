@@ -598,6 +598,170 @@ body.dark .view-btn.active {
     box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
 }
 
+.month-calendar {
+    background: var(--white);
+    border-radius: var(--border-radius-lg);
+    border: 1px solid var(--gray-200);
+    padding: 24px;
+    margin-top: 24px;
+}
+
+body.dark .month-calendar {
+    background: var(--card-bg);
+    border-color: var(--gray-700);
+}
+
+.month-calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.month-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.month-grid-weekday {
+    text-align: center;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 10px 0;
+    color: var(--gray-600);
+    background: var(--gray-50);
+    border-radius: 12px;
+}
+
+body.dark .month-grid-weekday {
+    background: var(--gray-900);
+    color: var(--text-muted);
+}
+
+.month-day-cell {
+    min-height: 130px;
+    background: var(--gray-50);
+    border-radius: 18px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+body.dark .month-day-cell {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.month-day-cell.today {
+    border: 1px solid var(--primary);
+    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.16);
+}
+
+.month-day-cell.empty {
+    background: transparent;
+    box-shadow: none;
+    border: none;
+}
+
+.day-number {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--gray-900);
+}
+
+body.dark .day-number {
+    color: var(--text);
+}
+
+.day-events {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    overflow: hidden;
+}
+
+.day-event-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 999px;
+    color: white;
+    font-size: 12px;
+    line-height: 1.2;
+    cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.day-more-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: var(--gray-600);
+}
+
+body.dark .day-more-count {
+    color: var(--text-muted);
+}
+
+.month-select-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.month-select {
+    padding: 10px 12px;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--border-radius-lg);
+    background: var(--white);
+    color: var(--gray-900);
+    font-size: 14px;
+}
+
+body.dark .month-select {
+    background: var(--card-bg);
+    border-color: var(--gray-700);
+    color: var(--text);
+}
+
+.month-year-label {
+    font-size: 14px;
+    color: var(--gray-600);
+    font-weight: 600;
+}
+
+body.dark .month-year-label {
+    color: var(--text-muted);
+}
+
+.day-event-pill.event-math { background: #7c3aed; }
+.day-event-pill.event-science { background: #14b8a6; }
+.day-event-pill.event-english { background: #ec4899; }
+.day-event-pill.event-history { background: #f97316; }
+
+@media (max-width: 900px) {
+    .month-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 620px) {
+    .month-grid {
+        grid-template-columns: 1fr;
+    }
+    .month-day-cell {
+        min-height: 100px;
+    }
+}
+
 /* Sessions List View */
 .sessions-list {
     display: flex;
