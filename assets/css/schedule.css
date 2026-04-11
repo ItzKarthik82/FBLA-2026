@@ -400,22 +400,136 @@ body.dark .calendar-legend {
         padding: 16px;
     }
 
+    .calendar-wrapper {
+        grid-template-columns: 60px 1fr;
+    }
+
+    .calendar-time-axis {
+        display: flex;
+        padding-right: 10px;
+    }
+
     .calendar-main-grid {
-        flex-direction: column;
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        gap: 12px;
+        padding-bottom: 12px;
+        scroll-snap-type: x mandatory;
     }
 
     .calendar-day-column {
-        min-width: 100%;
-        border-right: none;
-        border-bottom: 1px solid var(--gray-200);
+        min-width: 190px;
+        flex: 0 0 190px;
+        border-right: 1px solid var(--gray-200);
+        border-bottom: none;
+        scroll-snap-align: start;
     }
 
     .calendar-day-column:last-child {
-        border-bottom: none;
+        border-right: none;
     }
 
     .calendar-day-header {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        background: var(--white);
+        margin: 0;
+        padding: 14px 10px;
+        font-size: 13px;
+        border-radius: 0;
+        border-bottom: 1px solid var(--gray-200);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .calendar-day-header span {
+        font-size: 11px;
+    }
+
+    .calendar-day-body {
         position: relative;
+        height: 1008px;
+        min-height: 1008px;
+        padding: 0 6px;
+        background: linear-gradient(180deg, transparent 0%, transparent 92%, rgba(102, 126, 234, 0.04) 92%);
+    }
+
+    .calendar-slot {
+        height: 72px;
+    }
+
+    .calendar-event {
+        position: absolute;
+        left: 6px;
+        right: 6px;
+        margin: 0;
+        padding: 10px 12px;
+        border-radius: 14px;
+        color: white;
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+    }
+
+    .calendar-event strong {
+        font-size: 13px;
+    }
+
+    .calendar-event span {
+        font-size: 11px;
+    }
+
+    .event-math {
+        background: linear-gradient(135deg, rgba(124, 58, 237, 0.95), rgba(124, 58, 237, 0.8));
+    }
+
+    .event-science {
+        background: linear-gradient(135deg, rgba(20, 184, 166, 0.95), rgba(20, 184, 166, 0.8));
+    }
+
+    .event-english {
+        background: linear-gradient(135deg, rgba(236, 72, 153, 0.95), rgba(236, 72, 153, 0.8));
+    }
+
+    .event-history {
+        background: linear-gradient(135deg, rgba(249, 115, 22, 0.95), rgba(249, 115, 22, 0.8));
+    }
+
+    .calendar-time-axis {
+        display: flex;
+    }
+
+    .session-browser {
+        padding: 32px 20px;
+    }
+
+    .session-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .session-card {
+        padding: 24px;
+    }
+
+    .session-card h4 {
+        font-size: 18px;
+    }
+
+    .session-meta {
+        gap: 10px;
+    }
+
+    .session-description {
+        margin-bottom: 22px;
+        font-size: 14px;
+    }
+
+    .add-to-calendar-btn,
+    .btn.small {
+        padding: 12px 18px;
+        font-size: 14px;
     }
 }
 
