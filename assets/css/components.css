@@ -296,10 +296,10 @@ body.dark .session-modal-content {
     background: var(--card-bg);
 }
 
-@media (max-width: 620px) {
+@media (max-width: 760px) {
     .session-modal {
         align-items: center;
-        padding: 12px;
+        padding: 16px 12px;
     }
 
     .session-modal-content {
@@ -307,7 +307,7 @@ body.dark .session-modal-content {
         max-width: calc(100% - 24px);
         margin: 0 12px;
         min-height: auto;
-        max-height: calc(100vh - 24px);
+        max-height: calc(100vh - 32px);
     }
 
     .session-modal-content .modal-header,
@@ -316,12 +316,36 @@ body.dark .session-modal-content {
         padding: 18px;
     }
 
+    .session-modal-content .modal-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .session-modal-content .modal-header > div {
+        align-items: flex-start;
+    }
+
     .session-modal-content .modal-footer {
         flex-direction: column;
         align-items: stretch;
     }
 
     .session-modal-content .modal-footer .btn {
+        width: 100%;
+    }
+
+    .session-modal-content .modal-footer .btn + .btn {
+        margin-top: 12px;
+    }
+
+    .meeting-link-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .meeting-link-container .btn,
+    .meeting-link-container .meeting-link-input {
         width: 100%;
     }
 }
