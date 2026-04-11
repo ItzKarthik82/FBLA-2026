@@ -317,6 +317,8 @@ body.dark .calendar-slot {
     line-height: 1.4;
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;
+    overflow: hidden;
+    word-break: break-word;
 }
 
 .calendar-event:hover {
@@ -326,6 +328,18 @@ body.dark .calendar-slot {
 
 .calendar-event strong {
     font-size: 14px;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-break: normal;
+}
+
+.calendar-event span {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .event-math {
@@ -470,14 +484,25 @@ body.dark .calendar-legend {
         border-radius: 14px;
         color: white;
         box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+        overflow: hidden;
+        word-break: break-word;
     }
 
     .calendar-event strong {
         font-size: 13px;
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        word-break: normal;
     }
 
     .calendar-event span {
         font-size: 11px;
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
     .event-math {

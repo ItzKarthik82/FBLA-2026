@@ -196,6 +196,26 @@ function isSessionInterested(sessionId) {
     return interested.some(s => s.id === sessionId);
 }
 
+function getWeekdayIndexFromString(dateTime) {
+    const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const match = dateTime.match(/^(Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday),/i);
+    if (!match) return null;
+    return dayNames.findIndex(day => day.toLowerCase() === match[1].toLowerCase());
+}
+
+function getCurrentWeekDateForWeekday(dayIndex, hour, minute) {
+    const now = new Date();
+    const mondayOffset = (now.getDay() + 6) % 7;
+    const monday = new Date(now);
+    // Use next week's Monday so generated session dates align with the static calendar labels.
+    monday.setDate(now.getDate() - mondayOffset + 7);
+    const target = new Date(monday);
+    const offset = (dayIndex + 6) % 7;
+    target.setDate(monday.getDate() + offset);
+    target.setHours(hour, minute, 0, 0);
+    return target;
+}
+
 function toggleSessionInterest(sessionId, sessionTitle, dateTime, button) {
     const interested = JSON.parse(localStorage.getItem('interestedSessions') || '[]');
     const index = interested.findIndex(s => s.id === sessionId);
@@ -472,7 +492,8 @@ function loadCustomSessions() {
 
     sessions.forEach(session => {
         const sessionDate = new Date(session.date);
-        const dayBody = getCalendarDayBody(sessionDate.getDay());
+        const dayIndex = sessionDate.getDay();
+        const dayBody = getCalendarDayBody(dayIndex);
         if (!dayBody) return;
 
         const { top, height } = calculateEventPosition(sessionDate);
@@ -655,7 +676,7 @@ const availableSessions = [
         level: "Advanced",
         host: "Dr. Sarah Chen",
         meetingLink: "https://meet.google.com/abc-defg-hij",
-        dateTime: "Thursday, April 11, 7:00 PM"
+        dateTime: "Monday, April 13, 7:00 PM"
     },
     {
         title: "Chemistry Lab Review",
@@ -664,7 +685,7 @@ const availableSessions = [
         level: "Intermediate",
         host: "Prof. Michael Torres",
         meetingLink: "https://meet.google.com/klm-nopq-rst",
-        dateTime: "Friday, April 12, 5:00 PM"
+        dateTime: "Tuesday, April 14, 5:00 PM"
     },
     {
         title: "Essay Writing Workshop",
@@ -673,7 +694,7 @@ const availableSessions = [
         level: "Beginner",
         host: "Ms. Emily Rodriguez",
         meetingLink: "https://meet.google.com/uvw-xyza-bcd",
-        dateTime: "Saturday, April 13, 10:00 AM"
+        dateTime: "Wednesday, April 15, 10:00 AM"
     },
     {
         title: "World History Debate Prep",
@@ -682,7 +703,7 @@ const availableSessions = [
         level: "Intermediate",
         host: "Mr. David Kim",
         meetingLink: "https://meet.google.com/efg-hijk-lmn",
-        dateTime: "Monday, April 15, 6:00 PM"
+        dateTime: "Thursday, April 16, 6:00 PM"
     },
     {
         title: "Calculus Problem Solving",
@@ -691,7 +712,7 @@ const availableSessions = [
         level: "Advanced",
         host: "Dr. James Wilson",
         meetingLink: "https://meet.google.com/opq-rstu-vwx",
-        dateTime: "Tuesday, April 16, 4:00 PM"
+        dateTime: "Friday, April 17, 4:00 PM"
     },
     {
         title: "Biology Cell Structure Deep Dive",
@@ -700,7 +721,7 @@ const availableSessions = [
         level: "Intermediate",
         host: "Dr. Lisa Park",
         meetingLink: "https://meet.google.com/yz-abcd-efg",
-        dateTime: "Wednesday, April 17, 3:00 PM"
+        dateTime: "Saturday, April 18, 3:00 PM"
     },
     {
         title: "Grammar and Literature Analysis",
@@ -709,7 +730,7 @@ const availableSessions = [
         level: "Beginner",
         host: "Ms. Rachel Thompson",
         meetingLink: "https://meet.google.com/hij-klmn-opq",
-        dateTime: "Thursday, April 18, 2:00 PM"
+        dateTime: "Sunday, April 19, 2:00 PM"
     },
     {
         title: "American History Timeline Review",
@@ -718,7 +739,7 @@ const availableSessions = [
         level: "Intermediate",
         host: "Mr. Robert Johnson",
         meetingLink: "https://meet.google.com/rst-uvwx-yza",
-        dateTime: "Friday, April 19, 6:00 PM"
+        dateTime: "Sunday, April 19, 6:00 PM"
     }
 ];
 
@@ -856,7 +877,8 @@ function addToCalendarFromModal(button, title, dateTime, category, level, host, 
         category: category,
         level: level,
         meetingLink: meetingLink,
-        date: sessionDate.toISOString()
+        date: sessionDate.toISOString(),
+        weekdayIndex: sessionDate.getDay()
     };
 
     existingSessions.push(newSession);
