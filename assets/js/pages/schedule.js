@@ -326,13 +326,20 @@ function copyToClipboard(text, button) {
     });
 }
 
-function joinSession(sessionTitle, meetingLink, host, level, dateTime, isCustom = false, category = 'math') {
+function joinSession(sessionTitle, meetingLink, host, level, dateTime, isCustom = false, category = 'math', browseOptions = {}) {
     const categoryColors = {
         math: '#7c3aed',
         science: '#14b8a6',
         english: '#ec4899',
         history: '#f97316'
     };
+
+    const {
+        showAddToCalendar = false,
+        alreadyAdded = false,
+        isInterested = false,
+        description = ''
+    } = browseOptions || {};
 
     // If category not provided, try to detect from title
     if (!category || category === '') {
@@ -358,9 +365,31 @@ function joinSession(sessionTitle, meetingLink, host, level, dateTime, isCustom 
         </div>
     `;
 
+    const browseActionHTML = showAddToCalendar ? `
+        <button type="button" class="btn small interest-action ${isInterested ? 'interested' : ''}" data-session-id="${generateSessionId(sessionTitle, dateTime)}" data-title="${sessionTitle.replace(/'/g, "\\'")}" data-datetime="${dateTime}">
+            ${isInterested ? '❤️ Interested' : '🤍 Mark Interested'}
+        </button>
+        <button type="button" class="btn small add-calendar-action ${alreadyAdded ? 'disabled' : 'primary'}" data-title="${sessionTitle.replace(/'/g, "\\'")}" data-datetime="${dateTime}" data-category="${category}" data-level="${level}" data-host="${host.replace(/'/g, "\\'")}" data-link="${meetingLink}" ${alreadyAdded ? 'disabled' : ''}>
+            ${alreadyAdded ? '✓ Added to Calendar' : '📌 Add to Calendar'}
+        </button>
+    ` : '';
+
     const customActionsHTML = isCustom ? `
-        <button class="btn small delete-session-btn" data-title="${sessionTitle}" data-link="${meetingLink}" data-host="${host}" data-level="${level}" data-category="${category}" data-datetime="${dateTime}">Edit Session</button>
-        <button class="btn small danger delete-session-btn" data-title="${sessionTitle}" data-datetime="${dateTime}">Delete Session</button>
+        <button type="button" class="btn small delete-session-btn" data-title="${sessionTitle}" data-link="${meetingLink}" data-host="${host}" data-level="${level}" data-category="${category}" data-datetime="${dateTime}">Edit Session</button>
+        <button type="button" class="btn small danger delete-session-btn" data-title="${sessionTitle}" data-datetime="${dateTime}">Delete Session</button>
+    ` : '';
+
+    const alreadyAddedInfo = showAddToCalendar && alreadyAdded ? `
+        <div class="info-group">
+            <span class="info-label">📌 Status</span>
+            <p class="text-muted">This session is already on your calendar.</p>
+        </div>
+    ` : '';
+
+    const descriptionHTML = description ? `
+        <div class="info-group">
+            <p class="session-description">${description}</p>
+        </div>
     ` : '';
 
     const modal = document.createElement('div');
@@ -376,6 +405,7 @@ function joinSession(sessionTitle, meetingLink, host, level, dateTime, isCustom 
             </div>
             <div class="modal-body">
                 <div class="session-modal-info">
+                    ${descriptionHTML}
                     <div class="info-group">
                         <span class="info-label">📅 When</span>
                         <p>${dateTime}</p>
@@ -389,9 +419,11 @@ function joinSession(sessionTitle, meetingLink, host, level, dateTime, isCustom 
                         <p>${level}</p>
                     </div>
                     ${meetingLinkHTML}
+                    ${alreadyAddedInfo}
                 </div>
             </div>
             <div class="modal-footer">
+                ${browseActionHTML}
                 ${customActionsHTML}
                 <button class="btn small secondary" onclick="this.parentElement.parentElement.parentElement.remove()">Close</button>
             </div>
@@ -399,6 +431,32 @@ function joinSession(sessionTitle, meetingLink, host, level, dateTime, isCustom 
     `;
 
     document.body.appendChild(modal);
+
+    if (showAddToCalendar) {
+        const interestBtn = modal.querySelector('.interest-action');
+        const addCalendarBtn = modal.querySelector('.add-calendar-action');
+
+        if (interestBtn) {
+            interestBtn.addEventListener('click', function() {
+                const sessionId = this.getAttribute('data-session-id');
+                const title = this.getAttribute('data-title');
+                const datetime = this.getAttribute('data-datetime');
+                toggleSessionInterest(sessionId, title, datetime, this);
+            });
+        }
+
+        if (addCalendarBtn) {
+            addCalendarBtn.addEventListener('click', function() {
+                const title = this.getAttribute('data-title');
+                const dateTime = this.getAttribute('data-datetime');
+                const categoryName = this.getAttribute('data-category');
+                const levelName = this.getAttribute('data-level');
+                const hostName = this.getAttribute('data-host');
+                const meetingLinkValue = this.getAttribute('data-link');
+                addToCalendarFromModal(this, title, dateTime, categoryName, levelName, hostName, meetingLinkValue);
+            });
+        }
+    }
 
     if (isCustom) {
         const deleteBtn = modal.querySelector('.btn.small.danger.delete-session-btn');
@@ -980,12 +1038,27 @@ function loadAvailableSessions() {
                     <span class="detail-label">📅 When:</span> ${session.dateTime}
                 </div>
             </div>
-            <button class="add-to-calendar-btn ${alreadyAdded ? 'disabled' : ''}" ${alreadyAdded ? 'disabled' : ''} onclick="openBrowseSessionModal('${session.title.replace(/'/g, "\\'")}', '${session.dateTime}', '${session.category}', '${session.level}', '${session.host.replace(/'/g, "\\'")}', '${session.meetingLink}', '${session.description.replace(/'/g, "\\'").replace(/"/g, '\\"')}')">
+            <button type="button" class="add-to-calendar-btn ${alreadyAdded ? 'disabled' : ''}" ${alreadyAdded ? 'disabled' : ''}>
                 ${alreadyAdded ? '✓ Added' : 'Add to Calendar'}
             </button>
         `;
 
         sessionGrid.appendChild(sessionCard);
+
+        const addBtn = sessionCard.querySelector('.add-to-calendar-btn');
+        if (addBtn && !alreadyAdded) {
+            addBtn.addEventListener('click', () => {
+                openBrowseSessionModal(
+                    session.title,
+                    session.dateTime,
+                    session.category,
+                    session.level,
+                    session.host,
+                    session.meetingLink,
+                    session.description
+                );
+            });
+        }
     });
 }
 
@@ -995,55 +1068,12 @@ function openBrowseSessionModal(title, dateTime, category, level, host, meetingL
     const existingSessions = JSON.parse(localStorage.getItem('customSessions') || '[]');
     const alreadyAdded = existingSessions.some(s => s.title === title && s.dateTime === dateTime);
 
-    const categoryColors = {
-        math: '#7c3aed',
-        science: '#14b8a6',
-        english: '#ec4899',
-        history: '#f97316'
-    };
-
-    const modal = document.createElement('div');
-    modal.className = 'session-modal';
-    modal.innerHTML = `
-        <div class="modal-content session-modal-content">
-            <div class="modal-header">
-                <div>
-                    <h3>${title}</h3>
-                    <span class="category-badge" style="background: ${categoryColors[category] || '#667eea'};">${category.charAt(0).toUpperCase() + category.slice(1)}</span>
-                </div>
-                <span class="close" onclick="this.parentElement.parentElement.parentElement.remove()">&times;</span>
-            </div>
-            <div class="modal-body">
-                <div class="session-modal-info">
-                    ${description ? `<div class="info-group"><p class="session-description">${description}</p></div>` : ''}
-                    <div class="info-group">
-                        <span class="info-label">📅 When</span>
-                        <p>${dateTime}</p>
-                    </div>
-                    <div class="info-group">
-                        <span class="info-label">👨‍🏫 Host</span>
-                        <p>${host}</p>
-                    </div>
-                    <div class="info-group">
-                        <span class="info-label">📊 Level</span>
-                        <p>${level}</p>
-                    </div>
-                    ${alreadyAdded ? `<div class="info-group"><span class="info-label">📌 Status</span><p class="text-muted">This session is already on your calendar.</p></div>` : ''}
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn small ${isInterested ? 'interested' : ''}" onclick="toggleSessionInterest('${sessionId}', '${title}', '${dateTime}', this)">
-                    ${isInterested ? '❤️ Interested' : '🤍 Mark Interested'}
-                </button>
-                <button class="btn small ${alreadyAdded ? 'disabled' : 'primary'}" onclick="addToCalendarFromModal(this, '${title}', '${dateTime}', '${category}', '${level}', '${host.replace(/'/g, "\\'")}', '${meetingLink}')" ${alreadyAdded ? 'disabled' : ''}>
-                    ${alreadyAdded ? '✓ Added to Calendar' : '📌 Add to Calendar'}
-                </button>
-                <button class="btn small secondary" onclick="this.parentElement.parentElement.parentElement.remove()">Close</button>
-            </div>
-        </div>
-    `;
-
-    document.body.appendChild(modal);
+    joinSession(title, meetingLink, host, level, dateTime, false, category, {
+        showAddToCalendar: true,
+        alreadyAdded,
+        isInterested,
+        description
+    });
 }
 
 function addToCalendarFromModal(button, title, dateTime, category, level, host, meetingLink) {
