@@ -583,6 +583,9 @@ function getMonthViewEvents() {
         const dateTime = el.dataset.datetime || '';
         const title = el.dataset.title || '';
         const category = el.dataset.category || 'math';
+        const host = el.dataset.host || 'Study Host';
+        const level = el.dataset.level || 'Open';
+        const meetingLink = el.dataset.link || '';
         const sessionId = generateSessionId(title, dateTime);
         if (hiddenSessions.includes(sessionId)) return;
 
@@ -594,7 +597,10 @@ function getMonthViewEvents() {
             dateTime,
             category,
             date: sessionDate,
-            source: 'base'
+            source: 'custom',
+            host,
+            level,
+            meetingLink
         });
     });
 
@@ -734,75 +740,15 @@ function renderMonthCalendar() {
 }
 
 function openMonthEventModal(eventData) {
-    const categoryColors = {
-        math: '#7c3aed',
-        science: '#14b8a6',
-        english: '#ec4899',
-        history: '#f97316'
-    };
-
-    const customActionsHTML = eventData.source === 'custom' ? `
-                <button class="btn small edit-session-btn" data-title="${eventData.title}" data-link="${eventData.meetingLink || ''}" data-host="${eventData.host || ''}" data-level="${eventData.level || ''}" data-category="${eventData.category}" data-datetime="${eventData.dateTime}">Edit Session</button>
-                <button class="btn small danger delete-session-btn" data-title="${eventData.title}" data-datetime="${eventData.dateTime}">Delete Session</button>
-            ` : '';
-
-    const modal = document.createElement('div');
-    modal.className = 'session-modal';
-    modal.innerHTML = `
-        <div class="modal-content session-modal-content">
-            <div class="modal-header">
-                <div>
-                    <h3>${eventData.title}</h3>
-                    <span class="category-badge" style="background: ${categoryColors[eventData.category] || '#667eea'};">${eventData.category.charAt(0).toUpperCase() + eventData.category.slice(1)}</span>
-                </div>
-                <span class="close" onclick="this.parentElement.parentElement.parentElement.remove()">&times;</span>
-            </div>
-            <div class="modal-body">
-                <div class="session-modal-info">
-                    <div class="info-group">
-                        <span class="info-label">📅 When</span>
-                        <p>${eventData.dateTime}</p>
-                    </div>
-                    <div class="info-group">
-                        <span class="info-label">📊 Level</span>
-                        <p>${eventData.level || 'Open'}</p>
-                    </div>
-                    ${eventData.host ? `<div class="info-group"><span class="info-label">👨‍🏫 Host</span><p>${eventData.host}</p></div>` : ''}
-                </div>
-            </div>
-            <div class="modal-footer">
-                ${eventData.meetingLink ? `<button class="btn small primary" onclick="joinSession('${eventData.title.replace(/'/g, "\\'")}', '${eventData.meetingLink}', '${(eventData.host || 'Study Host').replace(/'/g, "\\'")}', '${eventData.level || 'Open'}', '${eventData.dateTime}', ${eventData.source === 'custom'}, '${eventData.category}')">Join Meeting</button>` : ''}
-                ${customActionsHTML}
-                <button class="btn small secondary" onclick="this.parentElement.parentElement.parentElement.remove()">Close</button>
-            </div>
-        </div>
-    `;
-    document.body.appendChild(modal);
-
-    if (eventData.source === 'custom') {
-        const deleteBtn = modal.querySelector('.btn.small.danger.delete-session-btn');
-        const editBtn = modal.querySelector('.btn.small.edit-session-btn');
-
-        if (deleteBtn) {
-            deleteBtn.addEventListener('click', function() {
-                const title = this.getAttribute('data-title');
-                const datetime = this.getAttribute('data-datetime');
-                deleteSession(title, datetime, modal);
-            });
-        }
-
-        if (editBtn) {
-            editBtn.addEventListener('click', function() {
-                const title = this.getAttribute('data-title');
-                const link = this.getAttribute('data-link');
-                const hostName = this.getAttribute('data-host');
-                const lvl = this.getAttribute('data-level');
-                const categoryName = this.getAttribute('data-category');
-                const dt = this.getAttribute('data-datetime');
-                editSession(title, link, hostName, lvl, categoryName, dt, title, modal);
-            });
-        }
-    }
+    joinSession(
+        eventData.title,
+        eventData.meetingLink || '',
+        eventData.host || 'Study Host',
+        eventData.level || 'Open',
+        eventData.dateTime,
+        eventData.source === 'custom',
+        eventData.category || 'math'
+    );
 }
 
 function switchCalendarView(view, button) {
