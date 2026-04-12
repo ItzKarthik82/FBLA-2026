@@ -4,11 +4,12 @@ const selectedMonthYear = 2026;
 
 function proposeSession() {
     const title = document.getElementById('sessionTitle').value;
-    const host = document.getElementById('sessionHost').value;
     const time = document.getElementById('sessionTime').value;
     const category = document.getElementById('sessionCategory').value;
     const level = document.getElementById('sessionLevel').value;
     const meetingLink = document.getElementById('meetingLink').value || '';
+    const currentUser = getUserInfo();
+    const host = currentUser.name || document.getElementById('sessionHost').value.trim();
 
     if (!title || !host || !time) {
         showToast('Please fill in all fields');
@@ -74,7 +75,11 @@ function proposeSession() {
 
 function editCustomSession(title, fullDateTimeStr, host, timeInput, category, level, meetingLink) {
     document.getElementById('editSessionTitle').value = title;
-    document.getElementById('editSessionHost').value = host;
+    const hostInput = document.getElementById('editSessionHost');
+    if (hostInput) {
+        hostInput.value = host;
+        hostInput.readOnly = !isUserAdmin();
+    }
     document.getElementById('editSessionTime').value = timeInput;
     document.getElementById('editSessionCategory').value = category;
     document.getElementById('editSessionLevel').value = level;
@@ -83,24 +88,33 @@ function editCustomSession(title, fullDateTimeStr, host, timeInput, category, le
     editingSession = {
         title: title,
         dateTime: fullDateTimeStr,
-        timeInput: timeInput
+        timeInput: timeInput,
+        host: host
     };
 
     document.getElementById('editSessionModal').style.display = 'flex';
 }
 
 function closeEditModal() {
+    const hostInput = document.getElementById('editSessionHost');
+    if (hostInput) {
+        hostInput.readOnly = false;
+    }
     document.getElementById('editSessionModal').style.display = 'none';
     editingSession = null;
 }
 
 function saveEditedSession() {
     const title = document.getElementById('editSessionTitle').value;
-    const host = document.getElementById('editSessionHost').value;
+    let host = document.getElementById('editSessionHost').value.trim();
     const time = document.getElementById('editSessionTime').value;
     const category = document.getElementById('editSessionCategory').value;
     const level = document.getElementById('editSessionLevel').value;
     const meetingLink = document.getElementById('editMeetingLink').value || '';
+
+    if (editingSession && !isUserAdmin()) {
+        host = editingSession.host || host;
+    }
 
     if (!title || !host || !time) {
         showToast('Please fill in all fields');
@@ -156,6 +170,12 @@ function deleteCustomSession(title, fullDateTimeStr) {
     }
 
     const sessions = JSON.parse(localStorage.getItem('customSessions') || '[]');
+    const sessionToDelete = sessions.find(s => s.title === title && s.dateTime === fullDateTimeStr);
+    if (sessionToDelete && !canEditSession(sessionToDelete.host)) {
+        showToast('You do not have permission to delete this session.');
+        return;
+    }
+
     const updatedSessions = sessions.filter(s => !(s.title === title && s.dateTime === fullDateTimeStr));
     localStorage.setItem('customSessions', JSON.stringify(updatedSessions));
     loadCustomSessions();
@@ -165,6 +185,13 @@ function deleteCustomSession(title, fullDateTimeStr) {
 
 function generateSessionId(title, dateTime) {
     return `${title}-${dateTime}`.replace(/[^a-zA-Z0-9]/g, '-');
+}
+
+function canEditSession(hostName) {
+    const userInfo = getUserInfo();
+    const normalizedHost = (hostName || '').trim().toLowerCase();
+    const normalizedUser = (userInfo.name || '').trim().toLowerCase();
+    return isUserAdmin() || (normalizedHost !== '' && normalizedHost === normalizedUser);
 }
 
 function getBaseInterestCount(sessionId) {
@@ -424,9 +451,10 @@ function joinSession(sessionTitle, meetingLink, host, level, dateTime, isCustom 
         </button>
     ` : '';
 
-    const customActionsHTML = isCustom ? `
-        <button type="button" class="btn small delete-session-btn" data-title="${sessionTitle}" data-link="${meetingLink}" data-host="${host}" data-level="${level}" data-category="${category}" data-datetime="${dateTime}">Edit Session</button>
-        <button type="button" class="btn small danger delete-session-btn" data-title="${sessionTitle}" data-datetime="${dateTime}">Delete Session</button>
+    const canEdit = canEditSession(host);
+    const modifyActionsHTML = canEdit ? `
+        <button type="button" class="btn small edit-session-btn" data-title="${sessionTitle}" data-link="${meetingLink}" data-host="${host}" data-level="${level}" data-category="${category}" data-datetime="${dateTime}">Edit Session</button>
+        <button type="button" class="btn small danger delete-session-btn" data-title="${sessionTitle}" data-datetime="${dateTime}" data-host="${host}">Delete Session</button>
     ` : '';
 
     const alreadyAddedInfo = showAddToCalendar && alreadyAdded ? `
@@ -482,7 +510,7 @@ function joinSession(sessionTitle, meetingLink, host, level, dateTime, isCustom 
             </div>
             <div class="modal-footer">
                 ${browseActionHTML}
-                ${customActionsHTML}
+                ${modifyActionsHTML}
                 <button class="btn small secondary" onclick="this.parentElement.parentElement.parentElement.remove()">Close</button>
             </div>
         </div>
@@ -516,29 +544,27 @@ function joinSession(sessionTitle, meetingLink, host, level, dateTime, isCustom 
         }
     }
 
-    if (isCustom) {
-        const deleteBtn = modal.querySelector('.btn.small.danger.delete-session-btn');
-        const editBtn = modal.querySelector('.btn.small.delete-session-btn:not(.danger)');
+    const deleteBtn = modal.querySelector('.delete-session-btn.danger');
+    const editBtn = modal.querySelector('.edit-session-btn');
 
-        if (deleteBtn) {
-            deleteBtn.addEventListener('click', function() {
-                const title = this.getAttribute('data-title');
-                const datetime = this.getAttribute('data-datetime');
-                deleteSession(title, datetime, modal);
-            });
-        }
+    if (deleteBtn) {
+        deleteBtn.addEventListener('click', function() {
+            const title = this.getAttribute('data-title');
+            const datetime = this.getAttribute('data-datetime');
+            deleteSession(title, datetime, modal);
+        });
+    }
 
-        if (editBtn) {
-            editBtn.addEventListener('click', function() {
-                const title = this.getAttribute('data-title');
-                const link = this.getAttribute('data-link');
-                const hostName = this.getAttribute('data-host');
-                const lvl = this.getAttribute('data-level');
-                const categoryName = this.getAttribute('data-category');
-                const dt = this.getAttribute('data-datetime');
-                editSession(title, link, hostName, lvl, categoryName, dt, title, modal);
-            });
-        }
+    if (editBtn) {
+        editBtn.addEventListener('click', function() {
+            const title = this.getAttribute('data-title');
+            const link = this.getAttribute('data-link');
+            const hostName = this.getAttribute('data-host');
+            const lvl = this.getAttribute('data-level');
+            const categoryName = this.getAttribute('data-category');
+            const dt = this.getAttribute('data-datetime');
+            editSession(title, link, hostName, lvl, categoryName, dt, title, modal);
+        });
     }
 }
 
@@ -565,6 +591,11 @@ function deleteSession(sessionTitle, dateTime, modal) {
 }
 
 function editSession(oldTitle, oldMeetingLink, oldHost, oldLevel, oldCategory, oldDateTime, displayTitle, modal) {
+    if (!canEditSession(oldHost)) {
+        showToast('You do not have permission to edit this session.');
+        return;
+    }
+
     const dateMatch = oldDateTime.match(/(\w+), (\w+) (\d+), (\d+):(\d+) (AM|PM)/);
     if (!dateMatch) {
         showToast('Error parsing session date');
@@ -599,6 +630,11 @@ function editSession(oldTitle, oldMeetingLink, oldHost, oldLevel, oldCategory, o
     };
 
     if (modal) modal.remove();
+
+    const hostInput = document.getElementById('editSessionHost');
+    if (hostInput && !isUserAdmin()) {
+        hostInput.readOnly = true;
+    }
 
     document.getElementById('hostForm').scrollIntoView({ behavior: 'smooth' });
     showToast('Edit the session details and click Create Session');
@@ -1204,6 +1240,12 @@ function initializeSchedulePage() {
             filterCalendarEvents(category, button);
         });
     });
+
+    const currentUser = getUserInfo();
+    const hostInput = document.getElementById('sessionHost');
+    if (hostInput && currentUser.name) {
+        hostInput.value = currentUser.name;
+    }
 
     // Load custom sessions and available sessions
     const allBtn = document.querySelector('.pill-btn[data-filter="all"]');
