@@ -128,6 +128,21 @@ body.dark .sources-section h4[style*="color"] {
     color: var(--text) !important;
 }
 
+.source-item a {
+    color: inherit;
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-block;
+    max-width: 100%;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+}
+
+.source-item a:hover {
+    color: var(--primary);
+}
+
 .source-item ul li {
     margin: 6px 0;
     line-height: 1.6;
