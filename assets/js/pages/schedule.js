@@ -167,6 +167,47 @@ function generateSessionId(title, dateTime) {
     return `${title}-${dateTime}`.replace(/[^a-zA-Z0-9]/g, '-');
 }
 
+function getBaseInterestCount(sessionId) {
+    let hash = 0;
+    for (let i = 0; i < sessionId.length; i++) {
+        hash = (hash * 31 + sessionId.charCodeAt(i)) | 0;
+    }
+    return 2 + Math.abs(hash) % 4;
+}
+
+function getInterestCounts() {
+    return JSON.parse(localStorage.getItem('interestCounts') || '{}');
+}
+
+function setInterestCounts(counts) {
+    localStorage.setItem('interestCounts', JSON.stringify(counts));
+}
+
+function getInterestCount(sessionId) {
+    const counts = getInterestCounts();
+    if (typeof counts[sessionId] === 'number') {
+        return counts[sessionId];
+    }
+    const baseCount = getBaseInterestCount(sessionId);
+    counts[sessionId] = baseCount;
+    setInterestCounts(counts);
+    return baseCount;
+}
+
+function updateInterestCount(sessionId, newCount) {
+    const counts = getInterestCounts();
+    counts[sessionId] = newCount;
+    setInterestCounts(counts);
+    const interestCountEl = document.querySelector(`.interest-count[data-session-id="${sessionId}"]`);
+    if (interestCountEl) {
+        interestCountEl.textContent = formatInterestText(newCount);
+    }
+}
+
+function formatInterestText(count) {
+    return count === 1 ? '1 person is interested' : `${count} people are interested`;
+}
+
 function getHiddenSampleSessions() {
     return JSON.parse(localStorage.getItem('hiddenSampleSessions') || '[]');
 }
@@ -221,21 +262,27 @@ function getCurrentWeekDateForWeekday(dayIndex, hour, minute) {
 function toggleSessionInterest(sessionId, sessionTitle, dateTime, button) {
     const interested = JSON.parse(localStorage.getItem('interestedSessions') || '[]');
     const index = interested.findIndex(s => s.id === sessionId);
+    const baseCount = getBaseInterestCount(sessionId);
+    const currentCount = getInterestCount(sessionId);
+    let updatedCount = currentCount;
 
     if (index > -1) {
         interested.splice(index, 1);
         button.textContent = '🤍 Mark Interested';
         button.classList.remove('interested');
+        updatedCount = Math.max(baseCount, currentCount - 1);
         showToast('Removed from interested sessions');
     } else {
         interested.push({ id: sessionId, title: sessionTitle, dateTime: dateTime });
         button.textContent = '❤️ Interested';
         button.classList.add('interested');
+        updatedCount = currentCount + 1;
         showToast('✅ Added to interested sessions - you will get a reminder 15 minutes before!');
         setupReminder(sessionId, sessionTitle, dateTime);
     }
 
     localStorage.setItem('interestedSessions', JSON.stringify(interested));
+    updateInterestCount(sessionId, updatedCount);
 }
 
 function setupReminder(sessionId, sessionTitle, dateTime) {
@@ -341,6 +388,9 @@ function joinSession(sessionTitle, meetingLink, host, level, dateTime, isCustom 
         description = ''
     } = browseOptions || {};
 
+    const sessionId = generateSessionId(sessionTitle, dateTime);
+    const interestCount = getInterestCount(sessionId);
+
     // If category not provided, try to detect from title
     if (!category || category === '') {
         const titleLower = sessionTitle.toLowerCase();
@@ -392,6 +442,13 @@ function joinSession(sessionTitle, meetingLink, host, level, dateTime, isCustom 
         </div>
     ` : '';
 
+    const interestHTML = `
+        <div class="info-group">
+            <span class="info-label">Interest</span>
+            <p class="interest-count" data-session-id="${sessionId}">${formatInterestText(interestCount)}</p>
+        </div>
+    `;
+
     const modal = document.createElement('div');
     modal.className = 'session-modal';
     modal.innerHTML = `
@@ -418,6 +475,7 @@ function joinSession(sessionTitle, meetingLink, host, level, dateTime, isCustom 
                         <span class="info-label">📊 Level</span>
                         <p>${level}</p>
                     </div>
+                    ${interestHTML}
                     ${meetingLinkHTML}
                     ${alreadyAddedInfo}
                 </div>
@@ -1016,6 +1074,8 @@ function loadAvailableSessions() {
 
     availableSessions.forEach(session => {
         const alreadyAdded = existingSessions.some(s => s.title === session.title && s.dateTime === session.dateTime);
+        const sessionId = generateSessionId(session.title, session.dateTime);
+        const interestCount = getInterestCount(sessionId);
         const sessionCard = document.createElement('div');
         sessionCard.className = 'session-card';
         sessionCard.dataset.category = session.category;
@@ -1030,6 +1090,7 @@ function loadAvailableSessions() {
                 <span class="meta-item">🎯 ${session.level}</span>
             </div>
             <p class="session-description">${session.description}</p>
+            <p class="session-interest"><span class="interest-count" data-session-id="${sessionId}">${formatInterestText(interestCount)}</span></p>
             <div class="session-details">
                 <div class="detail-item">
                     <span class="detail-label">👨‍🏫 Host:</span> ${session.host}

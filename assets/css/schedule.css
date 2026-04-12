@@ -557,8 +557,15 @@ body.dark .calendar-legend {
     }
 
     .session-description {
-        margin-bottom: 22px;
+        margin-bottom: 14px;
         font-size: 14px;
+    }
+
+    .session-interest {
+        margin-bottom: 16px;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.4;
     }
 
     .add-to-calendar-btn,
