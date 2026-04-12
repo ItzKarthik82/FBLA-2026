@@ -795,36 +795,44 @@ function renderMonthCalendar() {
     const titleBlock = document.createElement('div');
     titleBlock.className = 'month-calendar-header';
     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    const monthSelect = document.createElement('select');
-    monthSelect.className = 'month-select';
-    monthSelect.setAttribute('aria-label', 'Select month');
-
-    monthNames.forEach((name, index) => {
-        const option = document.createElement('option');
-        option.value = index;
-        option.textContent = name;
-        if (index === month) option.selected = true;
-        monthSelect.appendChild(option);
-    });
-
-    monthSelect.addEventListener('change', event => {
-        selectedMonthIndex = parseInt(event.target.value, 10);
-        renderMonthCalendar();
-    });
 
     titleBlock.innerHTML = `
         <div>
             <span class="calendar-heading-label">Month view</span>
         </div>
     `;
-    const selectRow = document.createElement('div');
-    selectRow.className = 'month-select-row';
-    const yearText = document.createElement('span');
-    yearText.className = 'month-year-label';
-    yearText.textContent = year;
-    selectRow.appendChild(monthSelect);
-    selectRow.appendChild(yearText);
-    titleBlock.appendChild(selectRow);
+
+    const navRow = document.createElement('div');
+    navRow.className = 'month-nav-row';
+
+    const prevButton = document.createElement('button');
+    prevButton.type = 'button';
+    prevButton.className = 'month-nav-btn month-nav-prev';
+    prevButton.setAttribute('aria-label', 'Previous month');
+    prevButton.textContent = '←';
+    prevButton.addEventListener('click', () => {
+        selectedMonthIndex = (selectedMonthIndex + 11) % 12;
+        renderMonthCalendar();
+    });
+
+    const monthDisplay = document.createElement('div');
+    monthDisplay.className = 'month-display';
+    monthDisplay.textContent = `${monthNames[month]} ${year}`;
+
+    const nextButton = document.createElement('button');
+    nextButton.type = 'button';
+    nextButton.className = 'month-nav-btn month-nav-next';
+    nextButton.setAttribute('aria-label', 'Next month');
+    nextButton.textContent = '→';
+    nextButton.addEventListener('click', () => {
+        selectedMonthIndex = (selectedMonthIndex + 1) % 12;
+        renderMonthCalendar();
+    });
+
+    navRow.appendChild(prevButton);
+    navRow.appendChild(monthDisplay);
+    navRow.appendChild(nextButton);
+    titleBlock.appendChild(navRow);
     container.appendChild(titleBlock);
 
     const grid = document.createElement('div');

@@ -631,15 +631,17 @@ body.dark .month-calendar {
 }
 
 .month-calendar-header {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 16px;
+    display: flex;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
+    gap: 12px;
     margin-bottom: 20px;
+    text-align: center;
 }
 
 .month-calendar-header .calendar-heading-label {
-    margin-bottom: 8px;
+    margin-bottom: 0;
 }
 
 .month-grid-wrapper {
@@ -754,36 +756,50 @@ body.dark .day-more-count {
     color: var(--text-muted);
 }
 
-.month-select-row {
+.month-nav-row {
     display: flex;
     align-items: center;
-    gap: 12px;
+    justify-content: center;
+    gap: 16px;
     margin-top: 8px;
 }
 
-.month-select {
-    padding: 10px 12px;
+.month-nav-btn {
+    width: 40px;
+    height: 40px;
     border: 1px solid var(--gray-200);
-    border-radius: var(--border-radius-lg);
+    border-radius: 999px;
     background: var(--white);
     color: var(--gray-900);
-    font-size: 14px;
+    font-size: 18px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
 }
 
-body.dark .month-select {
+.month-nav-btn:hover,
+.month-nav-btn:focus {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: rgba(102, 126, 234, 0.08);
+}
+
+body.dark .month-nav-btn {
     background: var(--card-bg);
     border-color: var(--gray-700);
     color: var(--text);
 }
 
-.month-year-label {
-    font-size: 14px;
-    color: var(--gray-600);
-    font-weight: 600;
+.month-display {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--gray-900);
 }
 
-body.dark .month-year-label {
-    color: var(--text-muted);
+body.dark .month-display {
+    color: var(--text);
 }
 
 .day-event-pill.event-math { background: #7c3aed; }
