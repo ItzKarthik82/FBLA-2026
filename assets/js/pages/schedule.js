@@ -403,7 +403,7 @@ function copyToClipboard(text, button) {
     });
 }
 
-function joinSession(sessionTitle, meetingLink, host, level, dateTime, isCustom = false, category = 'math', browseOptions = {}) {
+function joinSession(sessionTitle, meetingLink, host, level, dateTime, isCustom = false, category = 'math', browseOptions = {}, sessionSource = 'custom') {
     const categoryColors = {
         math: '#7c3aed',
         science: '#14b8a6',
@@ -455,8 +455,10 @@ function joinSession(sessionTitle, meetingLink, host, level, dateTime, isCustom 
     ` : '';
 
     const canEdit = canEditSession(host);
-    const modifyActionsHTML = canEdit ? `
-        <button type="button" class="btn small edit-session-btn" data-title="${sessionTitle}" data-link="${meetingLink}" data-host="${host}" data-level="${level}" data-category="${category}" data-datetime="${dateTime}">Edit Session</button>
+    const canDeleteBaseSession = sessionSource === 'base' && !!getUserInfo()?.name;
+    const showModifyActions = canEdit || canDeleteBaseSession;
+    const modifyActionsHTML = showModifyActions ? `
+        ${canEdit ? `<button type="button" class="btn small edit-session-btn" data-title="${sessionTitle}" data-link="${meetingLink}" data-host="${host}" data-level="${level}" data-category="${category}" data-datetime="${dateTime}">Edit Session</button>` : ''}
         <button type="button" class="btn small danger delete-session-btn" data-title="${sessionTitle}" data-datetime="${dateTime}" data-host="${host}">Delete Session</button>
     ` : '';
 
