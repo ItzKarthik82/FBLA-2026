@@ -492,3 +492,161 @@ body.dark .admin-item h4 {
 body.dark .admin-item p {
     color: var(--text-muted);
 }
+
+
+.admin-container {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+.admin-sidebar {
+    flex: 0 0 260px;
+    min-width: 220px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--border-radius);
+    padding: 22px;
+    box-shadow: 0 14px 36px rgba(15, 23, 42, 0.06);
+}
+
+.admin-content {
+    flex: 1;
+    min-width: 340px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.admin-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.nav-btn {
+    width: 100%;
+    text-align: left;
+    padding: 12px 16px;
+    border: 1px solid var(--border);
+    background: var(--bg-color);
+    color: var(--text);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 600;
+}
+
+.nav-btn:hover,
+.nav-btn.active {
+    background: var(--primary);
+    border-color: transparent;
+    color: #fff;
+}
+
+body.dark .nav-btn {
+    background: var(--card-bg);
+    color: var(--text);
+}
+
+body.dark .nav-btn:hover,
+body.dark .nav-btn.active {
+    background: var(--primary);
+    color: #fff;
+}
+
+.section {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--border-radius);
+    padding: 26px;
+    box-shadow: 0 14px 36px rgba(15, 23, 42, 0.06);
+}
+
+.section h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.section h3 {
+    margin-top: 0;
+    margin-bottom: 18px;
+}
+
+.lesson-form,
+.quiz-form,
+.video-form,
+.materials-form {
+    background: var(--bg-color);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 22px;
+}
+
+.form-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.form-input-group label {
+    font-weight: 600;
+    color: var(--gray-900);
+}
+
+.form-input-group input,
+.form-input-group select,
+.form-input-group textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--white);
+    color: var(--text);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+body.dark .form-input-group input,
+body.dark .form-input-group select,
+body.dark .form-input-group textarea {
+    background: var(--card-bg);
+    color: var(--text);
+}
+
+.form-input-group input:focus,
+.form-input-group select:focus,
+.form-input-group textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12);
+}
+
+.button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.lessons-list,
+.quizzes-list,
+.videos-list,
+.materials-list,
+.users-list {
+    display: grid;
+    gap: 14px;
+    margin-top: 16px;
+}
+
+@media (max-width: 980px) {
+    .admin-container {
+        flex-direction: column;
+    }
+
+    .admin-sidebar {
+        width: 100%;
+    }
+}
