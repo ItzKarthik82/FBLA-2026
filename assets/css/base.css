@@ -46,11 +46,18 @@ body {
     --border-radius: 8px;
     --border-radius-lg: 12px;
     --transition: all 0.2s ease-in-out;
+    --bg: #f8fafc;
+    --bg-color: #f8fafc;
+    --card-bg: #ffffff;
+    --text: #111827;
+    --text-muted: #6b7280;
+    --border: #d1d5db;
 }
 
 /* Dark Theme */
 body.dark {
     --bg: #0f172a;
+    --bg-color: #1e293b;
     --card-bg: #1e293b;
     --text: #e2e8f0;
     --text-muted: #94a3b8;
