@@ -83,6 +83,11 @@
                         <span class="calendar-heading-label" id="calendarViewLabel">Week view</span>
                         <h3>Study Calendar</h3>
                     </div>
+                    <div class="week-nav-row">
+                        <button type="button" class="month-nav-btn week-nav-btn week-nav-prev" onclick="scrollWeekCalendar(-1)" aria-label="Previous week">←</button>
+                        <span class="week-range-label">Week 1</span>
+                        <button type="button" class="month-nav-btn week-nav-btn week-nav-next" onclick="scrollWeekCalendar(1)" aria-label="Next week">→</button>
+                    </div>
                     <div class="calendar-panel-actions">
                         <button class="view-btn active" data-view="week" onclick="switchCalendarMode('week', this)">Week</button>
                         <button class="view-btn" data-view="month" onclick="switchCalendarMode('month', this)">Month</button>

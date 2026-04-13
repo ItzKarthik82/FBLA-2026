@@ -1,6 +1,9 @@
 let editingSession = null;
-let selectedMonthIndex = new Date().getMonth();
+let selectedMonthIndex = 3; // April
 const selectedMonthYear = 2026;
+const WEEKS_IN_MONTH = 4;
+const MONTH_ABBREV = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+let currentWeekIndex = 3;
 
 function proposeSession() {
     const title = document.getElementById('sessionTitle').value;
@@ -704,6 +707,8 @@ function filterCalendarEvents(category, button) {
 
     if (document.getElementById('monthCalendar')?.style.display !== 'none') {
         renderMonthCalendar();
+    } else {
+        updateWeekView();
     }
 }
 
@@ -715,16 +720,139 @@ function switchCalendarMode(view, button) {
     document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
     if (button) button.classList.add('active');
 
+    const weekNavRow = document.querySelector('.week-nav-row');
+
     if (view === 'month') {
         if (weekCalendar) weekCalendar.style.display = 'none';
         if (monthCalendar) monthCalendar.style.display = 'block';
+        if (weekNavRow) weekNavRow.style.display = 'none';
         if (viewLabel) viewLabel.textContent = 'Month view';
         renderMonthCalendar();
     } else {
         if (weekCalendar) weekCalendar.style.display = 'block';
         if (monthCalendar) monthCalendar.style.display = 'none';
+        if (weekNavRow) weekNavRow.style.display = 'flex';
         if (viewLabel) viewLabel.textContent = 'Week view';
+        currentWeekIndex = getWeekIndexForDate(new Date(selectedMonthYear, selectedMonthIndex, 13));
+        updateWeekView();
     }
+}
+
+function updateWeekLabelsAndHeaders() {
+    const label = document.querySelector('.week-range-label');
+    if (!label) return;
+    label.textContent = `Week ${currentWeekIndex}`;
+
+    const prevBtn = document.querySelector('.week-nav-prev');
+    const nextBtn = document.querySelector('.week-nav-next');
+
+    if (prevBtn) prevBtn.disabled = currentWeekIndex <= 1;
+    if (nextBtn) nextBtn.disabled = currentWeekIndex >= WEEKS_IN_MONTH;
+
+    updateWeekHeaders();
+}
+
+function getWeekViewBaseDate() {
+    const year = selectedMonthYear;
+    const month = selectedMonthIndex;
+    const firstOfMonth = new Date(year, month, 1);
+    const firstDayIndex = firstOfMonth.getDay();
+
+    const offset = (firstDayIndex + 6) % 7; // days back to Monday, with Sunday as 6
+    const firstMonday = new Date(year, month, 1 - offset);
+    firstMonday.setHours(0, 0, 0, 0, 0);
+    return firstMonday;
+}
+
+function getWeekStartDate(index) {
+    const weekStart = getWeekViewBaseDate();
+    const result = new Date(weekStart);
+    result.setDate(weekStart.getDate() + (index - 1) * 7);
+    return result;
+}
+
+function getWeekIndexForDate(date) {
+    const weekStart = getWeekViewBaseDate();
+    const diff = date.getTime() - weekStart.getTime();
+    const dayDiff = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const index = Math.floor(dayDiff / 7) + 1;
+    return Math.min(Math.max(index, 1), WEEKS_IN_MONTH);
+}
+
+function isEventInCurrentWeek(eventDate) {
+    if (!eventDate) return false;
+
+    const weekStart = getWeekStartDate(currentWeekIndex);
+    weekStart.setHours(0, 0, 0, 0);
+
+    const weekEnd = new Date(weekStart);
+    weekEnd.setDate(weekStart.getDate() + 6);
+    weekEnd.setHours(23, 59, 59, 999);
+
+    return eventDate >= weekStart && eventDate <= weekEnd;
+}
+
+function getEventDateFromElement(event) {
+    const dateTime = event.dataset.datetime || '';
+    const parsedDate = parseSessionDateTime(dateTime);
+    if (parsedDate) return parsedDate;
+
+    const column = event.closest('.calendar-day-column');
+    if (!column) return null;
+
+    const dayIndex = parseInt(column.dataset.day, 10);
+    if (isNaN(dayIndex)) return null;
+
+    const weekStart = getWeekStartDate(currentWeekIndex);
+    const offset = dayIndex === 0 ? 6 : dayIndex - 1;
+    const fallbackDate = new Date(weekStart);
+    fallbackDate.setDate(weekStart.getDate() + offset);
+    return fallbackDate;
+}
+
+function updateWeekEvents() {
+    const activeCategory = document.querySelector('.pill-btn.active')?.dataset.filter || 'all';
+    const hiddenSessions = getHiddenSampleSessions();
+
+    document.querySelectorAll('#weekCalendar .calendar-event').forEach(event => {
+        const eventDate = getEventDateFromElement(event);
+        const inWeek = isEventInCurrentWeek(eventDate);
+        const categoryMatch = activeCategory === 'all' || event.dataset.category === activeCategory;
+        const isHiddenBase = event.dataset.source === 'base' && hiddenSessions.includes(generateSessionId(event.dataset.title || '', event.dataset.datetime || ''));
+        const showMathOnlyInWeek3 = event.dataset.category === 'math' ? currentWeekIndex === 3 : true;
+        const showEvent = inWeek && categoryMatch && !isHiddenBase && showMathOnlyInWeek3;
+
+        event.style.display = showEvent ? '' : 'none';
+    });
+}
+
+function updateWeekView() {
+    updateWeekLabelsAndHeaders();
+    updateWeekEvents();
+}
+
+function updateWeekHeaders() {
+    const columns = document.querySelectorAll('.calendar-day-column');
+    if (!columns || columns.length === 0) return;
+
+    const weekStart = getWeekStartDate(currentWeekIndex);
+    for (let i = 0; i < columns.length; i++) {
+        const date = new Date(weekStart);
+        date.setDate(weekStart.getDate() + i);
+        const span = columns[i].querySelector('.calendar-day-header span');
+        if (!span) continue;
+        span.textContent = `${MONTH_ABBREV[date.getMonth()]} ${date.getDate()}`;
+    }
+}
+
+function scrollWeekCalendar(direction) {
+    const nextIndex = currentWeekIndex + direction;
+    if (nextIndex < 1 || nextIndex > WEEKS_IN_MONTH) {
+        return;
+    }
+
+    currentWeekIndex = nextIndex;
+    updateWeekView();
 }
 
 function getMonthViewEvents() {
@@ -1260,6 +1388,10 @@ function initializeSchedulePage() {
     loadCustomSessions();
     applyHiddenSampleOverrides();
     filterCalendarEvents('all', allBtn);
+    if (document.getElementById('weekCalendar')?.style.display !== 'none') {
+        currentWeekIndex = getWeekIndexForDate(new Date(selectedMonthYear, selectedMonthIndex, 13));
+        updateWeekView();
+    }
     loadAvailableSessions();
 }
 

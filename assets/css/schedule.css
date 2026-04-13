@@ -764,7 +764,16 @@ body.dark .day-more-count {
     margin-top: 8px;
 }
 
-.month-nav-btn {
+.week-nav-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin-top: 12px;
+}
+
+.month-nav-btn,
+.week-nav-btn {
     width: 40px;
     height: 40px;
     border: 1px solid var(--gray-200);
@@ -780,13 +789,24 @@ body.dark .day-more-count {
 }
 
 .month-nav-btn:hover,
-.month-nav-btn:focus {
+.month-nav-btn:focus,
+.week-nav-btn:hover,
+.week-nav-btn:focus {
     border-color: var(--primary);
     color: var(--primary);
     background: rgba(102, 126, 234, 0.08);
 }
 
-body.dark .month-nav-btn {
+.week-nav-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+    border-color: var(--gray-200);
+    color: var(--gray-400);
+    background: var(--gray-100);
+}
+
+body.dark .month-nav-btn,
+body.dark .week-nav-btn {
     background: var(--card-bg);
     border-color: var(--gray-700);
     color: var(--text);
@@ -799,6 +819,16 @@ body.dark .month-nav-btn {
 }
 
 body.dark .month-display {
+    color: var(--text);
+}
+
+.week-range-label {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--gray-700);
+}
+
+body.dark .week-range-label {
     color: var(--text);
 }
 
